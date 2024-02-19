@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect } from "react";
@@ -13,8 +14,8 @@ import { Colors } from "./assets/color/color";
 import IconButton from "./components/ui/IconButton";
 import AuthContextProvider, { AuthContext } from "./data/auth-context";
 import LoginScreen from "./screens/LoginScreen";
+import WelcomeScreen from "./screens/MyRecord";
 import SignupScreen from "./screens/SignupScreen";
-import WelcomeScreen from "./screens/WelcomeScreen";
 const Stack = createNativeStackNavigator();
 function AuthStack() {
   return (
@@ -31,42 +32,6 @@ function AuthStack() {
   );
 }
 
-/* function BottomTabStack() {
-  const BottomTab = createBottomTabNavigator();
-  return (
-    <BottomTab.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: "#3c0a6b" },
-        headerTintColor: "white",
-        tabBarActiveTintColor: "#3c0a6b",
-      }}
-    >
-      <BottomTab.Screen
-        name="Welcome"
-        component={WelcomeScreen}
-        options={
-          {
-            tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} />
-          ),
-          }
-        }
-      />
-      <BottomTab.Screen
-        name="User"
-        component={WelcomeScreen}
-        options={
-          {
-            tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
-          ),
-          }
-        }
-      />
-    </BottomTab.Navigator>
-  );
-}
- */
 function AuthenticatedStack() {
   const authCtx = useContext(AuthContext);
   const BottomTab = createBottomTabNavigator();
@@ -144,6 +109,29 @@ function Root() {
 }
 
 export default function App() {
+  const fetchFonts = () => {
+    return Font.loadAsync({
+      /* Pretendard: require("/assets/font/pretendard/PretendardVariable.ttf"), */
+      "Pretendard-Light": require("./assets/font/pretendard/Pretendard-Light.otf"),
+      "Pretendard-Black": require("./assets/font/pretendard/Pretendard-Black.otf"),
+      "Pretendard-Bold": require("./assets/font/pretendard/Pretendard-Bold.otf"),
+      "Pretendard-ExtraBold": require("./assets/font/pretendard/Pretendard-ExtraBold.otf"),
+      "Pretendard-Thin": require("./assets/font/pretendard/Pretendard-Thin.otf"),
+      "Pretendard-ExtraLight": require("./assets/font/pretendard/Pretendard-ExtraLight.otf"),
+      "Pretendard-SemiBold": require("./assets/font/pretendard/Pretendard-SemiBold.otf"),
+      "Pretendard-Regular": require("./assets/font/pretendard/Pretendard-Regular.otf"),
+      "Pretendard-Medium": require("./assets/font/pretendard/Pretendard-Medium.otf"),
+    });
+  };
+
+  const preLoad = async () => {
+    return await fetchFonts();
+  };
+  useEffect(() => {
+    preLoad().then((context) => {
+      SplashScreen.hideAsync();
+    });
+  }, []);
   return (
     <RecoilRoot>
       <StatusBar style="dark" />
@@ -162,28 +150,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-{
-  /* <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: Colors.primary500 },
-        headerTintColor: "white",
-        contentStyle: { backgroundColor: Colors.primary100 },
-      }}
-    >
-      <Stack.Screen name="BottomTab" component={BottomTabStack} />
-      <Stack.Screen
-        name="Welcome"
-        component={WelcomeScreen}
-        options={{
-          headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="exit"
-              color={tintColor}
-              size={24}
-              onPress={authCtx.logout}
-            />
-          ),
-        }}
-      />
-    </Stack.Navigator> */
-}

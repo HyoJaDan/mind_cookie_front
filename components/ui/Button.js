@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { Colors } from '../../constants/styles';
+import { Colors } from "../../assets/color/color";
 
 function Button({ children, onPress }) {
   return (
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     backgroundColor: Colors.primary500,
     elevation: 2,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -33,9 +33,9 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   buttonText: {
-    textAlign: 'center',
-    color: 'white',
+    textAlign: "center",
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
 });

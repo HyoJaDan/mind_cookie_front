@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
-import { Colors } from "../../constants/styles";
+import { Colors } from "../../assets/color/color";
 
 function Input({
   label,

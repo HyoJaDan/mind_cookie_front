@@ -1,26 +1,29 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../assets/color/color";
+import { fontStyle } from "../../assets/font/font";
 
 export const Today = () => {
   const dateToStr = (date: Date) => {
     var week = new Array("일", "월", "화", "수", "목", "금", "토");
-
-    var localTime = date.toLocaleTimeString();
-
-    var year = date.getFullYear();
     var month = date.getMonth() + 1;
     var day = date.getDate();
     var dayName = week[date.getDay()];
 
-    return month + "월 " + day + "일 " + dayName + "요일 ";
+    return (
+      <View style={styles.fontWrapper}>
+        <Text style={[fontStyle.BD16, styles.date]}>
+          {month}월 {day}일
+        </Text>
+        <View style={styles.dayContainer}>
+          <Text style={[fontStyle.RG14, styles.day]}>{dayName}요일</Text>
+        </View>
+      </View>
+    );
   };
   const temp = dateToStr(new Date());
-  return (
-    <View style={styles.wrapper}>
-      <Text style={styles.title}>{temp}</Text>
-    </View>
-  );
+  return <View style={styles.wrapper}>{temp}</View>;
 };
+
 const styles = StyleSheet.create({
   wrapper: {
     justifyContent: "center",
@@ -28,13 +31,30 @@ const styles = StyleSheet.create({
     padding: 32,
     backgroundColor: Colors.basic.white,
     borderRadius: 99,
-    paddingVertical: 8, // 이 값은 단위가 픽셀이 아니라 포인트입니다.
+    paddingVertical: 8,
     paddingHorizontal: 16,
   },
-  title: {
-    fontSize: 50,
-    fontWeight: "bold",
-    marginBottom: 8,
-    fontFamily: "Pretendard-Bold",
+  fontWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  date: {
+    color: Colors.basic.text_light,
+    textShadowColor: "#464646",
+    /* textShadowColor: "rgba(70,70,70,0.12)", */
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 0,
+    shadowOpacity: 0.12,
+  },
+  dayContainer: {
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.primary.primary100,
+    borderRadius: 40,
+  },
+  day: {
+    color: Colors.primary.primary400,
   },
 });

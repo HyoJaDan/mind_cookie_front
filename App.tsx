@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { RecoilRoot } from "recoil";
 import { Colors } from "./assets/color/color";
@@ -109,6 +109,8 @@ function Root() {
 }
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
+
   const fetchFonts = () => {
     return Font.loadAsync({
       /* Pretendard: require("/assets/font/pretendard/PretendardVariable.ttf"), */
@@ -127,11 +129,18 @@ export default function App() {
   const preLoad = async () => {
     return await fetchFonts();
   };
+
   useEffect(() => {
     preLoad().then((context) => {
+      setIsReady(true);
       SplashScreen.hideAsync();
     });
   }, []);
+
+  if (!isReady) {
+    return null; // 또는 로딩 화면을 렌더링
+  }
+
   return (
     <RecoilRoot>
       <StatusBar style="dark" />

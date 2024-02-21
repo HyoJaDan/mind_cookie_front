@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-
+import { DailyCalory } from "../components/myRecord/DailyCalory";
 import { Today } from "../components/myRecord/Date";
 import { AuthContext } from "../data/auth-context";
 
@@ -23,6 +23,7 @@ function MyRecordScreen() {
   return (
     <View style={styles.rootContainer}>
       <Today />
+      <DailyCalory />
       <Text style={styles.title}>Welcome!</Text>
       <Text>You authenticated successfully!</Text>
       <Text>{fetchedMessage}</Text>

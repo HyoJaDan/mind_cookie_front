@@ -110,7 +110,15 @@ function Root() {
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
+  /* const preloadAssets = () => {
+    const fontToLoad = [Ionicons.font];
+    const fontPromises = fontToLoad.map((font: any) => Font.loadAsync(font));
 
+    const imagesToLoad = [require("./assets/picture/meRecord/Spoon.svg")];
+
+    const imagePromises = imagesToLoad.map((image) => Asset.loadAsync(image));
+    return Promise.all<void | Asset[]>([...fontPromises, ...imagePromises]);
+  }; */
   const fetchFonts = () => {
     return Font.loadAsync({
       /* Pretendard: require("/assets/font/pretendard/PretendardVariable.ttf"), */
@@ -129,7 +137,9 @@ export default function App() {
   const preLoad = async () => {
     return await fetchFonts();
   };
-
+  /* const preLoad = async () => {
+    return await Promise.all([fetchFonts() , preloadAssets()]);
+  }; */
   useEffect(() => {
     preLoad().then((context) => {
       setIsReady(true);

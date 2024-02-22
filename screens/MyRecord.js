@@ -24,7 +24,6 @@ function MyRecordScreen() {
     <View style={styles.rootContainer}>
       <Today />
       <DailyCalory />
-      <Text style={styles.title}>Welcome!</Text>
       <Text>You authenticated successfully!</Text>
       <Text>{fetchedMessage}</Text>
     </View>
@@ -38,6 +37,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    gap: 24,
     padding: 32,
     backgroundColor: Colors.backgroundColor,
   },

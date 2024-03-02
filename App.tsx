@@ -3,12 +3,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot } from "recoil";
 import { Colors } from "./assets/color/color";
 import IconButton from "./components/ui/IconButton";
@@ -153,10 +155,14 @@ export default function App() {
 
   return (
     <RecoilRoot>
-      <StatusBar style="dark" />
-      <AuthContextProvider>
-        <Root />
-      </AuthContextProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <StatusBar style="dark" />
+          <AuthContextProvider>
+            <Root />
+          </AuthContextProvider>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     </RecoilRoot>
   );
 }

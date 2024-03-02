@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     /* textShadowColor: "rgba(70,70,70,0.12)", */
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 0,
-    shadowOpacity: 0.12,
   },
   dayContainer: {
     padding: 10,

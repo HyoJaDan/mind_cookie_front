@@ -1,5 +1,11 @@
 import { StyleSheet } from "react-native";
 
+/**
+ * 700: bold
+ * 600: semi-bold
+ * 500: medium
+ * 400: regular
+ * */
 export const fontStyle = StyleSheet.create({
   BD36: {
     fontFamily: "Pretendard-Bold",

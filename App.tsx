@@ -121,13 +121,13 @@ export default function App() {
   }; */
   const fetchFonts = () => {
     return Font.loadAsync({
-      /* Pretendard: require("/assets/font/pretendard/PretendardVariable.ttf"), */
-      "Pretendard-Light": require("./assets/font/pretendard/Pretendard-Light.otf"),
-      "Pretendard-Black": require("./assets/font/pretendard/Pretendard-Black.otf"),
-      "Pretendard-Bold": require("./assets/font/pretendard/Pretendard-Bold.otf"),
-      "Pretendard-ExtraBold": require("./assets/font/pretendard/Pretendard-ExtraBold.otf"),
+      /* Pretendard: require("/assets/font/pretendard/PretendardVariable.ttf"), 
+       "Pretendard-Light": require("./assets/font/pretendard/Pretendard-Light.otf"), 
+       "Pretendard-Black": require("./assets/font/pretendard/Pretendard-Black.otf"), 
+       "Pretendard-ExtraBold": require("./assets/font/pretendard/Pretendard-ExtraBold.otf"),
       "Pretendard-Thin": require("./assets/font/pretendard/Pretendard-Thin.otf"),
-      "Pretendard-ExtraLight": require("./assets/font/pretendard/Pretendard-ExtraLight.otf"),
+      "Pretendard-ExtraLight": require("./assets/font/pretendard/Pretendard-ExtraLight.otf"), */
+      "Pretendard-Bold": require("./assets/font/pretendard/Pretendard-Bold.otf"),
       "Pretendard-SemiBold": require("./assets/font/pretendard/Pretendard-SemiBold.otf"),
       "Pretendard-Regular": require("./assets/font/pretendard/Pretendard-Regular.otf"),
       "Pretendard-Medium": require("./assets/font/pretendard/Pretendard-Medium.otf"),

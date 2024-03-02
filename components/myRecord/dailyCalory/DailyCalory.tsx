@@ -9,21 +9,19 @@ import Svg, {
   TSpan,
   Text,
 } from "react-native-svg";
-import { Colors } from "../../assets/color/color";
-import { fontStyle } from "../../assets/font/font";
-import Fork from "../../assets/icon/fork.svg";
-import Spoon from "../../assets/icon/spoon.svg";
+import { Colors } from "../../../assets/color/color";
+import { fontStyle } from "../../../assets/font/font";
 
-const PieText = ({ percentage, title, currentCalroy }) => {
+const PieText = ({
+  title,
+  currentCalroy,
+}: {
+  title: string;
+  currentCalroy: number;
+}) => {
   return (
     <Text x="50%" y="50%" textAnchor="middle">
-      <TSpan
-        x="50%"
-        dy={-30}
-        fill={"#151A20"}
-        {...Colors.basic.text_light}
-        {...fontStyle.RG12}
-      >
+      <TSpan x="50%" dy={-30} fill={"#646464"} {...fontStyle.RG12}>
         {title}
       </TSpan>
       <TSpan
@@ -161,18 +159,14 @@ const Pie = ({
           isFullCircle={true}
         />
       </G>
-      <PieText
-        percentage={percentage}
-        title={title}
-        currentCalroy={currentCalroy}
-      />
+      <PieText title={title} currentCalroy={currentCalroy} />
     </Svg>
   );
 };
 export const DailyCalory = () => {
   const [totalCalory, setTotalCalory] = useState(1000);
   //이 데이터는 백엔드에서 받아오면됨
-  const [currentCalroy, setCurrentCalory] = useState(500);
+  const [currentCalroy, setCurrentCalory] = useState(700);
   const [caloryRate, setCaloryRate] = useState(0);
 
   useEffect(() => {
@@ -184,31 +178,20 @@ export const DailyCalory = () => {
   }, [totalCalory]);
 
   return (
-    <View style={styles.wrapper}>
-      <Spoon />
-      <View style={styles.dailyCaloryWrapper}>
-        <Pie
-          radius={100}
-          borderWidth={10}
-          percentage={caloryRate}
-          color={"#E3E3E3"}
-          title={"오늘의 섭취 칼로리"}
-          currentCalroy={currentCalroy}
-        />
-      </View>
-      <Fork />
+    <View style={styles.dailyCaloryWrapper}>
+      <Pie
+        radius={100}
+        borderWidth={10}
+        percentage={caloryRate}
+        color={"#E3E3E3"}
+        title={"오늘의 섭취 칼로리"}
+        currentCalroy={currentCalroy}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    gap: 8,
-    padding: 10,
-  },
   dailyCaloryWrapper: {
     width: 240,
     height: 240,

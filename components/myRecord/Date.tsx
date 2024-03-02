@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   fontWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 12,
   },
   date: {
     color: Colors.basic.text_light,

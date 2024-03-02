@@ -17,6 +17,7 @@ export const DailyCaloryMain = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
     width: "100%",
     gap: 8,

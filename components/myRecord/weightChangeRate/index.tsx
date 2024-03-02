@@ -1,12 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { Colors } from "../../../assets/color/color";
-import { fontStyle } from "../../../assets/font/font";
+import { WeightChangeRateChart } from "./chart";
+import { Header } from "./header";
 
 export default function WeightChangeRate() {
   return (
     <View style={styles.Wrapper}>
-      <Text style={[fontStyle.BD20, styles.Texts]}>체중변화량</Text>
+      <Header />
+      <WeightChangeRateChart />
     </View>
   );
 }
@@ -19,8 +21,5 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: Colors.basic.white,
     borderRadius: 10,
-  },
-  Texts: {
-    color: Colors.basic.text_default,
   },
 });

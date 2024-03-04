@@ -19,6 +19,7 @@ import {
 import { DailyCaloryMain } from "../components/myRecord/dailyCalory";
 import WeightChangeRate from "../components/myRecord/weightChangeRate";
 import { WeightButtonModal } from "../components/myRecord/weightChangeRate/WeightButtonModal";
+import RecommendedIntake from "../components/myRecord/recommendedIntake";
 import { AuthContext } from "../data/auth-context";
 
 export default function MyRecordScreen() {
@@ -71,6 +72,7 @@ export default function MyRecordScreen() {
           <Today />
           <DailyCaloryMain />
           <WeightChangeRate handlePresentModalPress={handlePresentModalPress} />
+          <RecommendedIntake intake={2000} />
           <Text>{fetchedMessage}</Text>
           <BottomSheetModal
             ref={bottomSheetModalRef}

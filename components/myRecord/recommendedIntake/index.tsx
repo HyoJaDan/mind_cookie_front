@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: Colors.basic.white,
     borderRadius: 10,
+    marginBottom: 24,
   },
   Line: {
     flexDirection: "row",

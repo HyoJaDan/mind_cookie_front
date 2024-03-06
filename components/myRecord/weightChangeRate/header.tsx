@@ -2,6 +2,11 @@ import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 
+interface IProps {
+  calorie: number;
+  intakedCalorie: number;
+}
+
 export const Header = () => {
   return (
     <View style={styles.Wrapper}>

@@ -1,13 +1,5 @@
-import axios from "axios";
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
+import { useCallback, useMemo, useRef } from "react";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { Today } from "../components/myRecord/Date";
 
@@ -16,25 +8,16 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
+import { useRecoilValue } from "recoil";
 import { DailyCaloryMain } from "../components/myRecord/dailyCalory";
+import RecommendedIntake from "../components/myRecord/recommendedIntake";
 import WeightChangeRate from "../components/myRecord/weightChangeRate";
 import { WeightButtonModal } from "../components/myRecord/weightChangeRate/WeightButtonModal";
-import RecommendedIntake from "../components/myRecord/recommendedIntake";
-import { AuthContext } from "../data/auth-context";
+import { userSelector } from "../data/myRecord";
 
 export default function MyRecordScreen() {
-  const [fetchedMessage, setFetchedMessage] = useState("");
-  const authCtx = useContext(AuthContext);
-  const token = authCtx.token;
-  useEffect(() => {
-    axios
-      .get(
-        `https://hobby-96efd-default-rtdb.firebaseio.com/message.json?auth=${token}`
-      )
-      .then((response) => {
-        setFetchedMessage(response.data);
-      });
-  });
+  const user = useRecoilValue(userSelector);
+  console.log(user);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["40%"], []);
@@ -60,7 +43,7 @@ export default function MyRecordScreen() {
     <BottomSheetModalProvider>
       <SafeAreaView style={styles.rootContainer}>
         <ScrollView
-          style={styles.rootContainer}
+          /*   style={styles.rootContainer} */
           contentContainerStyle={{
             alignItems: "center",
             justifyContent: "center",
@@ -70,10 +53,15 @@ export default function MyRecordScreen() {
           showsVerticalScrollIndicator={false}
         >
           <Today />
-          <DailyCaloryMain />
-          <WeightChangeRate handlePresentModalPress={handlePresentModalPress} />
-          <RecommendedIntake intake={2000} />
-          <Text>{fetchedMessage}</Text>
+          <DailyCaloryMain
+            calorie={user.calorie}
+            intakedCalorie={user.intakedCalorie}
+          />
+          <WeightChangeRate
+            handlePresentModalPress={handlePresentModalPress}
+            weight={user.weight}
+          />
+          <RecommendedIntake intake={user.calorie} />
           <BottomSheetModal
             ref={bottomSheetModalRef}
             index={0}
@@ -94,7 +82,6 @@ const styles = StyleSheet.create({
   rootContainer: {
     gap: 24,
     backgroundColor: Colors.backgroundColor,
-    paddingBottom: 24,
   },
   title: {
     fontSize: 20,

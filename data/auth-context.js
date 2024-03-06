@@ -32,3 +32,16 @@ function AuthContextProvider({ children }) {
 }
 
 export default AuthContextProvider;
+/* 
+ /* const [fetchedMessage, setFetchedMessage] = useState("");
+  const authCtx = useContext(AuthContext);
+  const token = authCtx.token;
+  useEffect(() => {
+    axios
+      .get(
+        `https://hobby-96efd-default-rtdb.firebaseio.com/message.json?auth=${token}`
+      )
+      .then((response) => {
+        setFetchedMessage(response.data);
+      });
+  });  */

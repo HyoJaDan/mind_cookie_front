@@ -9,17 +9,16 @@ const CustomChart = () => (
   </Svg>
 );
 
-export const WeightChangeRateChart = () => {
+export const WeightChangeRateChart = ({ weight }) => {
   const data = {
-    labels: ["07.31", "08.30", "09.30", "10.30", "11.30", "01.30"],
+    labels: weight.map((item) => item.date.slice(5, 10).split("-").join(".")), // date를 추출하고, MM.DD 형식으로 변환
     datasets: [
       {
-        data: [63, 67, 65, 60, 58, 55],
-        color: (opacity = 1) => `rgba(131, 131, 131, ${opacity})`, // 점들의 색
-        strokeWidth: 5, // optional
+        data: weight.map((item) => item.weight), // weight를 추출
+        color: (opacity = 1) => `rgba(131, 131, 131, ${opacity})`,
+        strokeWidth: 5,
       },
     ],
-    //legend: ["Rainy Days"], // optional
   };
   const chartConfig = {
     //1~4는 배경색

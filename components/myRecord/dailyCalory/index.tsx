@@ -4,11 +4,16 @@ import Fork from "../../../assets/icon/fork.svg";
 import Spoon from "../../../assets/icon/spoon.svg";
 import { DailyCalory } from "./DailyCalory";
 
-export const DailyCaloryMain = () => {
+interface IProps {
+  calorie: number;
+  intakedCalorie: number;
+}
+
+export const DailyCaloryMain = ({ calorie, intakedCalorie }: IProps) => {
   return (
     <View style={styles.wrapper}>
       <Spoon />
-      <DailyCalory />
+      <DailyCalory calorie={calorie} intakedCalorie={intakedCalorie} />
       <Fork />
     </View>
   );

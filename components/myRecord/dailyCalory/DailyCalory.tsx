@@ -163,19 +163,19 @@ const Pie = ({
     </Svg>
   );
 };
-export const DailyCalory = () => {
-  const [totalCalory, setTotalCalory] = useState(1000);
-  //이 데이터는 백엔드에서 받아오면됨
-  const [currentCalroy, setCurrentCalory] = useState(700);
+
+interface IProps {
+  calorie: number;
+  intakedCalorie: number;
+}
+export const DailyCalory = ({ calorie, intakedCalorie }: IProps) => {
   const [caloryRate, setCaloryRate] = useState(0);
 
   useEffect(() => {
     //이 함수가, 지금 70%일때 100%가 차니까, 총량을 늘려버림
-    setTotalCalory((totalCalory * 100) / 70);
-  }, [currentCalroy]);
-  useEffect(() => {
-    setCaloryRate((currentCalroy * 100) / totalCalory);
-  }, [totalCalory]);
+    const TotalCalorie = (calorie * 100) / 70;
+    setCaloryRate((intakedCalorie * 100) / TotalCalorie);
+  }, []);
 
   return (
     <View style={styles.dailyCaloryWrapper}>
@@ -185,7 +185,7 @@ export const DailyCalory = () => {
         percentage={caloryRate}
         color={"#E3E3E3"}
         title={"오늘의 섭취 칼로리"}
-        currentCalroy={currentCalroy}
+        currentCalroy={intakedCalorie}
       />
     </View>
   );

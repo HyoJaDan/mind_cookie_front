@@ -6,16 +6,20 @@ import { Header } from "./Header";
 import { WeightButton } from "./WeightButton";
 import { WeightChangeRateChart } from "./chart";
 
+interface IProps {
+  handlePresentModalPress: Function;
+  weight: number[];
+}
+
 export default function WeightChangeRate({
   handlePresentModalPress,
-}: {
-  handlePresentModalPress: Function;
-}) {
+  weight,
+}: IProps) {
   return (
     <BottomSheetModalProvider>
       <View style={styles.Wrapper}>
         <Header />
-        <WeightChangeRateChart />
+        <WeightChangeRateChart weight={weight} />
         <WeightButton handlePresentModalPress={handlePresentModalPress} />
       </View>
     </BottomSheetModalProvider>
@@ -26,7 +30,8 @@ const styles = StyleSheet.create({
     width: 335,
     gap: 16,
     flexDirection: "column",
-    alignItems: "flex-start",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 24,
     backgroundColor: Colors.basic.white,
     borderRadius: 10,

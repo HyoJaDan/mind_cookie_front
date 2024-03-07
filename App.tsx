@@ -16,7 +16,7 @@ import { Colors } from "./assets/color/color";
 import IconButton from "./components/ui/IconButton";
 import AuthContextProvider, { AuthContext } from "./data/auth-context";
 import LoginScreen from "./screens/LoginScreen";
-import WelcomeScreen from "./screens/MyRecord";
+import WelcomeScreen, { TempScreen } from "./screens/MyRecord";
 import SignupScreen from "./screens/SignupScreen";
 const Stack = createNativeStackNavigator();
 function AuthStack() {
@@ -57,7 +57,7 @@ function AuthenticatedStack() {
       />
       <BottomTab.Screen
         name="챌린지"
-        component={WelcomeScreen}
+        component={TempScreen}
         options={{
           headerRight: ({ tintColor }) => (
             <IconButton

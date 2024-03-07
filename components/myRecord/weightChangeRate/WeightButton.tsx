@@ -9,7 +9,6 @@ export function WeightButton({
   handlePresentModalPress: Function;
 }) {
   function pressHandler() {
-    console.log("Pressed!");
     handlePresentModalPress();
   }
 

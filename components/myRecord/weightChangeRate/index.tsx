@@ -2,13 +2,14 @@ import { StyleSheet, View } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Colors } from "../../../assets/color/color";
+import { IWeight } from "../../../data/myRecord/userData";
 import { Header } from "./Header";
 import { WeightButton } from "./WeightButton";
 import { WeightChangeRateChart } from "./chart";
 
 interface IProps {
   handlePresentModalPress: Function;
-  weight: number[];
+  weight: IWeight[];
 }
 
 export default function WeightChangeRate({
@@ -18,7 +19,7 @@ export default function WeightChangeRate({
   return (
     <BottomSheetModalProvider>
       <View style={styles.Wrapper}>
-        <Header />
+        <Header weight={weight} />
         <WeightChangeRateChart weight={weight} />
         <WeightButton handlePresentModalPress={handlePresentModalPress} />
       </View>

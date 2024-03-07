@@ -1,19 +1,32 @@
 import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
+import { IUser } from "../../../data/myRecord/userData";
+import { putUserData } from "../../../data/myRecord/userDataHandler";
+
+interface IProps {
+  handlePresentModalPress: Function;
+  id: number;
+  user: IUser;
+  setUser: Function;
+}
 
 export function WeightButtonModal({
   handlePresentModalPress,
-}: {
-  handlePresentModalPress: Function;
-}) {
-  function pressHandler() {
-    console.log("Pressed!");
+  id,
+  user,
+  setUser,
+}: IProps) {
+  const [inputValue, setInputValue] = useState("");
+  const pressHandler = async () => {
+    const data = await putUserData(id as number, inputValue);
+    if (data) setUser(data); // 비동기 요청 성공 후 userData 상태 업데이트
     handlePresentModalPress();
-  }
-  function amountChangedHandler() {}
+  };
+
   return (
     <View style={styles.modalContainer}>
       <View style={styles.Content}>
@@ -25,6 +38,7 @@ export function WeightButtonModal({
           keyboardType="decimal-pad"
           autoCapitalize="none"
           style={styles.TextInput}
+          onChangeText={setInputValue}
         />
       </View>
       <View style={styles.buttonOuterContainer}>

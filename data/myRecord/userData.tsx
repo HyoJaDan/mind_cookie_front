@@ -1,5 +1,4 @@
-import axios from "axios";
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 export const userId = atom<number | undefined>({
   key: "userId",

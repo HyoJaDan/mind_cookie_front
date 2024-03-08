@@ -1,23 +1,24 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot } from "recoil";
 import { Colors } from "./assets/color/color";
 import IconButton from "./components/ui/IconButton";
 import AuthContextProvider, { AuthContext } from "./data/auth-context";
 import LoginScreen from "./screens/LoginScreen";
-import WelcomeScreen, { TempScreen } from "./screens/MyRecord";
+import WelcomeScreen from "./screens/MyRecord";
 import SignupScreen from "./screens/SignupScreen";
+import { FindChallenge } from "./screens/findChallenge";
+import ChallengeDetailScreen from "./screens/teamDetail";
+
 const Stack = createNativeStackNavigator();
 function AuthStack() {
   return (
@@ -33,18 +34,19 @@ function AuthStack() {
     </Stack.Navigator>
   );
 }
-
+function FindChallengeStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="FindChallenge" component={FindChallenge} />
+      <Stack.Screen name="ChallengeDetail" component={ChallengeDetailScreen} />
+    </Stack.Navigator>
+  );
+}
 function AuthenticatedStack() {
   const authCtx = useContext(AuthContext);
   const BottomTab = createBottomTabNavigator();
   return (
-    <BottomTab.Navigator
-    /* screenOptions={{
-        headerStyle: { backgroundColor: "#3c0a6b" },
-        headerTintColor: "white",
-        tabBarActiveTintColor: "#3c0a6b",
-      }} */
-    >
+    <BottomTab.Navigator>
       <BottomTab.Screen
         name="내 기록"
         component={WelcomeScreen}
@@ -57,7 +59,7 @@ function AuthenticatedStack() {
       />
       <BottomTab.Screen
         name="챌린지"
-        component={TempScreen}
+        component={FindChallengeStack}
         options={{
           headerRight: ({ tintColor }) => (
             <IconButton
@@ -166,12 +168,3 @@ export default function App() {
     </RecoilRoot>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

@@ -2,21 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import { IWeight } from "../../../data/myRecord/userData";
-
-// 날짜를 "YY.MM.DD" 형식으로 변환하는 함수
-function formatDate(isoDateString: string, weight: number) {
-  const date = new Date(isoDateString);
-  const year = date.getFullYear().toString().slice(-2);
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-
-  const formattedDateTime = `${year}.${month}.${day} ${hours}:${minutes}`;
-  const lastWeight = weight;
-
-  return { formattedDateTime, lastWeight };
-}
+import { formatDateUntilMinute } from "../../../uitl/dateConverter";
 
 function parseLastWeightDate(weight: IWeight[]) {
   if (weight.length === 0) {
@@ -24,7 +10,7 @@ function parseLastWeightDate(weight: IWeight[]) {
   }
 
   const lastWeight = weight[weight.length - 1];
-  return formatDate(lastWeight.date, lastWeight.weight);
+  return formatDateUntilMinute(lastWeight.date, lastWeight.weight);
 }
 
 export const Header = ({ weight }: { weight: IWeight[] }) => {

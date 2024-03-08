@@ -16,10 +16,6 @@ import { WeightButtonModal } from "../components/myRecord/weightChangeRate/Weigh
 import { userData, userId } from "../data/myRecord/userData";
 import { fetchUserData } from "../data/myRecord/userDataHandler";
 
-export function TempScreen() {
-  return null;
-}
-
 export default function MyRecordScreen() {
   const id = useRecoilValue(userId);
   const [user, setUser] = useRecoilState(userData);

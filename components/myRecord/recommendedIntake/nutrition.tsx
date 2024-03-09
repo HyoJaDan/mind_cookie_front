@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
+import { Commonstyles } from "../../../uitl/defaultStyle";
 import Circle from "./circle";
 
 interface NutritionProps {
@@ -17,7 +18,7 @@ export const Nutrition: React.FC<NutritionProps> = ({
   text,
   amount,
 }) => (
-  <View style={styles.Line}>
+  <View style={Commonstyles.Line}>
     <View style={styles.Component}>
       <Circle size={45} color={color}>
         {icon}
@@ -37,12 +38,6 @@ export const Nutrition: React.FC<NutritionProps> = ({
   </View>
 );
 const styles = StyleSheet.create({
-  Line: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-  },
   Component: {
     gap: 12,
     flexDirection: "row",

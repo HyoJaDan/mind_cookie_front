@@ -5,6 +5,7 @@ import { fontStyle } from "../../../assets/font/font";
 import Bacon from "../../../assets/icon/bacon.svg";
 import Bread from "../../../assets/icon/bread.svg";
 import Meat from "../../../assets/icon/meat.svg";
+import { Commonstyles } from "../../../uitl/defaultStyle";
 import { Nutrition } from "./nutrition";
 
 interface RecommendedIntakeProps {
@@ -35,14 +36,14 @@ export default function RecommendedIntake({ intake }: { intake: number }) {
         text="탄수화물"
         amount={recommendedIntake?.carbohydrate}
       />
-      <View style={styles.line} />
+      <View style={Commonstyles.line} />
       <Nutrition
         color="#FFDDC2"
         icon={<Meat />}
         text="단백질"
         amount={recommendedIntake?.protein}
       />
-      <View style={styles.line} />
+      <View style={Commonstyles.line} />
       <Nutrition
         color="#FFDEEC"
         icon={<Bacon />}
@@ -63,12 +64,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 24,
   },
-  Line: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-  },
   Component: {
     gap: 12,
     flexDirection: "row",
@@ -76,10 +71,5 @@ const styles = StyleSheet.create({
   },
   FontStyle: {
     flexDirection: "row",
-  },
-  line: {
-    borderWidth: 1,
-    borderColor: Colors.basic.line_light,
-    width: "100%",
   },
 });

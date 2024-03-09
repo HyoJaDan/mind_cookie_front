@@ -3,8 +3,8 @@ import { StyleSheet, View } from "react-native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Colors } from "../../../assets/color/color";
 import { IWeight } from "../../../data/myRecord/userData";
+import { DefaultButton } from "../../../uitl/defaultBotton";
 import { Header } from "./Header";
-import { WeightButton } from "./WeightButton";
 import { WeightChangeRateChart } from "./chart";
 
 interface IProps {
@@ -16,12 +16,15 @@ export default function WeightChangeRate({
   handlePresentModalPress,
   weight,
 }: IProps) {
+  function pressHandler() {
+    handlePresentModalPress();
+  }
   return (
     <BottomSheetModalProvider>
       <View style={styles.Wrapper}>
         <Header weight={weight} />
         <WeightChangeRateChart weight={weight} />
-        <WeightButton handlePresentModalPress={handlePresentModalPress} />
+        <DefaultButton pressHandler={pressHandler} text="몸무게 기록하기" />
       </View>
     </BottomSheetModalProvider>
   );

@@ -1,17 +1,18 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
 import { LinearGradient } from "expo-linear-gradient";
-import { fontStyle } from "../../../assets/font/font";
+import {
+  GestureResponderEvent,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { fontStyle } from "../assets/font/font";
 
-export function WeightButton({
-  handlePresentModalPress,
-}: {
-  handlePresentModalPress: Function;
-}) {
-  function pressHandler() {
-    handlePresentModalPress();
-  }
-
+interface IProps {
+  pressHandler: (event: GestureResponderEvent) => void;
+  text: string;
+}
+export const DefaultButton = ({ pressHandler, text }: IProps) => {
   return (
     <View style={styles.buttonOuterContainer}>
       <Pressable
@@ -25,31 +26,28 @@ export function WeightButton({
           colors={["#2D81FF", "#8785FF"]}
           style={styles.buttonInnerContainer}
         >
-          <Text style={[styles.buttonText, fontStyle.BD16]}>
-            몸무게 기록하기
-          </Text>
+          <Text style={[styles.buttonText, fontStyle.BD16]}>{text}</Text>
         </LinearGradient>
       </Pressable>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  buttonOuterContainer: {
-    borderRadius: 8,
-    margin: 4,
-    overflow: "hidden",
-    width: "100%",
-  },
   buttonInnerContainer: {
     padding: 16,
     elevation: 2,
+    minWidth: "100%",
+  },
+  pressed: {
+    opacity: 0.75,
   },
   buttonText: {
     color: "white",
     textAlign: "center",
   },
-  pressed: {
-    opacity: 0.75,
+  buttonOuterContainer: {
+    borderRadius: 8,
+    overflow: "hidden",
   },
 });

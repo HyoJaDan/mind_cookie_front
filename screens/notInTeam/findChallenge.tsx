@@ -2,15 +2,15 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { Colors } from "../assets/color/color";
-import { fontStyle } from "../assets/font/font";
-import { RenderItemComponent } from "../components/findChallenge/teamList";
-import { fetchTeamData } from "../data/team/getAllTeam";
-import { ITeams } from "../data/team/teamData";
+import { Colors } from "../../assets/color/color";
+import { fontStyle } from "../../assets/font/font";
+import { RenderItemComponent } from "../../components/findChallenge/teamList";
+import { fetchTeamData } from "../../data/team/getAllTeam";
+import { ITeams } from "../../data/team/teamData";
 
 type RootStackParamList = {
   FindChallenge: undefined;
-  ChallengeDetail: { teamName: string };
+  ChallengeDetail: { currentTeam: ITeams };
 };
 
 export function FindChallenge() {
@@ -31,7 +31,7 @@ export function FindChallenge() {
     <RenderItemComponent
       item={item}
       onPress={() =>
-        navigation.navigate("ChallengeDetail", { teamName: item.teamName })
+        navigation.navigate("ChallengeDetail", { currentTeam: item })
       }
     />
   );
@@ -53,7 +53,6 @@ export function FindChallenge() {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-
     backgroundColor: Colors.basic.white,
   },
   Wrapper: {

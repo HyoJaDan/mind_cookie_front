@@ -16,8 +16,8 @@ import AuthContextProvider, { AuthContext } from "./data/auth-context";
 import LoginScreen from "./screens/LoginScreen";
 import WelcomeScreen from "./screens/MyRecord";
 import SignupScreen from "./screens/SignupScreen";
-import { FindChallenge } from "./screens/findChallenge";
-import ChallengeDetailScreen from "./screens/teamDetail";
+import { FindChallenge } from "./screens/notInTeam/findChallenge";
+import ChallengeDetailScreen from "./screens/notInTeam/teamDetail";
 
 const Stack = createNativeStackNavigator();
 function AuthStack() {

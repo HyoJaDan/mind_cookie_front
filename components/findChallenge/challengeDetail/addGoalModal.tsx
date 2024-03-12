@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { Colors } from "../../assets/color/color";
-import { fontStyle } from "../../assets/font/font";
-import Trash from "../../assets/icon/teamList/trash.svg";
-import { DefaultButton } from "../../uitl/defaultBotton";
-import { generateID } from "../../uitl/generateID";
+import { Colors } from "../../../assets/color/color";
+import { fontStyle } from "../../../assets/font/font";
+import Trash from "../../../assets/icon/teamList/trash.svg";
+import { DefaultButton } from "../../../uitll/defaultBotton";
+import { generateID } from "../../../uitll/generateID";
 import { GoalItem } from "./myDetail";
 
 interface IProps {

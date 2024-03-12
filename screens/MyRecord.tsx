@@ -13,16 +13,16 @@ import { DailyCaloryMain } from "../components/myRecord/dailyCalory";
 import RecommendedIntake from "../components/myRecord/recommendedIntake";
 import WeightChangeRate from "../components/myRecord/weightChangeRate";
 import { WeightButtonModal } from "../components/myRecord/weightChangeRate/WeightButtonModal";
-import { userData, userId } from "../data/myRecord/userData";
-import { fetchUserData } from "../data/myRecord/userDataHandler";
+import { userDataInMyRecord, userId } from "../data/user/userData";
+import { fetchUserDataInMyRecord } from "../data/user/userDataHandler";
 
 export default function MyRecordScreen() {
   const id = useRecoilValue(userId);
-  const [user, setUser] = useRecoilState(userData);
+  const [user, setUser] = useRecoilState(userDataInMyRecord);
 
   useEffect(() => {
     const loadUserData = async () => {
-      const data = await fetchUserData(id as number);
+      const data = await fetchUserDataInMyRecord(id as number);
       if (data) setUser(data);
     };
 

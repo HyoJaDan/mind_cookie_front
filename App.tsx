@@ -11,13 +11,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot } from "recoil";
 import { Colors } from "./assets/color/color";
-import IconButton from "./components/ui/IconButton";
 import AuthContextProvider, { AuthContext } from "./data/auth-context";
-import LoginScreen from "./screens/LoginScreen";
 import WelcomeScreen from "./screens/MyRecord";
-import SignupScreen from "./screens/SignupScreen";
-import { FindChallenge } from "./screens/notInTeam/findChallenge";
-import ChallengeDetailScreen from "./screens/notInTeam/teamDetail";
+import LoginScreen from "./screens/initScreen/LoginScreen";
+import SignupScreen from "./screens/initScreen/SignupScreen";
+
+import ChallengeDetailScreen from "./screens/findChallenge/ChallengeDetail";
+import { FindChallenge } from "./screens/findChallenge/findChallenge";
+import IconButton from "./uitll/ui/IconButton";
 
 const Stack = createNativeStackNavigator();
 function AuthStack() {

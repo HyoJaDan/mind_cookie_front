@@ -2,13 +2,13 @@ import { FC } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SvgProps } from "react-native-svg";
-import { Colors } from "../../assets/color/color";
-import { fontStyle } from "../../assets/font/font";
-import IncreaseIcon from "../../assets/icon/teamList/increase.svg";
-import MaintainIcon from "../../assets/icon/teamList/maintain.svg";
-import ReduceIcon from "../../assets/icon/teamList/reduce.svg";
-import { ITeams } from "../../data/team/teamData";
-import { calculateDaysFromNow, formatDate } from "../../uitl/dateConverter";
+import { Colors } from "../../../assets/color/color";
+import { fontStyle } from "../../../assets/font/font";
+import IncreaseIcon from "../../../assets/icon/teamList/increase.svg";
+import MaintainIcon from "../../../assets/icon/teamList/maintain.svg";
+import ReduceIcon from "../../../assets/icon/teamList/reduce.svg";
+import { ITeams } from "../../../data/team/teamData";
+import { calculateDaysFromNow, formatDate } from "../../../uitll/dateConverter";
 
 interface RenderItemProps {
   item: ITeams;
@@ -68,6 +68,7 @@ interface ChallengeTypeConfig {
     text: string;
   };
 }
+
 const challengeTypeConfig: ChallengeTypeConfig = {
   reduce: { Icon: ReduceIcon, text: "감량" },
   increase: { Icon: IncreaseIcon, text: "증량" },

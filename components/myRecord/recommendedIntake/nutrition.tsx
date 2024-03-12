@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import { Commonstyles } from "../../../uitl/defaultStyle";
+import { Commonstyles } from "../../../uitll/defaultStyle";
 import Circle from "./circle";
 
 interface NutritionProps {

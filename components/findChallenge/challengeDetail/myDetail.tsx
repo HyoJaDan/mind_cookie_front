@@ -1,29 +1,45 @@
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Colors } from "../../assets/color/color";
-import { fontStyle } from "../../assets/font/font";
-import { Commonstyles } from "../../uitl/defaultStyle";
-import { generateID } from "../../uitl/generateID";
+import { SetterOrUpdater } from "recoil";
+import { Colors } from "../../../assets/color/color";
+import { fontStyle } from "../../../assets/font/font";
+import { IUserInProfile } from "../../../data/user/userData";
+import { fetchUserDataInProfile } from "../../../data/user/userDataHandler";
+import { GoalItem } from "../../../screens/findChallenge/ChallengeDetail";
+import { Commonstyles } from "../../../uitll/defaultStyle";
 import { AddGoalModal } from "./addGoalModal";
+import { AddProfileModal } from "./addProfileModal";
 
-export interface GoalItem {
-  id: string;
-  value: string;
+interface IProps {
+  id: number;
+  user: IUserInProfile;
+  setUser: SetterOrUpdater<IUserInProfile>;
+  goals: GoalItem[];
+  setGoals: React.Dispatch<React.SetStateAction<GoalItem[]>>;
 }
-export default function MyDetail() {
-  const [goals, setGoals] = useState<GoalItem[]>([
-    { id: generateID(), value: "식단 기록" },
-    { id: generateID(), value: "운동 기록" },
-  ]);
+export default function MyDetail({
+  id,
+  user,
+  setUser,
+  goals,
+  setGoals,
+}: IProps) {
+  useEffect(() => {
+    const loadUserData = async () => {
+      const data = await fetchUserDataInProfile(id as number);
+      if (data) setUser(data);
+    };
 
+    loadUserData();
+  }, []);
+
+  const [modalContent, setModalContent] = useState("");
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["70%"], []);
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
+
   const handleSheetChanges = useCallback((index: number) => {}, []);
-  const handleClosePress = () => bottomSheetModalRef.current?.close();
+
   const renderBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -35,6 +51,19 @@ export default function MyDetail() {
     ),
     []
   );
+  // 내 프로필 변경 버튼을 누를 때 실행될 핸들러
+  const handlePresentProfileModalPress = useCallback(() => {
+    setModalContent("profile");
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  // 내 목표 변경 버튼을 누를 때 실행될 핸들러
+  const handlePresentGoalsModalPress = useCallback(() => {
+    setModalContent("goals");
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleClosePress = () => bottomSheetModalRef.current?.close();
+
   return (
     <View style={styles.Wrapper}>
       <View style={styles.boxWrapper}>
@@ -45,15 +74,16 @@ export default function MyDetail() {
           <View style={Commonstyles.flexGap}>
             <View style={styles.Circle} />
             <Text style={[fontStyle.RG14, { color: Colors.basic.text_light }]}>
-              userName
+              {user.userName}
             </Text>
           </View>
-          <Text
-            onPress={handlePresentModalPress}
-            style={[fontStyle.MD16, { color: Colors.basic.text_extralight }]}
-          >
-            변경
-          </Text>
+          <TouchableOpacity onPress={handlePresentProfileModalPress}>
+            <Text
+              style={[fontStyle.MD16, { color: Colors.basic.text_extralight }]}
+            >
+              변경
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={Commonstyles.line} />
@@ -81,7 +111,7 @@ export default function MyDetail() {
               </Text>
             )}
           </View>
-          <TouchableOpacity onPress={handlePresentModalPress}>
+          <TouchableOpacity onPress={handlePresentGoalsModalPress}>
             <Text
               style={[fontStyle.MD16, { color: Colors.basic.text_extralight }]}
             >
@@ -105,11 +135,21 @@ export default function MyDetail() {
         backdropComponent={renderBackdrop}
         keyboardBehavior="interactive"
       >
-        <AddGoalModal
-          handlePresentModalPress={handleClosePress}
-          goals={goals}
-          setGoals={setGoals}
-        />
+        {modalContent === "goals" && (
+          <AddGoalModal
+            handlePresentModalPress={handleClosePress}
+            goals={goals}
+            setGoals={setGoals}
+          />
+        )}
+        {modalContent === "profile" && (
+          <AddProfileModal
+            handlePresentModalPress={handleClosePress}
+            user={user}
+            setName={setUser}
+            // ProfileChangeModal에 전달할 추가적인 프롭스
+          />
+        )}
       </BottomSheetModal>
     </View>
   );

@@ -10,14 +10,14 @@ export interface IWeight {
   weight: number;
 }
 
-export interface IUser {
+export interface IUserInMyRecord {
   calorie: number;
   intakedCalorie: number;
   weight: IWeight[];
 }
 
-export const userData = atom<IUser>({
-  key: "userData",
+export const userDataInMyRecord = atom<IUserInMyRecord>({
+  key: "IUserInMyRecord",
   default: {
     calorie: 2000,
     intakedCalorie: 1700,
@@ -28,5 +28,15 @@ export const userData = atom<IUser>({
       { date: "2021-10-04T00:00:00.000Z", weight: 70 },
       { date: "2021-10-05T00:00:00.000Z", weight: 70 },
     ],
+  },
+});
+
+export interface IUserInProfile {
+  userName: string;
+}
+export const userDataInProfile = atom<IUserInProfile>({
+  key: "IUserInProfile",
+  default: {
+    userName: "",
   },
 });

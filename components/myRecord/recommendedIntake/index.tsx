@@ -5,7 +5,7 @@ import { fontStyle } from "../../../assets/font/font";
 import Bacon from "../../../assets/icon/bacon.svg";
 import Bread from "../../../assets/icon/bread.svg";
 import Meat from "../../../assets/icon/meat.svg";
-import { Commonstyles } from "../../../uitl/defaultStyle";
+import { Commonstyles } from "../../../uitll/defaultStyle";
 import { Nutrition } from "./nutrition";
 
 interface RecommendedIntakeProps {

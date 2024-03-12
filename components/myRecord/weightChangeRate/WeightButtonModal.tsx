@@ -3,14 +3,14 @@ import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import { IUser } from "../../../data/myRecord/userData";
-import { putUserData } from "../../../data/myRecord/userDataHandler";
-import { DefaultButton } from "../../../uitl/defaultBotton";
+import { IUserInMyRecord } from "../../../data/user/userData";
+import { putUserData } from "../../../data/user/userDataHandler";
+import { DefaultButton } from "../../../uitll/defaultBotton";
 
 interface IProps {
   handlePresentModalPress: Function;
   id: number;
-  user: IUser;
+  user: IUserInMyRecord;
   setUser: Function;
 }
 

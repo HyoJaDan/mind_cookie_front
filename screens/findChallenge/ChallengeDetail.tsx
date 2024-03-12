@@ -1,12 +1,19 @@
 // screens/ChallengeDetailScreen.tsx
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Colors } from "../../assets/color/color";
 import { fontStyle } from "../../assets/font/font";
-import MyDetail from "../../components/findChallenge/myDetail";
+import MyDetail from "../../components/findChallenge/challengeDetail/myDetail";
 import { ITeams } from "../../data/team/teamData";
-import { formatDate } from "../../uitl/dateConverter";
-import { DefaultButton } from "../../uitl/defaultBotton";
+import { userDataInProfile, userId } from "../../data/user/userData";
+import {
+  putUserEtcGoal,
+  putUserteamUserName,
+} from "../../data/user/userDataHandler";
+import { formatDate } from "../../uitll/dateConverter";
+import { DefaultButton } from "../../uitll/defaultBotton";
+import { generateID } from "../../uitll/generateID";
 
 // TypeScript 인터페이스를 사용하여 route.params의 타입 정의
 interface ChallengeDetailScreenProps {
@@ -46,15 +53,32 @@ const DetailItem: React.FC<{ label: string; content: JSX.Element }> = ({
   </View>
 );
 
+export interface GoalItem {
+  id: string;
+  value: string;
+}
+
 export const ChallengeDetailScreen: React.FC<ChallengeDetailScreenProps> = ({
   route,
 }) => {
+  const id = useRecoilValue(userId);
+  const [user, setUser] = useRecoilState(userDataInProfile);
+  const [goals, setGoals] = useState<GoalItem[]>([
+    { id: generateID(), value: "식단 기록" },
+    { id: generateID(), value: "운동 기록" },
+  ]);
   const { currentTeam } = route.params;
+
   const date = `${formatDate(currentTeam.startDate)} ~ ${formatDate(
     currentTeam.endDate
   )}`;
   const pressHandler = async () => {
-    console.log("HELLO");
+    const parsedGoals = JSON.stringify(
+      goals.slice(2).map((item) => item.value.toLowerCase())
+    );
+
+    await putUserteamUserName(id as number, user.userName);
+    await putUserEtcGoal(id as number, parsedGoals, currentTeam.startDate);
   };
   return (
     <SafeAreaView style={styles.Wrapper}>
@@ -89,7 +113,13 @@ export const ChallengeDetailScreen: React.FC<ChallengeDetailScreenProps> = ({
           }
         />
       </View>
-      <MyDetail />
+      <MyDetail
+        id={id}
+        user={user}
+        setUser={setUser}
+        goals={goals}
+        setGoals={setGoals}
+      />
       <DefaultButton pressHandler={pressHandler} text="참가하기" />
     </SafeAreaView>
   );

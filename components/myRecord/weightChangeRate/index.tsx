@@ -2,8 +2,8 @@ import { StyleSheet, View } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Colors } from "../../../assets/color/color";
-import { IWeight } from "../../../data/myRecord/userData";
-import { DefaultButton } from "../../../uitl/defaultBotton";
+import { IWeight } from "../../../data/user/userData";
+import { DefaultButton } from "../../../uitll/defaultBotton";
 import { Header } from "./Header";
 import { WeightChangeRateChart } from "./chart";
 

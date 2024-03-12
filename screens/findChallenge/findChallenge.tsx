@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../assets/color/color";
 import { fontStyle } from "../../assets/font/font";
-import { RenderItemComponent } from "../../components/findChallenge/teamList";
-import { fetchTeamData } from "../../data/team/getAllTeam";
+import { RenderItemComponent } from "../../components/findChallenge/findChallenge/teamList";
 import { ITeams } from "../../data/team/teamData";
+import { fetchAllTeamData } from "../../data/team/teamDataHandler";
 
 type RootStackParamList = {
   FindChallenge: undefined;
@@ -15,12 +15,12 @@ type RootStackParamList = {
 
 export function FindChallenge() {
   const [teamList, setTeamList] = useState([]);
-
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  console.log(teamList, "teamListㄴ");
   useEffect(() => {
     const loadUserData = async () => {
-      const data = await fetchTeamData();
+      const data = await fetchAllTeamData();
       if (data) setTeamList(data);
     };
 

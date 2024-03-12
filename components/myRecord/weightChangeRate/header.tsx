@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import { IWeight } from "../../../data/myRecord/userData";
-import { formatDateUntilMinute } from "../../../uitl/dateConverter";
+import { IWeight } from "../../../data/user/userData";
+import { formatDateUntilMinute } from "../../../uitll/dateConverter";
 
 function parseLastWeightDate(weight: IWeight[]) {
   if (weight.length === 0) {

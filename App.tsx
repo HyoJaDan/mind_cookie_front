@@ -2,22 +2,27 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import { Colors } from "./assets/color/color";
 import AuthContextProvider, { AuthContext } from "./data/auth-context";
+import { IsMemberWithTeam, userId } from "./data/user/userData";
+import { getIsMemberWithTeam } from "./data/user/userDataHandler";
 import WelcomeScreen from "./screens/MyRecord";
-import LoginScreen from "./screens/initScreen/LoginScreen";
-import SignupScreen from "./screens/initScreen/SignupScreen";
-
+import MyGoalScreen from "./screens/challenge/myGoalScreen";
+import MyTeamScreen from "./screens/challenge/myTeamScreen";
 import ChallengeDetailScreen from "./screens/findChallenge/ChallengeDetail";
 import { FindChallenge } from "./screens/findChallenge/findChallenge";
+import LoginScreen from "./screens/initScreen/LoginScreen";
+import SignupScreen from "./screens/initScreen/SignupScreen";
 import IconButton from "./uitll/ui/IconButton";
 
 const Stack = createNativeStackNavigator();
@@ -43,9 +48,42 @@ function FindChallengeStack() {
     </Stack.Navigator>
   );
 }
+
+const Tab = createMaterialTopTabNavigator();
+function ChallengeStack() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarLabelStyle: {
+          color: Colors.basic.text_default,
+          fontSize: 18,
+          fontFamily: "Pretendard-Bold",
+        },
+        tabBarIndicatorStyle: { height: 3 },
+      }}
+    >
+      <Tab.Screen name="내 목표" component={MyGoalScreen} />
+      <Tab.Screen name="내 팀" component={MyTeamScreen} />
+    </Tab.Navigator>
+  );
+}
 function AuthenticatedStack() {
   const authCtx = useContext(AuthContext);
   const BottomTab = createBottomTabNavigator();
+
+  const id = useRecoilValue(userId);
+  const [isMemberWithTeam, setIsMemberWithTeam] =
+    useRecoilState(IsMemberWithTeam);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getIsMemberWithTeam(id as number);
+      if (response !== null) setIsMemberWithTeam(response);
+    };
+    fetchData(); // 정의한 비동기 함수를 호출합니다.
+  }, []);
+
+  console.log(isMemberWithTeam, "isMemberWithTeam");
   return (
     <BottomTab.Navigator>
       <BottomTab.Screen
@@ -58,27 +96,51 @@ function AuthenticatedStack() {
           headerShown: false,
         }}
       />
-      <BottomTab.Screen
-        name="챌린지"
-        component={FindChallengeStack}
-        options={{
-          headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="exit"
-              color={tintColor}
-              size={24}
-              onPress={authCtx.logout}
-            />
-          ),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="fire-circle"
-              color={color}
-              size={size}
-            />
-          ),
-        }}
-      />
+      {isMemberWithTeam === false ? (
+        <BottomTab.Screen
+          name="챌린지"
+          component={FindChallengeStack}
+          options={{
+            headerRight: ({ tintColor }) => (
+              <IconButton
+                icon="exit"
+                color={tintColor}
+                size={24}
+                onPress={authCtx.logout}
+              />
+            ),
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="fire-circle"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+      ) : (
+        <BottomTab.Screen
+          name="챌린지"
+          component={ChallengeStack}
+          options={{
+            headerRight: ({ tintColor }) => (
+              <IconButton
+                icon="exit"
+                color={tintColor}
+                size={24}
+                onPress={authCtx.logout}
+              />
+            ),
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="fire-circle"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+      )}
     </BottomTab.Navigator>
   );
 }
@@ -169,3 +231,11 @@ export default function App() {
     </RecoilRoot>
   );
 }
+const styles = StyleSheet.create({
+  indicatorStyle: {
+    backgroundColor: "blue",
+    width: "90%", // 인디케이터의 너비를 90%로 설정하여 여백 생성
+    marginLeft: "5%", // 인디케이터의 좌측 여백
+    marginRight: "5%", // 인디케이터의 우측 여백
+  },
+});

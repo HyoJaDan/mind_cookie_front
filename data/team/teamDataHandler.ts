@@ -8,3 +8,15 @@ export const fetchAllTeamData = async () => {
     console.error("Error fetching team data:", error);
   }
 };
+
+/* api/member/{memberId}/team/{teamId} */
+export const putUserInTeam = async (teamId: number, memberId: number) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:8080/api/member/${memberId}/team/${teamId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching team data:", error);
+  }
+};

@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-export const userId = atom<number | undefined>({
+export const userId = atom<number>({
   key: "userId",
   default: 1,
 });
@@ -39,4 +39,9 @@ export const userDataInProfile = atom<IUserInProfile>({
   default: {
     userName: "",
   },
+});
+
+export const IsMemberWithTeam = atom<boolean>({
+  key: "IMemberWithTeam",
+  default: false,
 });

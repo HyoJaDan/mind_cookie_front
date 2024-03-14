@@ -1,16 +1,19 @@
 // screens/ChallengeDetailScreen.tsx
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Colors } from "../../assets/color/color";
 import { fontStyle } from "../../assets/font/font";
 import MyDetail from "../../components/findChallenge/challengeDetail/myDetail";
+import { putEtcGoal } from "../../data/personalChallenge/personalChallengeDataHandler";
 import { ITeams } from "../../data/team/teamData";
-import { userDataInProfile, userId } from "../../data/user/userData";
+import { putUserInTeam } from "../../data/team/teamDataHandler";
 import {
-  putUserEtcGoal,
-  putUserteamUserName,
-} from "../../data/user/userDataHandler";
+  IsMemberWithTeam,
+  userDataInProfile,
+  userId,
+} from "../../data/user/userData";
+import { putUserteamUserName } from "../../data/user/userDataHandler";
 import { formatDate } from "../../uitll/dateConverter";
 import { DefaultButton } from "../../uitll/defaultBotton";
 import { generateID } from "../../uitll/generateID";
@@ -68,6 +71,7 @@ export const ChallengeDetailScreen: React.FC<ChallengeDetailScreenProps> = ({
     { id: generateID(), value: "운동 기록" },
   ]);
   const { currentTeam } = route.params;
+  const setIsMemberWithTeam = useSetRecoilState(IsMemberWithTeam);
 
   const date = `${formatDate(currentTeam.startDate)} ~ ${formatDate(
     currentTeam.endDate
@@ -76,9 +80,10 @@ export const ChallengeDetailScreen: React.FC<ChallengeDetailScreenProps> = ({
     const parsedGoals = JSON.stringify(
       goals.slice(2).map((item) => item.value.toLowerCase())
     );
-
+    setIsMemberWithTeam(true);
     await putUserteamUserName(id as number, user.userName);
-    await putUserEtcGoal(id as number, parsedGoals, currentTeam.startDate);
+    await putEtcGoal(id as number, parsedGoals, currentTeam.startDate);
+    await putUserInTeam(currentTeam.id as number, id as number);
   };
   return (
     <SafeAreaView style={styles.Wrapper}>

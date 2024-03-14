@@ -39,7 +39,6 @@ export function AddGoalModal({
     );
   };
   const pressHandler = async () => {
-    console.log(goals);
     handlePresentModalPress();
   };
   return (

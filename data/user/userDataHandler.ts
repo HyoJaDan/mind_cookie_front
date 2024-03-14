@@ -46,23 +46,14 @@ export const putUserteamUserName = async (userId: number, userName: string) => {
   }
 };
 
-export const putUserEtcGoal = async (
-  userId: number,
-  parsedGoals: string,
-  date: string
-) => {
-  const url = `http://localhost:8080/api/member/${userId}/startDay/personal-challenges/addEtcGoals?startDate=${date}`;
-
-  axios
-    .put(url, parsedGoals, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((response) => {
-      console.log("Response:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+export const getIsMemberWithTeam = async (userId: number) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/memberWithTeam/${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };

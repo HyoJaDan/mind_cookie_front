@@ -1,0 +1,15 @@
+<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="checkbox">
+<g id="Rectangle Copy">
+<rect x="0.0688477" y="0.481934" width="24" height="24" rx="4" fill="#DDDAD7"/>
+<rect x="0.0688477" y="0.481934" width="24" height="24" rx="4" fill="url(#paint0_linear_259_4469)"/>
+</g>
+<path id="Vector 95" d="M3.99951 13.4317L9.48849 18.3826L20.0689 7.08154" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_259_4469" x1="0.0688477" y1="-2.45966" x2="33.1647" y2="10.7593" gradientUnits="userSpaceOnUse">
+<stop stop-color="#B4D7FF"/>
+<stop offset="0.744792" stop-color="#D4ECC3"/>
+</linearGradient>
+</defs>
+</svg>

@@ -17,7 +17,6 @@ export function FindChallenge() {
   const [teamList, setTeamList] = useState([]);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  console.log(teamList, "teamListㄴ");
   useEffect(() => {
     const loadUserData = async () => {
       const data = await fetchAllTeamData();

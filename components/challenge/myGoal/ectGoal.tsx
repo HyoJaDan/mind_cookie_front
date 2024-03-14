@@ -9,11 +9,12 @@ import {
 import { useRecoilValue } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import CheckIcon from "../../../assets/icon/challenge/checkbox.svg";
+
+import { IGoal } from "../../../data/personalChallenge/personalChallengeData";
 import {
-  IGoal,
+  getEtcGoal,
   updateGoalIsDone,
-} from "../../../data/personalChallenge/personalChallengeData";
-import { getEtcGoal } from "../../../data/personalChallenge/personalChallengeDataHandler";
+} from "../../../data/personalChallenge/personalChallengeDataHandler";
 import { userId } from "../../../data/user/userData";
 import { Header } from "./header";
 export function EtcGoal() {
@@ -28,7 +29,6 @@ export function EtcGoal() {
 
     loadUserData();
   }, []);
-  console.log(goals, "oals");
 
   const CustomCheckbox = ({
     goal,
@@ -75,7 +75,6 @@ export function EtcGoal() {
         )
       );
     } catch (error) {
-      console.error("Error toggling goal:", error);
       // 오류 처리 로직 (예: 사용자에게 오류 메시지 표시)
     }
   };
@@ -83,7 +82,7 @@ export function EtcGoal() {
   const ItemSeparator = () => <View style={{ height: 15 }} />;
   return (
     <View style={styles.Wrapper}>
-      <Header text="Meal Goal" />
+      <Header text="목표" />
       <View style={styles.Content}>
         <FlatList
           data={goals}

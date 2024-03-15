@@ -1,11 +1,12 @@
 import axios from "axios";
+import { BASE_URL, USER_URL } from "../../uitll/url";
 
 export const putEtcGoal = async (
   userId: number,
   parsedGoals: string,
   date: string
 ) => {
-  const url = `http://localhost:8080/api/member/${userId}/startDay/personal-challenges/addEtcGoals?startDate=${date}`;
+  const url = `${USER_URL}/${userId}/startDay/personal-challenges/addEtcGoals?startDate=${date}`;
 
   try {
     await axios.put(url, parsedGoals, {
@@ -19,7 +20,7 @@ export const putEtcGoal = async (
 };
 
 export const getEtcGoal = async (userId: number) => {
-  const url = `http://localhost:8080/api/member/${userId}/personal-challenges`;
+  const url = `${USER_URL}/${userId}/etc-personal-challenges`;
 
   try {
     const response = await axios.get(url);
@@ -30,14 +31,37 @@ export const getEtcGoal = async (userId: number) => {
   }
 };
 
-// 백엔드 API의 기본 URL
-const BASE_URL = "http://localhost:8080/api";
-
-// 목표의 isDone 값을 업데이트하는 함수
-export const updateGoalIsDone = async (goalId: number, isDone: boolean) => {
+/** 목표의 etc-goal의 isDone 값을 업데이트하는 함수 */
+export const updateEtcGoalIsDone = async (goalId: number, isDone: boolean) => {
   try {
     const response = await axios.put(
       `${BASE_URL}/goals/${goalId}/done?done=${isDone}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/** 목표의  운동 목표를 업데이트 하는 함수*/
+export const updateExerciseGoal = async (
+  caloriesBurned: number,
+  goalAchieved: boolean
+) => {
+  try {
+    const data = {
+      exerciseCalorie: caloriesBurned,
+      done: goalAchieved,
+    };
+
+    const response = await axios.put(
+      `${BASE_URL}/personal-challenge/1/exercise`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response.data;
   } catch (error) {

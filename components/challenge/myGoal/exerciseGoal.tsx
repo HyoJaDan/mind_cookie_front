@@ -7,6 +7,7 @@ import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import SwapChallengeIcon from "../../../assets/icon/challenge/swapChallenge.svg";
 import { exerciseOptions } from "../../../data/personalChallenge/personalChallengeData";
+import { updateExerciseGoal } from "../../../data/personalChallenge/personalChallengeDataHandler";
 import { Header } from "./header";
 
 export function ExerciseGoal() {
@@ -37,8 +38,13 @@ export function ExerciseGoal() {
     return () => clearInterval(interval);
   }, [isActive, selectedExercise]);
 
-  const toggleStopwatch = () => {
+  const toggleStopwatch = async () => {
     setIsActive(!isActive);
+
+    if (isActive) {
+      const goalAchieved = elapsedTime >= 900;
+      await updateExerciseGoal(caloriesBurned, goalAchieved);
+    }
   };
 
   const formatTime = (totalSeconds: number): string => {
@@ -142,7 +148,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: "center",
 
-    flexDirection: "row", // 여러 요소를 수평으로 배열하기 위함
+    flexDirection: "row",
     borderRadius: 40,
   },
   lastFont: {

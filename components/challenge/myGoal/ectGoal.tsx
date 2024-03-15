@@ -13,10 +13,11 @@ import CheckIcon from "../../../assets/icon/challenge/checkbox.svg";
 import { IGoal } from "../../../data/personalChallenge/personalChallengeData";
 import {
   getEtcGoal,
-  updateGoalIsDone,
+  updateEtcGoalIsDone,
 } from "../../../data/personalChallenge/personalChallengeDataHandler";
 import { userId } from "../../../data/user/userData";
 import { Header } from "./header";
+
 export function EtcGoal() {
   const id = useRecoilValue(userId);
   const [goals, setGoals] = useState<IGoal[]>([]);
@@ -66,7 +67,7 @@ export function EtcGoal() {
 
     try {
       // 백엔드에 isDone 상태 업데이트 요청
-      await updateGoalIsDone(goalId, newIsDone);
+      await updateEtcGoalIsDone(goalId, newIsDone);
 
       // 성공적으로 업데이트된 경우, 로컬 상태 업데이트
       setGoals(

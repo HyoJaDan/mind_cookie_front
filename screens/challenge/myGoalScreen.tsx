@@ -1,20 +1,47 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { MealGoal } from "../../components/challenge/myGoal/MealGoal";
-import { EtcGoal } from "../../components/challenge/myGoal/ectGoal";
+import { EtcGoalFunction } from "../../components/challenge/myGoal/ectGoal";
 import { ExerciseGoal } from "../../components/challenge/myGoal/exerciseGoal";
+import { todayPersonalChallenge } from "../../data/personalChallenge/personalChallengeData";
+import { getMyGoalData } from "../../data/personalChallenge/personalChallengeDataHandler";
+import { userId } from "../../data/user/userData";
 
 export default function MyGoalScreen() {
+  const id = useRecoilValue(userId);
+  const [data, setData] = useRecoilState(todayPersonalChallenge);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getMyGoalData(id);
+      if (result) {
+        setData(result);
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [id]);
+
   return (
     <FlatList
       ListHeaderComponent={() => (
         <View style={styles.Wrapper}>
-          <EtcGoal />
+          {data?.status === "before" && (
+            <Text>아직 첼린지가 시작하기 전이에요</Text>
+          )}
+          {data?.status === "after" && <Text>첼린지가 종료되었어요</Text>}
+          <EtcGoalFunction data={data} setData={setData} />
           <MealGoal />
         </View>
       )}
-      data={[]} // ExerciseGoal은 실제 목록 항목이 아니므로 data는 비어 있음
-      renderItem={null} // ExerciseGoal을 renderItem으로 사용하지 않음
-      ListFooterComponent={ExerciseGoal} // ExerciseGoal을 목록의 마지막 컴포넌트로 추가
+      data={[]}
+      renderItem={null}
+      ListFooterComponent={() => (
+        <ExerciseGoal id={data.challenge.id} goals={data.challenge.exercise} />
+      )}
       keyExtractor={(item, index) => index.toString()}
       contentContainerStyle={{
         paddingHorizontal: 20,

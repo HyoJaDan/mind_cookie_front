@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -6,36 +5,28 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useRecoilValue } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import CheckIcon from "../../../assets/icon/challenge/checkbox.svg";
 
-import { IGoal } from "../../../data/personalChallenge/personalChallengeData";
 import {
-  getEtcGoal,
-  updateEtcGoalIsDone,
-} from "../../../data/personalChallenge/personalChallengeDataHandler";
-import { userId } from "../../../data/user/userData";
+  EtcGoal,
+  ITodayPersonalChallenge,
+} from "../../../data/personalChallenge/personalChallengeData";
+import { updateEtcGoalIsDone } from "../../../data/personalChallenge/personalChallengeDataHandler";
 import { Header } from "./header";
 
-export function EtcGoal() {
-  const id = useRecoilValue(userId);
-  const [goals, setGoals] = useState<IGoal[]>([]);
+interface EtcGoalProps {
+  data: ITodayPersonalChallenge;
+  setData: Function;
+}
 
-  useEffect(() => {
-    const loadUserData = async () => {
-      const data = await getEtcGoal(id);
-      if (data) setGoals(data);
-    };
-
-    loadUserData();
-  }, []);
-
+export function EtcGoalFunction({ data, setData }: EtcGoalProps) {
+  const goals = data.challenge.etcGoals;
   const CustomCheckbox = ({
     goal,
     toggleCheckbox,
   }: {
-    goal: IGoal;
+    goal: EtcGoal;
     toggleCheckbox: (id: number) => void;
   }) => {
     return (
@@ -44,40 +35,40 @@ export function EtcGoal() {
         onPress={() => toggleCheckbox(goal.id)}
       >
         <View
-          style={
-            goal.isDone ? styles.checkboxChecked : styles.checkboxUnchecked
-          }
+          style={goal.done ? styles.checkboxChecked : styles.checkboxUnchecked}
         >
-          {goal.isDone && <CheckIcon />}
+          {goal.done && <CheckIcon />}
         </View>
         <Text style={styles.goalText}>{goal.goalName}</Text>
       </TouchableOpacity>
     );
   };
 
-  const renderItem = ({ item }: { item: IGoal }) => (
+  const renderItem = ({ item }: { item: EtcGoal }) => (
     <CustomCheckbox goal={item} toggleCheckbox={toggleCheckbox} />
   );
   const toggleCheckbox = async (goalId: number) => {
-    // 현재 클릭된 목표의 isDone 상태 찾기
-    const currentGoal = goals.find((goal) => goal.id === goalId);
-    if (!currentGoal) return; // 해당 ID를 가진 목표가 없는 경우 함수 종료
-
-    const newIsDone = !currentGoal.isDone;
+    const newGoals = data.challenge.etcGoals.map((goal) => {
+      if (goal.id === goalId) {
+        return { ...goal, done: !goal.done };
+      }
+      return goal;
+    });
 
     try {
-      // 백엔드에 isDone 상태 업데이트 요청
-      await updateEtcGoalIsDone(goalId, newIsDone);
-
-      // 성공적으로 업데이트된 경우, 로컬 상태 업데이트
-      setGoals(
-        goals.map((goal) =>
-          goal.id === goalId ? { ...goal, isDone: newIsDone } : goal
-        )
+      await updateEtcGoalIsDone(
+        goalId,
+        !data.challenge.etcGoals.find((goal) => goal.id === goalId)?.done
       );
-    } catch (error) {
-      // 오류 처리 로직 (예: 사용자에게 오류 메시지 표시)
-    }
+
+      setData((prevData: any) => ({
+        ...prevData,
+        challenge: {
+          ...prevData.challenge,
+          etcGoals: newGoals,
+        },
+      }));
+    } catch (error) {}
   };
 
   const ItemSeparator = () => <View style={{ height: 15 }} />;

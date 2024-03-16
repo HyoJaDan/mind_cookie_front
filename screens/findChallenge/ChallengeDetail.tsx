@@ -5,6 +5,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Colors } from "../../assets/color/color";
 import { fontStyle } from "../../assets/font/font";
 import MyDetail from "../../components/findChallenge/challengeDetail/myDetail";
+import { todayPersonalChallenge } from "../../data/personalChallenge/personalChallengeData";
 import { putEtcGoal } from "../../data/personalChallenge/personalChallengeDataHandler";
 import { ITeams } from "../../data/team/teamData";
 import { putUserInTeam } from "../../data/team/teamDataHandler";
@@ -70,21 +71,42 @@ export const ChallengeDetailScreen: React.FC<ChallengeDetailScreenProps> = ({
     { id: generateID(), value: "식단 기록" },
     { id: generateID(), value: "운동 기록" },
   ]);
+  const setTodayPersonalChallenge = useSetRecoilState(todayPersonalChallenge);
   const { currentTeam } = route.params;
   const setIsMemberWithTeam = useSetRecoilState(IsMemberWithTeam);
 
   const date = `${formatDate(currentTeam.startDate)} ~ ${formatDate(
     currentTeam.endDate
   )}`;
+
   const pressHandler = async () => {
+    const newGoals = goals.slice(2);
+
+    // newGoals를 통해 업데이트 될 EtcGoals 생성
+    const updatedEtcGoals = newGoals.map((goal) => ({
+      id: goal.id, // 실제 사용에 맞게 조정 필요
+      goalName: goal.value,
+      done: false,
+    }));
+
+    // todayPersonalChallenge 상태 업데이트
+    setTodayPersonalChallenge((prev) => ({
+      ...prev,
+      challenge: {
+        ...prev.challenge,
+        etcGoals: [...prev.challenge.etcGoals, ...updatedEtcGoals],
+      },
+    }));
+
     const parsedGoals = JSON.stringify(
       goals.slice(2).map((item) => item.value.toLowerCase())
     );
-    setIsMemberWithTeam(true);
     await putUserteamUserName(id as number, user.userName);
-    await putEtcGoal(id as number, parsedGoals, currentTeam.startDate);
+    await putEtcGoal(id as number, parsedGoals, currentTeam.startDate); //성공
     await putUserInTeam(currentTeam.id as number, id as number);
+    setIsMemberWithTeam(true);
   };
+
   return (
     <SafeAreaView style={styles.Wrapper}>
       <Text style={[fontStyle.BD24, { color: Colors.basic.text_default }]}>

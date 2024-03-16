@@ -175,7 +175,7 @@ export const DailyCalory = ({ calorie, intakedCalorie }: IProps) => {
     //이 함수가, 지금 70%일때 100%가 차니까, 총량을 늘려버림
     const TotalCalorie = (calorie * 100) / 70;
     setCaloryRate((intakedCalorie * 100) / TotalCalorie);
-  }, []);
+  }, [calorie, intakedCalorie]);
 
   return (
     <View style={styles.dailyCaloryWrapper}>
@@ -185,7 +185,7 @@ export const DailyCalory = ({ calorie, intakedCalorie }: IProps) => {
         percentage={caloryRate}
         color={"#E3E3E3"}
         title={"오늘의 섭취 칼로리"}
-        currentCalroy={intakedCalorie}
+        currentCalroy={Math.floor(intakedCalorie)}
       />
     </View>
   );

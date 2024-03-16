@@ -1,8 +1,49 @@
-export interface IGoal {
-  id: number;
+import { atom } from "recoil";
+
+export interface EtcGoal {
+  id: number | string;
   goalName: string;
-  isDone: boolean;
+  done: boolean;
 }
+
+export interface IExercise {
+  exerciseCalorie: number;
+  durationInSeconds: number;
+  done: boolean;
+}
+
+interface Challenge {
+  id: number;
+  etcGoals: EtcGoal[];
+  exercise: IExercise;
+}
+
+enum Status {
+  Before = "before",
+  Active = "active",
+  After = "after",
+}
+
+export interface ITodayPersonalChallenge {
+  status: Status;
+  challenge: Challenge;
+}
+
+export const todayPersonalChallenge = atom<ITodayPersonalChallenge>({
+  key: "todayPersonalChallenge",
+  default: {
+    status: Status.Active,
+    challenge: {
+      id: 0,
+      etcGoals: [],
+      exercise: {
+        exerciseCalorie: 0,
+        done: false,
+      },
+    },
+  },
+});
+
 interface ExerciseOption {
   label: string;
   value: string;

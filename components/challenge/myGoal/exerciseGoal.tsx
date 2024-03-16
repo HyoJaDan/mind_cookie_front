@@ -3,18 +3,35 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
+import { useRecoilState } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import SwapChallengeIcon from "../../../assets/icon/challenge/swapChallenge.svg";
-import { exerciseOptions } from "../../../data/personalChallenge/personalChallengeData";
+import {
+  IExercise,
+  exerciseOptions,
+} from "../../../data/personalChallenge/personalChallengeData";
 import { updateExerciseGoal } from "../../../data/personalChallenge/personalChallengeDataHandler";
+import { userDataInMyRecord } from "../../../data/user/userData";
 import { Header } from "./header";
 
-export function ExerciseGoal() {
+interface IProps {
+  id: number;
+  goals: IExercise;
+}
+export function ExerciseGoal({ id, goals }: IProps) {
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
-  const [caloriesBurned, setCaloriesBurned] = useState<number>(0);
+  const [elapsedTime, setElapsedTime] = useState<number>(
+    goals.durationInSeconds
+  );
+  const [caloriesBurned, setCaloriesBurned] = useState<number>(
+    goals.exerciseCalorie
+  );
+  const [lastCalorieBurned, setLastCalorieBurned] = useState<number>(
+    goals.exerciseCalorie
+  );
   const [selectedExercise, setSelectedExercise] = useState<string>("running");
+  const [userData, setUserData] = useRecoilState(userDataInMyRecord);
 
   useEffect(() => {
     let interval: any = null;
@@ -42,8 +59,15 @@ export function ExerciseGoal() {
     setIsActive(!isActive);
 
     if (isActive) {
+      const calorie = caloriesBurned - lastCalorieBurned;
+      setUserData((prevData) => ({
+        ...prevData,
+        intakedCalorie: prevData.intakedCalorie - calorie,
+      }));
+      setLastCalorieBurned(caloriesBurned);
+
       const goalAchieved = elapsedTime >= 900;
-      await updateExerciseGoal(caloriesBurned, goalAchieved);
+      await updateExerciseGoal(calorie, goalAchieved, elapsedTime, id);
     }
   };
 

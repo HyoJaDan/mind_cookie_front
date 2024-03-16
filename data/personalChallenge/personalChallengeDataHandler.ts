@@ -1,12 +1,12 @@
 import axios from "axios";
-import { BASE_URL, USER_URL } from "../../uitll/url";
+import { BASE_URL, MEMBER_URL } from "../../uitll/url";
 
 export const putEtcGoal = async (
   userId: number,
   parsedGoals: string,
   date: string
 ) => {
-  const url = `${USER_URL}/${userId}/startDay/personal-challenges/addEtcGoals?startDate=${date}`;
+  const url = `${MEMBER_URL}/${userId}/startDay/personal-challenges/addEtcGoals?startDate=${date}`;
 
   try {
     await axios.put(url, parsedGoals, {
@@ -15,19 +15,21 @@ export const putEtcGoal = async (
       },
     });
   } catch (error) {
-    console.error("Error:", error);
+    console.log("Error putEtcGoal");
+    throw error;
   }
 };
 
-export const getEtcGoal = async (userId: number) => {
-  const url = `${USER_URL}/${userId}/etc-personal-challenges`;
+export const getMyGoalData = async (userId: number) => {
+  const url = `${MEMBER_URL}/${userId}/today-personal-challenges`;
 
   try {
     const response = await axios.get(url);
 
     return response.data;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error getMyGoalData", error);
+    throw error;
   }
 };
 
@@ -35,27 +37,31 @@ export const getEtcGoal = async (userId: number) => {
 export const updateEtcGoalIsDone = async (goalId: number, isDone: boolean) => {
   try {
     const response = await axios.put(
-      `${BASE_URL}/goals/${goalId}/done?done=${isDone}`
+      `${BASE_URL}/etc-personal-challenges/${goalId}/isDone?isDone=${isDone}`
     );
     return response.data;
   } catch (error) {
+    console.log("Error updateEtcGoalIsDone", error);
     throw error;
   }
 };
 
-/** 목표의  운동 목표를 업데이트 하는 함수*/
+/** 목표의 운동 목표를 업데이트 하는 함수*/
 export const updateExerciseGoal = async (
   caloriesBurned: number,
-  goalAchieved: boolean
+  goalAchieved: boolean,
+  elapsedTime: number,
+  personalChallengeId: number
 ) => {
   try {
     const data = {
       exerciseCalorie: caloriesBurned,
-      done: goalAchieved,
+      durationInSeconds: elapsedTime,
+      isDone: goalAchieved,
     };
 
     const response = await axios.put(
-      `${BASE_URL}/personal-challenge/1/exercise`,
+      `${BASE_URL}/personal-challenge/${personalChallengeId}/exercise`,
       data,
       {
         headers: {
@@ -65,6 +71,7 @@ export const updateExerciseGoal = async (
     );
     return response.data;
   } catch (error) {
+    console.log("Error updateExerciseGoal", error);
     throw error;
   }
 };

@@ -80,10 +80,9 @@ function AuthenticatedStack() {
       const response = await getIsMemberWithTeam(id as number);
       if (response !== null) setIsMemberWithTeam(response);
     };
-    fetchData(); // 정의한 비동기 함수를 호출합니다.
-  }, []);
+    fetchData();
+  }, [isMemberWithTeam]);
 
-  console.log(isMemberWithTeam, "isMemberWithTeam");
   return (
     <BottomTab.Navigator>
       <BottomTab.Screen

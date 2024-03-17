@@ -5,7 +5,7 @@ import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import { IUserInMyRecord } from "../../../data/user/userData";
 import { putUserData } from "../../../data/user/userDataHandler";
-import { DefaultButton } from "../../../uitll/defaultBotton";
+import { DefaultButton } from "../../../uitll/defaultButton";
 
 interface IProps {
   handlePresentModalPress: Function;

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import Bacon from "../../../assets/icon/bacon.svg";
-import Bread from "../../../assets/icon/bread.svg";
-import Meat from "../../../assets/icon/meat.svg";
+import Bacon from "../../../assets/icon/findTeam/bacon.svg";
+import Bread from "../../../assets/icon/findTeam/bread.svg";
+import Meat from "../../../assets/icon/findTeam/meat.svg";
 import { Commonstyles } from "../../../uitll/defaultStyle";
 import { Nutrition } from "./nutrition";
 

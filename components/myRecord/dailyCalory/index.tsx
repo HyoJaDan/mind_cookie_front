@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
-import Fork from "../../../assets/icon/fork.svg";
-import Spoon from "../../../assets/icon/spoon.svg";
+import Fork from "../../../assets/icon/myRecord/fork.svg";
+import Spoon from "../../../assets/icon/myRecord/spoon.svg";
 import { DailyCalory } from "./DailyCalory";
 
 interface IProps {

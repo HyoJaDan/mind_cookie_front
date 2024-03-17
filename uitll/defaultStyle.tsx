@@ -2,10 +2,23 @@ import { StyleSheet } from "react-native";
 import { Colors } from "../assets/color/color";
 
 export const Commonstyles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    backgroundColor: Colors.basic.white,
+  },
+  flexRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
   SpaceBetween: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  ColumnSpaceBetween: {
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   SpaceBetweenAndAlignTop: {
     flexDirection: "row",
@@ -27,5 +40,6 @@ export const Commonstyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
+    gap: 8,
   },
 });

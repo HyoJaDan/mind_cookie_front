@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,22 +7,22 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import { Colors } from "./assets/color/color";
-import AuthContextProvider, { AuthContext } from "./data/auth-context";
+import AuthContextProvider from "./data/auth-context";
 import { IsMemberWithTeam, userId } from "./data/user/userData";
 import { getIsMemberWithTeam } from "./data/user/userDataHandler";
 import WelcomeScreen from "./screens/MyRecord";
-import MyGoalScreen from "./screens/challenge/myGoalScreen";
+import MealDetailScreen from "./screens/challenge/myGoal/mealDetailScreen";
+import MyGoalScreen from "./screens/challenge/myGoal/myGoalScreen";
 import MyTeamScreen from "./screens/challenge/myTeamScreen";
 import ChallengeDetailScreen from "./screens/findChallenge/ChallengeDetail";
 import { FindChallenge } from "./screens/findChallenge/findChallenge";
 import LoginScreen from "./screens/initScreen/LoginScreen";
 import SignupScreen from "./screens/initScreen/SignupScreen";
-import IconButton from "./uitll/ui/IconButton";
 
 const Stack = createNativeStackNavigator();
 function AuthStack() {
@@ -49,6 +48,15 @@ function FindChallengeStack() {
   );
 }
 
+function MyGoalChallengeStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MyGoalScreen" component={MyGoalScreen} />
+      <Stack.Screen name="MealDetailScreen" component={MealDetailScreen} />
+    </Stack.Navigator>
+  );
+}
+
 const Tab = createMaterialTopTabNavigator();
 function ChallengeStack() {
   return (
@@ -62,19 +70,18 @@ function ChallengeStack() {
         tabBarIndicatorStyle: { height: 3 },
       }}
     >
-      <Tab.Screen name="내 목표" component={MyGoalScreen} />
+      <Tab.Screen name="내 목표" component={MyGoalChallengeStack} />
       <Tab.Screen name="내 팀" component={MyTeamScreen} />
     </Tab.Navigator>
   );
 }
 function AuthenticatedStack() {
-  const authCtx = useContext(AuthContext);
+  //const authCtx = useContext(AuthContext);
   const BottomTab = createBottomTabNavigator();
 
   const id = useRecoilValue(userId);
   const [isMemberWithTeam, setIsMemberWithTeam] =
     useRecoilState(IsMemberWithTeam);
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await getIsMemberWithTeam(id as number);
@@ -99,7 +106,7 @@ function AuthenticatedStack() {
         <BottomTab.Screen
           name="챌린지"
           component={FindChallengeStack}
-          options={{
+          /* options={{
             headerRight: ({ tintColor }) => (
               <IconButton
                 icon="exit"
@@ -115,21 +122,21 @@ function AuthenticatedStack() {
                 size={size}
               />
             ),
-          }}
+          }} */
         />
       ) : (
         <BottomTab.Screen
           name="챌린지"
           component={ChallengeStack}
           options={{
-            headerRight: ({ tintColor }) => (
+            /* headerRight: ({ tintColor }) => (
               <IconButton
                 icon="exit"
                 color={tintColor}
                 size={24}
                 onPress={authCtx.logout}
               />
-            ),
+            ), */
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="fire-circle"
@@ -137,6 +144,7 @@ function AuthenticatedStack() {
                 size={size}
               />
             ),
+            /* headerShown: false, */
           }}
         />
       )}
@@ -145,17 +153,18 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const authCtx = useContext(AuthContext);
+  /* const authCtx = useContext(AuthContext); */
   return (
     <NavigationContainer>
-      {!authCtx.isAuthenticated && <AuthStack />}
-      {authCtx.isAuthenticated && <AuthenticatedStack />}
+      {/* {!authCtx.isAuthenticated && <AuthStack />}
+      {authCtx.isAuthenticated && <AuthenticatedStack />} */}
+      <AuthenticatedStack />
     </NavigationContainer>
   );
 }
 
 function Root() {
-  const authCtx = useContext(AuthContext);
+  /* const authCtx = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchToken() {
@@ -169,7 +178,7 @@ function Root() {
       await SplashScreen.hideAsync();
     }
     fetchToken();
-  }, []);
+  }, []); */
 
   return <Navigation />;
 }

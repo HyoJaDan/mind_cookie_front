@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import { IUserInProfile } from "../../../data/user/userData";
-import { DefaultButton } from "../../../uitll/defaultBotton";
+import { DefaultButton } from "../../../uitll/defaultButton";
 
 interface AddProfileModalProps {
   handlePresentModalPress: () => void;

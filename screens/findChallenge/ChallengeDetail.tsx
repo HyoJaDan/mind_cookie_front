@@ -16,7 +16,7 @@ import {
 } from "../../data/user/userData";
 import { putUserteamUserName } from "../../data/user/userDataHandler";
 import { formatDate } from "../../uitll/dateConverter";
-import { DefaultButton } from "../../uitll/defaultBotton";
+import { DefaultButton } from "../../uitll/defaultButton";
 import { generateID } from "../../uitll/generateID";
 
 // TypeScript 인터페이스를 사용하여 route.params의 타입 정의
@@ -62,9 +62,7 @@ export interface GoalItem {
   value: string;
 }
 
-export const ChallengeDetailScreen: React.FC<ChallengeDetailScreenProps> = ({
-  route,
-}) => {
+export function ChallengeDetailScreen({ route }: { route: any }) {
   const id = useRecoilValue(userId);
   const [user, setUser] = useRecoilState(userDataInProfile);
   const [goals, setGoals] = useState<GoalItem[]>([
@@ -150,7 +148,7 @@ export const ChallengeDetailScreen: React.FC<ChallengeDetailScreenProps> = ({
       <DefaultButton pressHandler={pressHandler} text="참가하기" />
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   Wrapper: {

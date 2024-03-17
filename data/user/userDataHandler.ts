@@ -7,7 +7,7 @@ export const fetchUserDataInProfile = async (userId: number) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("Error fetching user data in Profile:", error);
     throw error;
   }
 };
@@ -18,7 +18,7 @@ export const fetchUserDataInMyRecord = async (userId: number) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("Error fetching user data in MyRecord:", error);
     throw error;
   }
 };

@@ -8,6 +8,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { DailyCaloryMain } from "../components/myRecord/dailyCalory";
 import RecommendedIntake from "../components/myRecord/recommendedIntake";
@@ -17,12 +18,14 @@ import { userDataInMyRecord, userId } from "../data/user/userData";
 import { fetchUserDataInMyRecord } from "../data/user/userDataHandler";
 
 export default function MyRecordScreen() {
+  const insets = useSafeAreaInsets();
   const id = useRecoilValue(userId);
   const [user, setUser] = useRecoilState(userDataInMyRecord);
 
   useEffect(() => {
     const loadUserData = async () => {
       const data = await fetchUserDataInMyRecord(id as number);
+
       if (data) setUser(data);
     };
 
@@ -49,13 +52,15 @@ export default function MyRecordScreen() {
   );
   return (
     <BottomSheetModalProvider>
-      <SafeAreaView style={styles.rootContainer}>
+      <SafeAreaView style={[styles.rootContainer, { paddingTop: insets.top }]}>
         <ScrollView
           contentContainerStyle={{
             alignItems: "center",
             justifyContent: "center",
             gap: 24,
             backgroundColor: Colors.backgroundColor,
+
+            paddingVertical: 10,
           }}
           showsVerticalScrollIndicator={false}
         >

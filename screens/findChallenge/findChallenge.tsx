@@ -7,6 +7,7 @@ import { fontStyle } from "../../assets/font/font";
 import { RenderItemComponent } from "../../components/findChallenge/findChallenge/teamList";
 import { ITeams } from "../../data/team/teamData";
 import { fetchAllTeamData } from "../../data/team/teamDataHandler";
+import { Commonstyles } from "../../uitll/defaultStyle";
 
 type RootStackParamList = {
   FindChallenge: undefined;
@@ -36,7 +37,7 @@ export function FindChallenge() {
   );
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
+    <SafeAreaView style={Commonstyles.rootContainer}>
       <View style={styles.Wrapper}>
         <Text style={fontStyle.BD20}>챌린지 찾기</Text>
       </View>
@@ -50,10 +51,6 @@ export function FindChallenge() {
 }
 
 const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-    backgroundColor: Colors.basic.white,
-  },
   Wrapper: {
     paddingHorizontal: 24,
     marginTop: 16,

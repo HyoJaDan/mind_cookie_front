@@ -1,4 +1,5 @@
-import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import {
@@ -11,23 +12,35 @@ import {
   View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import CoocieIcon from "../../../assets/icon/challenge/cookie.svg";
 import FoodIcon from "../../../assets/icon/challenge/noodles.svg";
 import PictureImage from "../../../assets/icon/photo.svg";
 import PlusIcon from "../../../assets/icon/plus.svg";
-import { MealOrSnack } from "../../../components/challenge/myGoal/MealGoal";
+import { todayPersonalChallenge } from "../../../data/personalChallenge/personalChallengeData";
+import { postMealGoal } from "../../../data/personalChallenge/personalChallengeDataHandler";
+import { userId } from "../../../data/user/userData";
 import { DefaultButton } from "../../../uitll/defaultButton";
 import { Commonstyles } from "../../../uitll/defaultStyle";
 
-export default function MealDetailScreen({ route }: { route: any }) {
-  const { item }: { item: MealOrSnack } = route.params;
-  const [image, setImage] = useState<string | null>(item.imageUrl);
-  const [text, setText] = useState("");
+type AppNavigationParamList = {
+  MyGoalScreen: undefined;
+};
 
+export default function MealDetailScreen({ route }: { route: any }) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AppNavigationParamList>>();
+  const { index } = route.params;
+  const [data, setData] = useRecoilState(todayPersonalChallenge);
+  const item = data.challenge.mealRecords[index];
+
+  const [content, setContent] = useState(item.content);
+  const [calorie, setCalorie] = useState<number>(item.calorie);
+  const [image, setImage] = useState<string | null>(item.imageUrl);
+  const [imageURI, setImageURI] = useState("");
   const [isButtonClicked, setIsButtonClicked] = useState(false);
-  const [calorie, setCalorie] = useState<number>(0);
   const handleInputCalorieChange = (text: any) => {
     // 숫자만 입력 받기 위한 정규식 검사
     const validatedText = text.replace(/[^0-9]/g, "");
@@ -35,6 +48,7 @@ export default function MealDetailScreen({ route }: { route: any }) {
   };
   const numberMatch = item.title.match(/\d+/);
   const number = numberMatch ? numberMatch[0] : "";
+  const MemberId = useRecoilValue(userId);
 
   useEffect(() => {
     (async () => {
@@ -42,7 +56,6 @@ export default function MealDetailScreen({ route }: { route: any }) {
         const { status } =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
-          console.log("이미지 권한이 필요합니다.");
         }
       }
     })();
@@ -54,39 +67,54 @@ export default function MealDetailScreen({ route }: { route: any }) {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 1,
+        quality: 0.1,
       });
-
-    if (!("canceled" in result) || !result.canceled) {
-      const successResult = result as ImagePicker.ImagePickerSuccessResult;
-      setImage(successResult.assets[0].uri);
-      //uploadImage(successResult.uri);
+    if (!result.canceled) {
+      const uri = result.assets && result.assets[0].uri;
+      if (uri) {
+        setImage(uri);
+        setImageURI(uri);
+      } else {
+        console.error("Image URI is undefined.");
+      }
     }
   };
 
   const uploadImage = async (uri: string) => {
     const formData = new FormData();
-    formData.append("file", {
-      uri,
-      type: "image/jpeg", // or your file type
-      name: "upload.jpg", // or your file name
-    });
+    formData.append("calorie", calorie);
+    formData.append("content", content);
+    formData.append("title", item.title);
+    formData.append("type", item.type);
+    formData.append("createdTime", new Date().toISOString());
 
-    try {
-      const response = await axios.post("<YOUR_BACKEND_ENDPOINT>", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      // Handle response here
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
+    formData.append("boardFile", {
+      uri,
+      type: "image/jpeg",
+      name: "upload.jpg",
+    });
+    const updatedMealRecords = [...data.challenge.mealRecords];
+    updatedMealRecords[index] = {
+      ...updatedMealRecords[index],
+      calorie,
+      content,
+      imageUrl: uri,
+    };
+    const updatedData = {
+      ...data,
+      challenge: {
+        ...data.challenge,
+        mealRecords: updatedMealRecords,
+      },
+    };
+
+    setData(updatedData);
+    await postMealGoal(formData, MemberId);
+    navigation.navigate("MyGoalScreen");
   };
 
   const submitHandler = () => {
-    console.log("submit");
+    uploadImage(imageURI);
   };
 
   return (
@@ -147,8 +175,8 @@ export default function MealDetailScreen({ route }: { route: any }) {
         <View style={styles.textContainer}>
           <TextInput
             style={[styles.inputText]}
-            onChangeText={setText}
-            value={text}
+            onChangeText={setContent}
+            value={content}
             multiline
             placeholder="공유 하고싶은 이야기가 있나요?"
           />

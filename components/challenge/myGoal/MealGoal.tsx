@@ -1,83 +1,56 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import FoodImage from "../../../assets/icon/challenge/croissant.svg";
+import {
+  ITodayPersonalChallenge,
+  mealRecords,
+} from "../../../data/personalChallenge/personalChallengeData";
 import { Commonstyles } from "../../../uitll/defaultStyle";
 import { Header } from "./header";
 
-export type MealOrSnack = {
-  id: string;
-  type: "meal" | "snack";
-  title: string;
-  imageUrl: string | null;
-};
-
 export type MealDetailScreenParams = {
   MyGoalScreen: undefined;
-  MealDetailScreen: { item: MealOrSnack };
+  MealDetailScreen: { index: number };
 };
 
-export function MealGoal() {
+interface MealGoalProps {
+  data: ITodayPersonalChallenge;
+  setItems: Function;
+}
+
+export function MealGoal({ data, setItems }: MealGoalProps) {
   const navigation =
     useNavigation<NativeStackNavigationProp<MealDetailScreenParams>>();
-  const [items, setItems] = useState<MealOrSnack[]>([
-    {
-      id: Date.now().toString(),
-      type: "meal",
-      title: `오늘의 1번째 식사`,
-      imageUrl: null,
-    },
-  ]);
-
-  useEffect(() => {
-    // 백엔드에서 데이터 가져오기
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<MealOrSnack[]>("/api/meals");
-        setItems(response.data);
-      } catch (error) {
-        //console.error("Error fetching meals and snacks:", error);
-      }
-    };
-
-    fetchData();
-  }, [items]);
-
-  const pressHandler = (item: MealOrSnack) => {
-    console.log("끼니 추가하기 버튼 클릭");
-    navigation.navigate("MealDetailScreen", { item });
+  const items: mealRecords[] = data.challenge.mealRecords;
+  const pressDetailHandler = (index: number) => {
+    navigation.navigate("MealDetailScreen", { index });
   };
 
-  const addMealHandler = () => {
-    // 백엔드에 새 식사 추가 요청
-    // 이 예제에서는 새로운 식사를 로컬 상태에 추가하는 것으로 대체합니다.
-    const newMeal: MealOrSnack = {
+  const addNewMealOrSnack = (mealType: "meal" | "snack") => {
+    const newMeal: mealRecords = {
       id: Date.now().toString(),
-      type: "meal",
+      createdTime: new Date().toISOString(),
+      calorie: 0,
+      content: "",
+      type: mealType,
       title: `오늘의 ${
-        items.filter((item) => item.type === "meal").length + 1
-      }번째 식사`,
+        items.filter((item) => item.type === mealType).length + 1
+      }번째 ${mealType === "meal" ? "식사" : "간식"}`,
       imageUrl: null,
     };
-    setItems((currentItems) => [...currentItems, newMeal]);
-  };
 
-  const addSnackHandler = () => {
-    // 백엔드에 새 간식 추가 요청
-    // 이 예제에서는 새로운 간식을 로컬 상태에 추가하는 것으로 대체합니다.
-    const newSnack: MealOrSnack = {
-      id: Date.now().toString(),
-      type: "snack",
-      title: `오늘의 ${
-        items.filter((item) => item.type === "snack").length + 1
-      }번째 간식`,
-      imageUrl: null,
-    };
-    setItems((currentItems) => [...currentItems, newSnack]);
+    const updatedItems = [...items, newMeal];
+
+    setItems((prevData: ITodayPersonalChallenge) => ({
+      ...prevData,
+      challenge: {
+        ...prevData.challenge,
+        mealRecords: updatedItems,
+      },
+    }));
   };
 
   return (
@@ -86,12 +59,11 @@ export function MealGoal() {
       <View style={styles.ContentWrapper}>
         {items.map((item, index) => {
           if (item.imageUrl) {
-            // 이미지가 있는 경우
             return (
               <Image
                 key={index}
                 source={{ uri: item.imageUrl }}
-                style={{ width: 50, height: 50 }}
+                style={styles.image}
               />
             );
           } else {
@@ -108,7 +80,7 @@ export function MealGoal() {
                     style={({ pressed }) =>
                       pressed ? ButtonStyle.pressed : null
                     }
-                    onPress={() => pressHandler(item)}
+                    onPress={() => pressDetailHandler(index)}
                   >
                     <Text
                       style={[
@@ -133,7 +105,7 @@ export function MealGoal() {
                   ? [ButtonStyle.pressed, SecondaryButtonStyle.button]
                   : SecondaryButtonStyle.button
               }
-              onPress={addMealHandler}
+              onPress={() => addNewMealOrSnack("meal")}
             >
               <Text
                 style={[
@@ -152,7 +124,7 @@ export function MealGoal() {
                   ? [ButtonStyle.pressed, SecondaryButtonStyle.button]
                   : SecondaryButtonStyle.button
               }
-              onPress={addSnackHandler}
+              onPress={() => addNewMealOrSnack("snack")}
             >
               <Text
                 style={[
@@ -193,6 +165,7 @@ const styles = StyleSheet.create({
     color: Colors.basic.text_default,
     fontSize: 18,
   },
+  image: { width: "100%", height: 150, borderRadius: 10 },
 });
 
 const ButtonStyle = StyleSheet.create({

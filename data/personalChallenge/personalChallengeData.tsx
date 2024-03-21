@@ -12,10 +12,21 @@ export interface IExercise {
   done: boolean;
 }
 
+export interface mealRecords {
+  id: string;
+  createdTime: string;
+  type: "meal" | "snack";
+  title: string;
+  calorie: number;
+  content: string;
+  imageUrl: string | null;
+}
+
 interface Challenge {
   id: number;
   etcGoals: EtcGoal[];
   exercise: IExercise;
+  mealRecords: mealRecords[];
 }
 
 enum Status {
@@ -38,8 +49,20 @@ export const todayPersonalChallenge = atom<ITodayPersonalChallenge>({
       etcGoals: [],
       exercise: {
         exerciseCalorie: 0,
+        durationInSeconds: 0,
         done: false,
       },
+      mealRecords: [
+        {
+          id: Date.now().toString(),
+          createdTime: new Date().toISOString(),
+          calorie: 0,
+          content: "",
+          type: "meal",
+          title: "오늘의 1번째 식사",
+          imageUrl: null,
+        },
+      ],
     },
   },
 });

@@ -75,3 +75,30 @@ export const updateExerciseGoal = async (
     throw error;
   }
 };
+
+export const postMealGoal = async (FormData: any, MemberId: number) => {
+  try {
+    const response = await axios.post(
+      `${MEMBER_URL}/${MemberId}/todayPersonalChallenge/saveMealRecord`,
+      FormData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+  }
+};
+
+export const getMyMealData = async (id: number) => {
+  const URL = `${MEMBER_URL}/${id}/todayPersonalChallenge/getPersonalMealRecord`;
+  try {
+    const response = await axios.get(URL);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error getMyMealData", error);
+    throw error;
+  }
+};

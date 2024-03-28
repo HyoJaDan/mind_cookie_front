@@ -1,5 +1,10 @@
 import { atom } from "recoil";
 
+export const teamId = atom<number>({
+  key: "teamId",
+  default: 1,
+});
+
 export interface ITeams {
   id: number;
   teamName: string;
@@ -10,7 +15,7 @@ export interface ITeams {
   numOfMember: number;
 }
 
-export const teamData = atom<ITeams>({
+/* export const teamData = atom<ITeams>({
   key: "teamData",
   default: {
     id: 0,
@@ -20,5 +25,46 @@ export const teamData = atom<ITeams>({
     endDate: "2021-10-01T00:00:00.000Z",
     challngeType: "challngeType",
     numOfMember: 0,
+  },
+}); */
+
+export enum RecordType {
+  meal,
+  snack,
+}
+export interface MealRecord {
+  id: number;
+  createdTime: string;
+  title: string;
+  content: string;
+  recordType: RecordType;
+  imageUrl: string;
+}
+export interface memberDTOS {
+  flatMap: any;
+  length: number;
+
+  memberId: number;
+  teamUserName: string;
+  mealRecords: MealRecord[];
+}
+
+export interface ITeamData {
+  startDate: string;
+  endDate: string;
+  totalEtcGoals: number;
+  completedEtcGoals: number;
+  completedExercises: number;
+  memberDTOS: memberDTOS[];
+}
+export const teamData = atom<ITeamData>({
+  key: "ITeamData",
+  default: {
+    startDate: "",
+    endDate: "",
+    totalEtcGoals: 0,
+    completedEtcGoals: 0,
+    completedExercises: 0,
+    memberDTOS: [],
   },
 });

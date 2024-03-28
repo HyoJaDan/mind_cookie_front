@@ -22,3 +22,15 @@ export const putUserInTeam = async (teamId: number, memberId: number) => {
     throw error;
   }
 };
+
+export const getTeamData = async (teamId: number) => {
+  const url = `${TEAM_URL}/${teamId}/getEveryData`;
+
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.log("Error getTeamData", error);
+    throw error;
+  }
+};

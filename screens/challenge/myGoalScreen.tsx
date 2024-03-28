@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { MealGoal } from "../../../components/challenge/myGoal/MealGoal";
-import { EtcGoalFunction } from "../../../components/challenge/myGoal/ectGoal";
-import { ExerciseGoal } from "../../../components/challenge/myGoal/exerciseGoal";
+import { MealGoal } from "../../components/challenge/myGoal/MealGoal";
+import { EtcGoalFunction } from "../../components/challenge/myGoal/ectGoal";
+import { ExerciseGoal } from "../../components/challenge/myGoal/exerciseGoal";
 import {
   ITodayPersonalChallenge,
   mealRecords,
   todayPersonalChallenge,
-} from "../../../data/personalChallenge/personalChallengeData";
-import { getMyGoalData } from "../../../data/personalChallenge/personalChallengeDataHandler";
-import { userId } from "../../../data/user/userData";
+} from "../../data/personalChallenge/personalChallengeData";
+import { getMyGoalData } from "../../data/personalChallenge/personalChallengeDataHandler";
+import { userId } from "../../data/user/userData";
 
 export default function MyGoalScreen() {
   const id = useRecoilValue(userId);
   const [data, setData] = useRecoilState(todayPersonalChallenge);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchData = async () => {
       const result: ITodayPersonalChallenge = await getMyGoalData(id);
@@ -42,7 +41,6 @@ export default function MyGoalScreen() {
     };
     fetchData();
   }, [id]);
-  console.log(data, "gettedData");
 
   return (
     <FlatList

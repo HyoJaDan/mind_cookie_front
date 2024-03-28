@@ -15,8 +15,6 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import CoocieIcon from "../../../assets/icon/challenge/cookie.svg";
-import FoodIcon from "../../../assets/icon/challenge/noodles.svg";
 import PictureImage from "../../../assets/icon/photo.svg";
 import PlusIcon from "../../../assets/icon/plus.svg";
 import { todayPersonalChallenge } from "../../../data/personalChallenge/personalChallengeData";
@@ -24,6 +22,7 @@ import { postMealGoal } from "../../../data/personalChallenge/personalChallengeD
 import { userId } from "../../../data/user/userData";
 import { DefaultButton } from "../../../uitll/defaultButton";
 import { Commonstyles } from "../../../uitll/defaultStyle";
+import { MealButton } from "../../../uitll/mealButton";
 
 type AppNavigationParamList = {
   MyGoalScreen: undefined;
@@ -46,8 +45,6 @@ export default function MealDetailScreen({ route }: { route: any }) {
     const validatedText = text.replace(/[^0-9]/g, "");
     setCalorie(validatedText);
   };
-  const numberMatch = item.title.match(/\d+/);
-  const number = numberMatch ? numberMatch[0] : "";
   const MemberId = useRecoilValue(userId);
 
   useEffect(() => {
@@ -133,23 +130,11 @@ export default function MealDetailScreen({ route }: { route: any }) {
           </Pressable>
         </View>
         <View style={Commonstyles.flexGap}>
-          <>
-            {item.type === "meal" ? (
-              <View style={Commonstyles.flexGap}>
-                <View style={[Commonstyles.flexGap, styles.button]}>
-                  <FoodIcon />
-                  <Text>{number}째끼</Text>
-                </View>
-              </View>
-            ) : (
-              <View style={Commonstyles.flexGap}>
-                <View style={[Commonstyles.flexGap, styles.button]}>
-                  <CoocieIcon />
-                  <Text>간식</Text>
-                </View>
-              </View>
-            )}
-          </>
+          <MealButton
+            type={item.type}
+            title={item.title}
+            backgroundColor={Colors.basic.white}
+          />
           <Pressable onPress={() => setIsButtonClicked(!isButtonClicked)}>
             <View style={[Commonstyles.flexGap, styles.button]}>
               <PlusIcon />

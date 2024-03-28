@@ -65,6 +65,7 @@ export interface GoalItem {
 export function ChallengeDetailScreen({ route }: { route: any }) {
   const id = useRecoilValue(userId);
   const [user, setUser] = useRecoilState(userDataInProfile);
+
   const [goals, setGoals] = useState<GoalItem[]>([
     { id: generateID(), value: "식단 기록" },
     { id: generateID(), value: "운동 기록" },

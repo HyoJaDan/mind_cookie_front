@@ -1,9 +1,25 @@
-import { Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import MealRecordBoard from "../../components/challenge/myTeam/MealRecordBoard";
+import { todayPersonalChallenge } from "../../data/personalChallenge/personalChallengeData";
+import { ITeamData, teamData, teamId } from "../../data/team/teamData";
+import { getTeamData } from "../../data/team/teamDataHandler";
 
 export default function MyTeamScreen() {
-  return (
-    <View>
-      <Text>TempScreen</Text>
-    </View>
-  );
+  const id = useRecoilValue(teamId);
+  const [data, setData] = useRecoilState<ITeamData>(teamData);
+  const setLoadingState = useSetRecoilState(todayPersonalChallenge);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getTeamData(id);
+      setData(result);
+      setLoading(true);
+    };
+    fetchData();
+  }, [id, setData, setLoadingState]);
+  if (loading === false) return null;
+
+  return <MealRecordBoard data={data} />;
 }

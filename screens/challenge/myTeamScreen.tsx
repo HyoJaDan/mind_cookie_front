@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import MealRecordBoard from "../../components/challenge/myTeam/MealRecordBoard";
 import { todayPersonalChallenge } from "../../data/personalChallenge/personalChallengeData";
 import { ITeamData, teamData, teamId } from "../../data/team/teamData";
@@ -8,7 +8,7 @@ import { getTeamData } from "../../data/team/teamDataHandler";
 export default function MyTeamScreen() {
   const id = useRecoilValue(teamId);
   const [data, setData] = useRecoilState<ITeamData>(teamData);
-  const setLoadingState = useSetRecoilState(todayPersonalChallenge);
+  const setLoadingState = useRecoilValue(todayPersonalChallenge);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

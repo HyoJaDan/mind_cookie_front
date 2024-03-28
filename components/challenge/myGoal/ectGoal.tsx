@@ -32,7 +32,7 @@ export function EtcGoalFunction({ data, setData }: EtcGoalProps) {
     return (
       <TouchableOpacity
         style={styles.checkboxContainer}
-        onPress={() => toggleCheckbox(goal.id)}
+        onPress={() => toggleCheckbox(goal.id as number)}
       >
         <View
           style={goal.done ? styles.checkboxChecked : styles.checkboxUnchecked}

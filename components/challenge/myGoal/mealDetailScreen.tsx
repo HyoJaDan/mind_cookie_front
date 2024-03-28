@@ -12,14 +12,14 @@ import {
   View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import PictureImage from "../../../assets/icon/photo.svg";
 import PlusIcon from "../../../assets/icon/plus.svg";
 import { todayPersonalChallenge } from "../../../data/personalChallenge/personalChallengeData";
 import { postMealGoal } from "../../../data/personalChallenge/personalChallengeDataHandler";
-import { userId } from "../../../data/user/userData";
+import { userDataInMyRecord, userId } from "../../../data/user/userData";
 import { DefaultButton } from "../../../uitll/defaultButton";
 import { Commonstyles } from "../../../uitll/defaultStyle";
 import { MealButton } from "../../../uitll/mealButton";
@@ -33,6 +33,7 @@ export default function MealDetailScreen({ route }: { route: any }) {
     useNavigation<NativeStackNavigationProp<AppNavigationParamList>>();
   const { index } = route.params;
   const [data, setData] = useRecoilState(todayPersonalChallenge);
+  const setMember = useSetRecoilState(userDataInMyRecord);
   const item = data.challenge.mealRecords[index];
 
   const [content, setContent] = useState(item.content);
@@ -40,10 +41,10 @@ export default function MealDetailScreen({ route }: { route: any }) {
   const [image, setImage] = useState<string | null>(item.imageUrl);
   const [imageURI, setImageURI] = useState("");
   const [isButtonClicked, setIsButtonClicked] = useState(false);
-  const handleInputCalorieChange = (text: any) => {
+  const handleInputCalorieChange = (text: string) => {
     // 숫자만 입력 받기 위한 정규식 검사
     const validatedText = text.replace(/[^0-9]/g, "");
-    setCalorie(validatedText);
+    setCalorie(parseInt(validatedText, 10));
   };
   const MemberId = useRecoilValue(userId);
 
@@ -106,6 +107,11 @@ export default function MealDetailScreen({ route }: { route: any }) {
     };
 
     setData(updatedData);
+    setMember((prevUserData) => ({
+      ...prevUserData,
+      intakedCalorie: prevUserData.intakedCalorie + calorie,
+    }));
+
     await postMealGoal(formData, MemberId);
     navigation.navigate("MyGoalScreen");
   };
@@ -113,7 +119,6 @@ export default function MealDetailScreen({ route }: { route: any }) {
   const submitHandler = () => {
     uploadImage(imageURI);
   };
-
   return (
     <ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
       <View style={styles.Wrapper}>

@@ -1,13 +1,23 @@
 // screens/ChallengeDetailScreen.tsx
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Colors } from "../../assets/color/color";
 import { fontStyle } from "../../assets/font/font";
+import LeftIcon from "../../assets/icon/left.svg";
 import MyDetail from "../../components/findChallenge/challengeDetail/myDetail";
 import { todayPersonalChallenge } from "../../data/personalChallenge/personalChallengeData";
 import { putEtcGoal } from "../../data/personalChallenge/personalChallengeDataHandler";
-import { ITeams } from "../../data/team/teamData";
+import { ITeams, RootStackParamList } from "../../data/team/teamData";
 import { putUserInTeam } from "../../data/team/teamDataHandler";
 import {
   IsMemberWithTeam,
@@ -19,7 +29,6 @@ import { formatDate } from "../../uitll/dateConverter";
 import { DefaultButton } from "../../uitll/defaultButton";
 import { Commonstyles } from "../../uitll/defaultStyle";
 import { generateID } from "../../uitll/generateID";
-
 // TypeScript 인터페이스를 사용하여 route.params의 타입 정의
 interface ChallengeDetailScreenProps {
   route: {
@@ -65,8 +74,9 @@ export interface GoalItem {
 
 export function ChallengeDetailScreen({ route }: { route: any }) {
   const id = useRecoilValue(userId);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [user, setUser] = useRecoilState(userDataInProfile);
-
   const [goals, setGoals] = useState<GoalItem[]>([
     { id: generateID(), value: "식단 기록" },
     { id: generateID(), value: "운동 기록" },
@@ -111,6 +121,10 @@ export function ChallengeDetailScreen({ route }: { route: any }) {
     <SafeAreaView style={Commonstyles.rootContainer}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.Wrapper}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            {/* TouchableOpacity로 LeftIcon을 감싸고 onPress 이벤트에 navigation.goBack 메소드 연결 */}
+            <LeftIcon />
+          </TouchableOpacity>
           <Text style={[fontStyle.BD24, { color: Colors.basic.text_default }]}>
             {currentTeam.teamName}
           </Text>

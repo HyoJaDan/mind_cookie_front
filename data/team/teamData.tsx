@@ -70,3 +70,8 @@ export const teamData = atom<ITeamData>({
     memberDTOS: [],
   },
 });
+
+export type RootStackParamList = {
+  FindChallenge: undefined;
+  ChallengeDetail: { currentTeam: ITeams };
+};

@@ -5,14 +5,13 @@ import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useRecoilState } from "recoil";
 import { fontStyle } from "../../assets/font/font";
 import { RenderItemComponent } from "../../components/findChallenge/findChallenge/teamList";
-import { ITeams, everyTeamData } from "../../data/team/teamData";
+import {
+  ITeams,
+  RootStackParamList,
+  everyTeamData,
+} from "../../data/team/teamData";
 import { fetchAllTeamData } from "../../data/team/teamDataHandler";
 import { Commonstyles } from "../../uitll/defaultStyle";
-
-type RootStackParamList = {
-  FindChallenge: undefined;
-  ChallengeDetail: { currentTeam: ITeams };
-};
 
 export function FindChallenge() {
   const [teamList, setTeamList] = useRecoilState(everyTeamData);

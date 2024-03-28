@@ -15,18 +15,20 @@ export interface ITeams {
   numOfMember: number;
 }
 
-/* export const teamData = atom<ITeams>({
-  key: "teamData",
-  default: {
-    id: 0,
-    teamName: "teamName",
-    maxTeamMemberNumber: 0,
-    startDate: "2021-10-01T00:00:00.000Z",
-    endDate: "2021-10-01T00:00:00.000Z",
-    challngeType: "challngeType",
-    numOfMember: 0,
-  },
-}); */
+export const everyTeamData = atom<ITeams[]>({
+  key: "everyTeamData",
+  default: [
+    {
+      id: 0,
+      teamName: "teamName",
+      maxTeamMemberNumber: 0,
+      startDate: "2021-10-01T00:00:00.000Z",
+      endDate: "2021-10-01T00:00:00.000Z",
+      challngeType: "challngeType",
+      numOfMember: 0,
+    },
+  ],
+});
 
 export enum RecordType {
   meal,

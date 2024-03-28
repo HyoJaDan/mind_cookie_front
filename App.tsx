@@ -106,15 +106,15 @@ function AuthenticatedStack() {
         <BottomTab.Screen
           name="챌린지"
           component={FindChallengeStack}
-          /* options={{
-            headerRight: ({ tintColor }) => (
+          options={{
+            /* headerRight: ({ tintColor }) => (
               <IconButton
                 icon="exit"
                 color={tintColor}
                 size={24}
                 onPress={authCtx.logout}
               />
-            ),
+            ), */
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="fire-circle"
@@ -122,7 +122,7 @@ function AuthenticatedStack() {
                 size={size}
               />
             ),
-          }} */
+          }}
         />
       ) : (
         <BottomTab.Screen

@@ -1,11 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { Colors } from "../../assets/color/color";
+import { useRecoilState } from "recoil";
 import { fontStyle } from "../../assets/font/font";
 import { RenderItemComponent } from "../../components/findChallenge/findChallenge/teamList";
-import { ITeams } from "../../data/team/teamData";
+import { ITeams, everyTeamData } from "../../data/team/teamData";
 import { fetchAllTeamData } from "../../data/team/teamDataHandler";
 import { Commonstyles } from "../../uitll/defaultStyle";
 
@@ -15,7 +15,8 @@ type RootStackParamList = {
 };
 
 export function FindChallenge() {
-  const [teamList, setTeamList] = useState([]);
+  const [teamList, setTeamList] = useRecoilState(everyTeamData);
+  console.log("TEAMLIST", teamList);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {

@@ -1,6 +1,6 @@
 // screens/ChallengeDetailScreen.tsx
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Colors } from "../../assets/color/color";
 import { fontStyle } from "../../assets/font/font";
@@ -17,6 +17,7 @@ import {
 import { putUserteamUserName } from "../../data/user/userDataHandler";
 import { formatDate } from "../../uitll/dateConverter";
 import { DefaultButton } from "../../uitll/defaultButton";
+import { Commonstyles } from "../../uitll/defaultStyle";
 import { generateID } from "../../uitll/generateID";
 
 // TypeScript 인터페이스를 사용하여 route.params의 타입 정의
@@ -107,46 +108,52 @@ export function ChallengeDetailScreen({ route }: { route: any }) {
   };
 
   return (
-    <SafeAreaView style={styles.Wrapper}>
-      <Text style={[fontStyle.BD24, { color: Colors.basic.text_default }]}>
-        {currentTeam.teamName}
-      </Text>
-      <View style={styles.circle}>
-        <DetailItem
-          label="종류"
-          content={
-            <RenderChallengeType challengeType={currentTeam.challngeType} />
-          }
-        />
-        <DetailItem
-          label="기간"
-          content={
-            <Text
-              style={[fontStyle.BD16, { color: Colors.basic.text_default }]}
-            >
-              {date} (5주)
-            </Text>
-          }
-        />
-        <DetailItem
-          label="인원"
-          content={
-            <Text
-              style={[fontStyle.BD16, { color: Colors.basic.text_default }]}
-            >
-              {currentTeam.numOfMember}/{currentTeam.maxTeamMemberNumber}명
-            </Text>
-          }
-        />
-      </View>
-      <MyDetail
-        id={id}
-        user={user}
-        setUser={setUser}
-        goals={goals}
-        setGoals={setGoals}
-      />
-      <DefaultButton pressHandler={pressHandler} text="참가하기" />
+    <SafeAreaView style={Commonstyles.rootContainer}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.Wrapper}>
+          <Text style={[fontStyle.BD24, { color: Colors.basic.text_default }]}>
+            {currentTeam.teamName}
+          </Text>
+          <View style={styles.circle}>
+            <DetailItem
+              label="종류"
+              content={
+                <RenderChallengeType challengeType={currentTeam.challngeType} />
+              }
+            />
+            <DetailItem
+              label="기간"
+              content={
+                <Text
+                  style={[fontStyle.BD16, { color: Colors.basic.text_default }]}
+                >
+                  {date} (5주)
+                </Text>
+              }
+            />
+            <DetailItem
+              label="인원"
+              content={
+                <Text
+                  style={[fontStyle.BD16, { color: Colors.basic.text_default }]}
+                >
+                  {currentTeam.numOfMember}/{currentTeam.maxTeamMemberNumber}명
+                </Text>
+              }
+            />
+          </View>
+          <MyDetail
+            id={id}
+            user={user}
+            setUser={setUser}
+            goals={goals}
+            setGoals={setGoals}
+          />
+        </View>
+        <View style={styles.footer}>
+          <DefaultButton pressHandler={pressHandler} text="참가하기" />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -158,6 +165,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 24,
     gap: 24,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: "space-between",
+  },
+  footer: {
+    padding: 24, // 하단 버튼 주변의 여백
+    backgroundColor: Colors.basic.white, // 필요에 따라 배경색 조정
   },
   circle: {
     borderRadius: 10,

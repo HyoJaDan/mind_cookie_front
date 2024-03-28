@@ -107,6 +107,7 @@ function AuthenticatedStack() {
           name="챌린지"
           component={FindChallengeStack}
           options={{
+            headerShown: false,
             /* headerRight: ({ tintColor }) => (
               <IconButton
                 icon="exit"
@@ -129,6 +130,7 @@ function AuthenticatedStack() {
           name="챌린지"
           component={ChallengeStack}
           options={{
+            headerShown: false,
             /* headerRight: ({ tintColor }) => (
               <IconButton
                 icon="exit"

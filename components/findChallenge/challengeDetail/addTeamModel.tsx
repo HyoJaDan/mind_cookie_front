@@ -23,19 +23,23 @@ const typeIcons = {
   유지: MaintainIcon,
   증량: IncreaseIcon,
 };
+type ChallengeType = "감량" | "증량" | "유지";
+
 interface AddProfileModalProps {
   handlePresentModalPress: () => void;
   setTeamList: Function;
+  setUpdateTrigger: Function;
 }
 
 export function AddTeamModel({
   handlePresentModalPress,
   setTeamList,
+  setUpdateTrigger,
 }: AddProfileModalProps) {
   const [challengeName, setChallengeName] = useState("");
   const [selectedDate, setSelectedDate] = useState(
     new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  ); // 현재 날짜 + 1주
+  );
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -48,21 +52,30 @@ export function AddTeamModel({
     hideDatePicker();
   };
 
-  const [challengeType, setChallengeType] = useState("감량");
-  const handleTypeSelect = (type: string) => {
+  const [challengeType, setChallengeType] = useState<ChallengeType>("감량");
+  const handleTypeSelect = (type: ChallengeType) => {
     setChallengeType(type);
   };
   const pressHandler = async () => {
+    const challengeTypeMapping: { [key in ChallengeType]: string } = {
+      감량: "reduce",
+      증량: "increase",
+      유지: "maintain",
+    };
+    const mappedChallengeType =
+      challengeTypeMapping[challengeType as ChallengeType];
+
     const newTeam = {
       id: randomID(),
       teamName: challengeName,
       maxTeamMemberNumber: 5,
       startDate: selectedDate,
       endDate: addDays(selectedDate, 35),
-      challngeType: challengeType,
+      challngeType: mappedChallengeType,
       numOfMember: 1,
     };
     setTeamList((oldTeams: ITeams) => [...oldTeams, newTeam]);
+    setUpdateTrigger((prev: number) => prev + 1);
     handlePresentModalPress();
   };
   return (

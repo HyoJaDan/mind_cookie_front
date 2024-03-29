@@ -22,18 +22,30 @@ export function formatDate(isoDateString: Date) {
   return `${month}/${day}`;
 }
 
-export function calculateDaysFromNow(dateString: Date): number {
-  const now = new Date(); // 현재 날짜 및 시간
-  const targetDate = new Date(dateString); // 인자로 받은 특정 날짜
+export function calculateDateDifferenceAndIsPast(dateString: Date): {
+  startDayFromNow: number;
+  isPast: boolean;
+} {
+  const now = new Date();
+  const targetDate = new Date(dateString);
 
-  // 두 날짜의 차이를 밀리초 단위로 계산
-  const differenceInTime = now.getTime() - targetDate.getTime();
-
-  // 밀리초를 일수로 변환
+  const nowMidnight = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+  const targetMidnight = new Date(
+    targetDate.getFullYear(),
+    targetDate.getMonth(),
+    targetDate.getDate()
+  );
+  const differenceInTime = targetMidnight.getTime() - nowMidnight.getTime();
   const differenceInDays = differenceInTime / (1000 * 3600 * 24);
 
-  // 소수점 이하를 버리고 결과 반환
-  return Math.floor(differenceInDays);
+  return {
+    startDayFromNow: Math.round(differenceInDays) * -1,
+    isPast: differenceInTime < 0,
+  };
 }
 
 /** 24.03.21(목) */

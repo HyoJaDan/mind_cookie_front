@@ -8,20 +8,30 @@ import IncreaseIcon from "../../../assets/icon/teamList/increase.svg";
 import MaintainIcon from "../../../assets/icon/teamList/maintain.svg";
 import ReduceIcon from "../../../assets/icon/teamList/reduce.svg";
 import { ITeams } from "../../../data/team/teamData";
-import { calculateDaysFromNow, formatDate } from "../../../uitll/dateConverter";
+import {
+  calculateDateDifferenceAndIsPast,
+  formatDate,
+} from "../../../uitll/dateConverter";
 
 interface RenderItemProps {
   item: ITeams;
   onPress: () => void; // 추가: 클릭 이벤트 핸들러 prop
 }
 
-export const RenderItemComponent: FC<RenderItemProps> = ({ item, onPress }) => {
+export const TeamListComponent: FC<RenderItemProps> = ({ item, onPress }) => {
   formatDate(item.startDate);
   const date = `${formatDate(item.startDate)} ~ ${formatDate(item.endDate)}`;
-  const startDayFromNow = calculateDaysFromNow(item.startDate);
+
+  const { startDayFromNow, isPast } = calculateDateDifferenceAndIsPast(
+    item.startDate
+  );
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity
+      onPress={onPress}
+      disabled={isPast}
+      style={isPast && { backgroundColor: Colors.grayscale.gray100 }}
+    >
       <View>
         <View style={styles.Wrapper}>
           <RenderChallengeType challengeType={item.challngeType} />
@@ -43,7 +53,7 @@ export const RenderItemComponent: FC<RenderItemProps> = ({ item, onPress }) => {
             </View>
             <View style={styles.Circle}>
               <Text style={[fontStyle.SB10, { color: Colors.basic.white }]}>
-                D-{startDayFromNow}
+                {isPast ? `D +${startDayFromNow}` : `D ${startDayFromNow}`}
               </Text>
             </View>
           </View>

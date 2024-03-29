@@ -14,7 +14,7 @@ import { useRecoilState } from "recoil";
 import { fontStyle } from "../../assets/font/font";
 import AddIcon from "../../assets/icon/plus.svg";
 import { AddTeamModel } from "../../components/findChallenge/challengeDetail/addTeamModel";
-import { RenderItemComponent } from "../../components/findChallenge/findChallenge/teamList";
+import { TeamListComponent } from "../../components/findChallenge/findChallenge/teamList";
 import {
   ITeams,
   RootStackParamList,
@@ -24,17 +24,36 @@ import { fetchAllTeamData } from "../../data/team/teamDataHandler";
 import { Commonstyles } from "../../uitll/defaultStyle";
 export function FindChallenge() {
   const [teamList, setTeamList] = useRecoilState(everyTeamData);
-
+  const [updateTrigger, setUpdateTrigger] = useState<number>(0);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     const loadUserData = async () => {
       const data = await fetchAllTeamData();
       if (data) setTeamList(data);
+      setUpdateTrigger((prev) => prev + 1);
     };
 
     loadUserData();
   }, []);
+  useEffect(() => {
+    if (teamList) {
+      // 현재 날짜를 기준으로 정렬
+      const now = new Date().getTime();
+      const sortedTeams = [...teamList].sort((a: ITeams, b: ITeams) => {
+        const dateA = new Date(a.startDate).getTime();
+        const dateB = new Date(b.startDate).getTime();
+        if (dateA > now && dateB > now) {
+          return dateA - dateB; // 둘 다 미래인 경우
+        } else if (dateA < now && dateB < now) {
+          return dateB - dateA; // 둘 다 과거인 경우, 역순으로 정렬
+        } else {
+          return dateA < now ? 1 : -1; // 한 개만 과거인 경우
+        }
+      });
+      setTeamList(sortedTeams);
+    }
+  }, [updateTrigger]);
 
   const [modalContent, setModalContent] = useState<boolean>(false);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -52,14 +71,13 @@ export function FindChallenge() {
     []
   );
   const onAddPress = () => {
-    console.log("Add button pressed");
     setModalContent(true);
     bottomSheetModalRef.current?.present();
   };
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
   const renderItem: React.FC<{ item: ITeams }> = ({ item }) => (
-    <RenderItemComponent
+    <TeamListComponent
       item={item}
       onPress={() =>
         navigation.navigate("ChallengeDetail", { currentTeam: item })
@@ -92,6 +110,7 @@ export function FindChallenge() {
           <AddTeamModel
             handlePresentModalPress={handleClosePress}
             setTeamList={setTeamList}
+            setUpdateTrigger={setUpdateTrigger}
           />
         )}
       </BottomSheetModal>

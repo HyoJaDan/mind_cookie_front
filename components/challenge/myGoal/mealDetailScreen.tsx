@@ -16,7 +16,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
 import PictureImage from "../../../assets/icon/photo.svg";
-import PlusIcon from "../../../assets/icon/plus.svg";
+import PlusIcon from "../../../assets/icon/plus";
 import { todayPersonalChallenge } from "../../../data/personalChallenge/personalChallengeData";
 import { postMealGoal } from "../../../data/personalChallenge/personalChallengeDataHandler";
 import { userDataInMyRecord, userId } from "../../../data/user/userData";
@@ -142,7 +142,7 @@ export default function MealDetailScreen({ route }: { route: any }) {
           />
           <Pressable onPress={() => setIsButtonClicked(!isButtonClicked)}>
             <View style={[Commonstyles.flexGap, styles.button]}>
-              <PlusIcon />
+              <PlusIcon fill={"#C2C2C2"} />
               <Text>칼로리</Text>
             </View>
           </Pressable>

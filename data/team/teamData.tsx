@@ -74,4 +74,5 @@ export const teamData = atom<ITeamData>({
 export type RootStackParamList = {
   FindChallenge: undefined;
   ChallengeDetail: { currentTeam: ITeams };
+  AddChallenge: undefined;
 };

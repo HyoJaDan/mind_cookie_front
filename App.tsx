@@ -20,6 +20,7 @@ import WelcomeScreen from "./screens/MyRecord";
 import MyGoalScreen from "./screens/challenge/myGoalScreen";
 import MyTeamScreen from "./screens/challenge/myTeamScreen";
 import ChallengeDetailScreen from "./screens/findChallenge/ChallengeDetail";
+import AddChallenge from "./screens/findChallenge/addChallenge";
 import { FindChallenge } from "./screens/findChallenge/findChallenge";
 import LoginScreen from "./screens/initScreen/LoginScreen";
 import SignupScreen from "./screens/initScreen/SignupScreen";
@@ -44,6 +45,7 @@ function FindChallengeStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="FindChallenge" component={FindChallenge} />
       <Stack.Screen name="ChallengeDetail" component={ChallengeDetailScreen} />
+      <Stack.Screen name="AddChallenge" component={AddChallenge} />
     </Stack.Navigator>
   );
 }

@@ -29,16 +29,7 @@ import { formatDate } from "../../uitll/dateConverter";
 import { DefaultButton } from "../../uitll/defaultButton";
 import { Commonstyles } from "../../uitll/defaultStyle";
 import { generateID } from "../../uitll/generateID";
-// TypeScript 인터페이스를 사용하여 route.params의 타입 정의
-interface ChallengeDetailScreenProps {
-  route: {
-    params: {
-      currentTeam: ITeams;
-    };
-  };
-}
 
-// RenderChallengeType 컴포넌트 정의
 const RenderChallengeType = ({ challengeType }: { challengeType: string }) => {
   const challengeText =
     {
@@ -92,14 +83,12 @@ export function ChallengeDetailScreen({ route }: { route: any }) {
   const pressHandler = async () => {
     const newGoals = goals.slice(2);
 
-    // newGoals를 통해 업데이트 될 EtcGoals 생성
     const updatedEtcGoals = newGoals.map((goal) => ({
-      id: goal.id, // 실제 사용에 맞게 조정 필요
+      id: goal.id,
       goalName: goal.value,
       done: false,
     }));
 
-    // todayPersonalChallenge 상태 업데이트
     setTodayPersonalChallenge((prev) => ({
       ...prev,
       challenge: {
@@ -121,12 +110,16 @@ export function ChallengeDetailScreen({ route }: { route: any }) {
     <SafeAreaView style={Commonstyles.rootContainer}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.Wrapper}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <LeftIcon />
-          </TouchableOpacity>
-          <Text style={[fontStyle.BD24, { color: Colors.basic.text_default }]}>
-            {currentTeam.teamName}
-          </Text>
+          <View style={Commonstyles.flexRow}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <LeftIcon />
+            </TouchableOpacity>
+            <Text
+              style={[fontStyle.BD24, { color: Colors.basic.text_default }]}
+            >
+              {currentTeam.teamName}
+            </Text>
+          </View>
           <View style={styles.circle}>
             <DetailItem
               label="종류"

@@ -122,7 +122,6 @@ export function ChallengeDetailScreen({ route }: { route: any }) {
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.Wrapper}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            {/* TouchableOpacity로 LeftIcon을 감싸고 onPress 이벤트에 navigation.goBack 메소드 연결 */}
             <LeftIcon />
           </TouchableOpacity>
           <Text style={[fontStyle.BD24, { color: Colors.basic.text_default }]}>

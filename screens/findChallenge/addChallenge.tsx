@@ -63,6 +63,8 @@ export default function AddChallenge() {
         "날짜 선택 오류",
         "현재 선택하신 날짜에는 챌린지를 추가할 수가 없습니다"
       );
+    } else if (challengeName === "") {
+      Alert.alert("이름 오류", "챌린지 이름이 없습니다");
     } else {
       const challengeTypeMapping: { [key in ChallengeType]: string } = {
         감량: "reduce",

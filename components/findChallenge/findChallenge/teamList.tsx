@@ -51,7 +51,14 @@ export const TeamListComponent: FC<RenderItemProps> = ({ item, onPress }) => {
                 (5주)
               </Text>
             </View>
-            <View style={styles.Circle}>
+            <View
+              style={[
+                styles.Circle,
+                !isPast && startDayFromNow <= 3
+                  ? { backgroundColor: Colors.primary.primary500 }
+                  : { backgroundColor: Colors.grayscale.gray300 },
+              ]}
+            >
               <Text style={[fontStyle.SB10, { color: Colors.basic.white }]}>
                 {isPast ? `D +${startDayFromNow}` : `D ${startDayFromNow}`}
               </Text>

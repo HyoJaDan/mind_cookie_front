@@ -65,3 +65,16 @@ export const addDays = (date: Date, days: number) => {
   result.setDate(result.getDate() + days);
   return result;
 };
+
+export function isWithinThreeDaysFromNow(dateString: Date): boolean {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0); // 현재 날짜의 시간을 00:00:00.000으로 설정
+
+  const targetDate = new Date(dateString);
+  targetDate.setHours(0, 0, 0, 0); // 대상 날짜의 시간을 00:00:00.000으로 설정
+
+  const threeDaysInMilliseconds = 3 * 24 * 60 * 60 * 1000; // 3일을 밀리초로 환산
+  const differenceInTime = targetDate.getTime() - now.getTime(); // 두 날짜의 차이를 밀리초로 계산
+
+  return differenceInTime >= 0 && differenceInTime <= threeDaysInMilliseconds;
+}

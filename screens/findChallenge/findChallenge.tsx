@@ -24,7 +24,7 @@ import { fetchAllTeamData } from "../../data/team/teamDataHandler";
 import { Commonstyles } from "../../uitll/defaultStyle";
 export function FindChallenge() {
   const [teamList, setTeamList] = useRecoilState(everyTeamData);
-  console.log("TEAMLIST", teamList);
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
@@ -89,7 +89,10 @@ export function FindChallenge() {
         keyboardBehavior="interactive"
       >
         {modalContent === true && (
-          <AddTeamModel handlePresentModalPress={handleClosePress} />
+          <AddTeamModel
+            handlePresentModalPress={handleClosePress}
+            setTeamList={setTeamList}
+          />
         )}
       </BottomSheetModal>
     </SafeAreaView>

@@ -13,7 +13,8 @@ export function formatDateUntilMinute(isoDateString: string, weight: number) {
   return { formattedDateTime, lastWeight };
 }
 
-export function formatDate(isoDateString: string) {
+/** 02/30 */
+export function formatDate(isoDateString: Date) {
   const date = new Date(isoDateString);
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
@@ -21,7 +22,7 @@ export function formatDate(isoDateString: string) {
   return `${month}/${day}`;
 }
 
-export function calculateDaysFromNow(dateString: string): number {
+export function calculateDaysFromNow(dateString: Date): number {
   const now = new Date(); // 현재 날짜 및 시간
   const targetDate = new Date(dateString); // 인자로 받은 특정 날짜
 
@@ -34,3 +35,21 @@ export function calculateDaysFromNow(dateString: string): number {
   // 소수점 이하를 버리고 결과 반환
   return Math.floor(differenceInDays);
 }
+
+/** 24.03.21(목) */
+export function formatDate2(date: Date): string {
+  const year = date.getFullYear().toString().slice(2);
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const dayOfWeek = new Intl.DateTimeFormat("ko-KR", {
+    weekday: "short",
+  }).format(date);
+
+  return `${year}.${month}.${day}(${dayOfWeek})`;
+}
+
+export const addDays = (date: Date, days: number) => {
+  let result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};

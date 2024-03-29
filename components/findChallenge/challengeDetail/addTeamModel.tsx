@@ -6,13 +6,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import { DefaultButton } from "../../../uitll/defaultButton";
-
 import DecreaseIcon from "../../../assets/icon/addTeam/decrease";
 import IncreaseIcon from "../../../assets/icon/addTeam/increase";
 import MaintainIcon from "../../../assets/icon/addTeam/maintain";
+import { ITeams } from "../../../data/team/teamData";
+import { addDays, formatDate2 } from "../../../uitll/dateConverter";
+import { DefaultButton } from "../../../uitll/defaultButton";
+import { Commonstyles } from "../../../uitll/defaultStyle";
+import { randomID } from "../../../uitll/generateID";
 
 const typeIcons = {
   감량: DecreaseIcon,
@@ -21,21 +25,44 @@ const typeIcons = {
 };
 interface AddProfileModalProps {
   handlePresentModalPress: () => void;
+  setTeamList: Function;
 }
 
 export function AddTeamModel({
   handlePresentModalPress,
+  setTeamList,
 }: AddProfileModalProps) {
   const [challengeName, setChallengeName] = useState("");
   const [selectedDate, setSelectedDate] = useState(
     new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   ); // 현재 날짜 + 1주
-  const [challengeType, setChallengeType] = useState("");
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  const handleConfirm = (date: Date) => {
+    setSelectedDate(date);
+    hideDatePicker();
+  };
 
+  const [challengeType, setChallengeType] = useState("감량");
   const handleTypeSelect = (type: string) => {
     setChallengeType(type);
   };
   const pressHandler = async () => {
+    const newTeam = {
+      id: randomID(),
+      teamName: challengeName,
+      maxTeamMemberNumber: 5,
+      startDate: selectedDate,
+      endDate: addDays(selectedDate, 35),
+      challngeType: challengeType,
+      numOfMember: 1,
+    };
+    setTeamList((oldTeams: ITeams) => [...oldTeams, newTeam]);
     handlePresentModalPress();
   };
   return (
@@ -58,9 +85,37 @@ export function AddTeamModel({
           </View>
         </View>
         <View style={styles.headerGap}>
-          <Text style={[fontStyle.BD15, { color: Colors.basic.text_light }]}>
-            시작예정일
-          </Text>
+          <View style={Commonstyles.flexRow}>
+            <Text style={[fontStyle.BD15, { color: Colors.basic.text_light }]}>
+              시작예정일
+            </Text>
+            <Text style={[fontStyle.RG12, { color: Colors.basic.text_light }]}>
+              *첼린지는 35일 동안 지속됩니다.
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={[styles.goalInputContainer]}
+            onPress={showDatePicker}
+          >
+            <View style={styles.input}>
+              <Text
+                style={[
+                  fontStyle.MD14,
+                  { color: Colors.basic.text_extralight },
+                ]}
+              >
+                {formatDate2(selectedDate) +
+                  "~" +
+                  formatDate2(addDays(selectedDate, 35))}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
         </View>
         <View style={styles.headerGap}>
           <Text style={[fontStyle.BD15, { color: Colors.basic.text_light }]}>

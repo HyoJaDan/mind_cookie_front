@@ -78,8 +78,8 @@ export default function AddChallenge() {
         id: randomID(),
         teamName: challengeName,
         maxTeamMemberNumber: 5,
-        startDate: selectedDate,
-        endDate: addDays(selectedDate, 35),
+        startDate: selectedDate.toISOString().split("T")[0],
+        endDate: addDays(selectedDate, 35).toISOString().split("T")[0],
         challngeType: mappedChallengeType,
         numOfMember: 1,
       };

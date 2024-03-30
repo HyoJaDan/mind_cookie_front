@@ -1,5 +1,34 @@
 import axios from "axios";
-import { MEMBER_URL } from "../../uitll/url";
+import { MEMBER_URL, TEAM_URL } from "../../uitll/url";
+
+export const fetchNewTeam = async (
+  memberId: number,
+  teamName: string,
+  startDate: string,
+  challengeType: string
+) => {
+  /* /api/team/create-team" */
+  const api = `${TEAM_URL}/create-team`;
+
+  try {
+    const response = await axios.post(
+      api,
+      {
+        memberId,
+        teamName,
+        startDate,
+        challengeType,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error creating team:", error);
+  }
+};
 
 export const fetchUserDataInProfile = async (userId: number) => {
   try {

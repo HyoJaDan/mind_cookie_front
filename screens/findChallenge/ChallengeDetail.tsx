@@ -24,7 +24,10 @@ import {
   userDataInProfile,
   userId,
 } from "../../data/user/userData";
-import { putUserteamUserName } from "../../data/user/userDataHandler";
+import {
+  fetchNewTeam,
+  putUserteamUserName,
+} from "../../data/user/userDataHandler";
 import { formatDate } from "../../uitll/dateConverter";
 import { DefaultButton } from "../../uitll/defaultButton";
 import { Commonstyles } from "../../uitll/defaultStyle";
@@ -73,7 +76,7 @@ export function ChallengeDetailScreen({ route }: { route: any }) {
     { id: generateID(), value: "운동 기록" },
   ]);
   const setTodayPersonalChallenge = useSetRecoilState(todayPersonalChallenge);
-  const { currentTeam } = route.params;
+  const { currentTeam }: { currentTeam: ITeams } = route.params;
   const setIsMemberWithTeam = useSetRecoilState(IsMemberWithTeam);
 
   const date = `${formatDate(currentTeam.startDate)} ~ ${formatDate(
@@ -100,9 +103,25 @@ export function ChallengeDetailScreen({ route }: { route: any }) {
     const parsedGoals = JSON.stringify(
       goals.slice(2).map((item) => item.value.toLowerCase())
     );
+    console.log(currentTeam.startDate, "시간정보 ");
     await putUserteamUserName(id as number, user.userName);
-    await putEtcGoal(id as number, parsedGoals, currentTeam.startDate); //성공
-    await putUserInTeam(currentTeam.id as number, id as number);
+    await putEtcGoal(
+      id as number,
+      parsedGoals,
+      /* 현재 데이터 : 2024-04-06T07:52:37.398Z */
+      currentTeam.startDate
+    );
+
+    if (currentTeam.id < 1) {
+      await fetchNewTeam(
+        id,
+        currentTeam.teamName,
+        currentTeam.startDate,
+        currentTeam.challngeType
+      );
+    } else {
+      await putUserInTeam(currentTeam.id as number, id as number);
+    }
     setIsMemberWithTeam(true);
   };
 

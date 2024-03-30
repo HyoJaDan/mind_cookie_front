@@ -67,7 +67,7 @@ export function AddGoalModal({
   return (
     <View style={styles.bottomSheetContent}>
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {

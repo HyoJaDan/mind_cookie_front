@@ -14,7 +14,7 @@ export function formatDateUntilMinute(isoDateString: string, weight: number) {
 }
 
 /** 02/30 */
-export function formatDate(isoDateString: Date) {
+export function formatDate(isoDateString: string) {
   const date = new Date(isoDateString);
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
@@ -22,7 +22,7 @@ export function formatDate(isoDateString: Date) {
   return `${month}/${day}`;
 }
 
-export function calculateDateDifferenceAndIsPast(dateString: Date): {
+export function calculateDateDifferenceAndIsPast(dateString: string): {
   startDayFromNow: number;
   isPast: boolean;
 } {

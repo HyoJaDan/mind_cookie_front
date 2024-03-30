@@ -27,6 +27,7 @@ interface MealRecordBoardProps {
 
 // MealRecordBoard 컴포넌트 정의
 const MealRecordBoard: React.FC<MealRecordBoardProps> = ({ data }) => {
+  console.log("COMMEDDATE", data);
   const extendedMealRecords: ExtendedMealRecords = data.memberDTOS.flatMap(
     (member) =>
       member.mealRecords.map((mealRecord) => ({

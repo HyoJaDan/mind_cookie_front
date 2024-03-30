@@ -8,6 +8,10 @@ export default function TeamAchievementDashboard({
 }: {
   data: ITeamData;
 }) {
+  let totalEtcGoals;
+  data.totalEtcGoals === 0
+    ? (totalEtcGoals = 1)
+    : (totalEtcGoals = data.totalEtcGoals);
   return (
     <View style={styles.Wrapper}>
       <Text style={[fontStyle.BD16, { color: Colors.basic.text_default }]}>
@@ -20,7 +24,7 @@ export default function TeamAchievementDashboard({
           </Text>
           <View style={styles.progressContainer}>
             <Progress.Bar
-              progress={data.completedEtcGoals / data.totalEtcGoals}
+              progress={data.completedEtcGoals / totalEtcGoals}
               width={234}
               height={8}
               color={"rgba(146,182,255,1)"}
@@ -33,7 +37,7 @@ export default function TeamAchievementDashboard({
           <Text
             style={[fontStyle.RG12, { color: Colors.basic.text_extralight }]}
           >
-            {data.completedEtcGoals}/{data.totalEtcGoals}
+            {data.completedEtcGoals}/{totalEtcGoals}
           </Text>
         </View>
         <View style={styles.statusBarWrapper}>

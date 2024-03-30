@@ -35,15 +35,25 @@ enum Status {
   After = "after",
 }
 
+interface Team {
+  teamId: number;
+  teamName: string;
+}
+
 export interface ITodayPersonalChallenge {
   status: Status;
-  challenge: Challenge;
+  challenge: Challenge | null;
+  team: Team;
 }
 
 export const todayPersonalChallenge = atom<ITodayPersonalChallenge>({
   key: "todayPersonalChallenge",
   default: {
     status: Status.Active,
+    team: {
+      teamId: 1,
+      teamName: "챌린지",
+    },
     challenge: {
       id: 0,
       etcGoals: [],

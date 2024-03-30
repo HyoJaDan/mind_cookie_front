@@ -15,14 +15,13 @@ export const putEtcGoal = async (
       },
     });
   } catch (error) {
-    console.log("Error putEtcGoal");
+    console.log("Error putEtcGoal", error);
     throw error;
   }
 };
 
 export const getMyGoalData = async (userId: number) => {
   const url = `${MEMBER_URL}/${userId}/today-personal-challenges`;
-
   try {
     const response = await axios.get(url);
 

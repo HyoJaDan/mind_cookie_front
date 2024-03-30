@@ -14,6 +14,7 @@ import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import { Colors } from "./assets/color/color";
 import MealDetailScreen from "./components/challenge/myGoal/mealDetailScreen";
 import AuthContextProvider from "./data/auth-context";
+import { todayPersonalChallenge } from "./data/personalChallenge/personalChallengeData";
 import { IsMemberWithTeam, userId } from "./data/user/userData";
 import { getIsMemberWithTeam } from "./data/user/userDataHandler";
 import WelcomeScreen from "./screens/MyRecord";
@@ -49,21 +50,12 @@ function FindChallengeStack() {
     </Stack.Navigator>
   );
 }
-
-function MyGoalChallengeStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="MyGoalScreen" component={MyGoalScreen} />
-      <Stack.Screen name="MealDetailScreen" component={MealDetailScreen} />
-    </Stack.Navigator>
-  );
-}
-
 const Tab = createMaterialTopTabNavigator();
 function ChallengeStack() {
   return (
     <Tab.Navigator
       screenOptions={{
+        lazy: true,
         tabBarLabelStyle: {
           color: Colors.basic.text_default,
           fontSize: 18,
@@ -77,13 +69,22 @@ function ChallengeStack() {
     </Tab.Navigator>
   );
 }
+function MyGoalChallengeStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MyGoalScreen" component={MyGoalScreen} />
+      <Stack.Screen name="MealDetailScreen" component={MealDetailScreen} />
+    </Stack.Navigator>
+  );
+}
 function AuthenticatedStack() {
   //const authCtx = useContext(AuthContext);
   const BottomTab = createBottomTabNavigator();
-
   const id = useRecoilValue(userId);
   const [isMemberWithTeam, setIsMemberWithTeam] =
     useRecoilState(IsMemberWithTeam);
+  const getTeam = useRecoilValue(todayPersonalChallenge);
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await getIsMemberWithTeam(id as number);
@@ -132,7 +133,15 @@ function AuthenticatedStack() {
           name="챌린지"
           component={ChallengeStack}
           options={{
-            headerShown: false,
+            title: getTeam.team.teamName,
+            tabBarLabel: "챌린지",
+            headerTitleStyle: {
+              color: "#191B23",
+              fontFamily: "Pretendard-Bold",
+              fontSize: 20,
+              fontWeight: "700",
+              lineHeight: 26,
+            },
             /* headerRight: ({ tintColor }) => (
               <IconButton
                 icon="exit"
@@ -148,7 +157,6 @@ function AuthenticatedStack() {
                 size={size}
               />
             ),
-            /* headerShown: false, */
           }}
         />
       )}

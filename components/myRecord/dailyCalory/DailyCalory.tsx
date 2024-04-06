@@ -131,9 +131,9 @@ const Pie = ({
     <Svg width={fullSize} height={fullSize}>
       <Defs>
         <LinearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
-          <Stop offset="0%" stopColor="#FFA8A2" stopOpacity="1" />
+          <Stop offset="0%" stopColor="#49FFB0" stopOpacity="1" />
           <Stop offset="52.08%" stopColor="#EFFF8F" stopOpacity="1" />
-          <Stop offset="100%" stopColor="#49FFB0" stopOpacity="1" />
+          <Stop offset="100%" stopColor="#FFA8A2" stopOpacity="1" />
         </LinearGradient>
       </Defs>
       <G

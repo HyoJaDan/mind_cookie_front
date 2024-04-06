@@ -31,7 +31,7 @@ export const Commonstyles = StyleSheet.create({
     gap: 8,
   },
   line: {
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: Colors.basic.line_light,
     width: "100%",
   },

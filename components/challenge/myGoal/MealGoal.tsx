@@ -3,7 +3,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import FoodImage from "../../../assets/icon/challenge/croissant.svg";
+import SnackImage from "../../../assets/icon/challenge/cookie.svg";
+import { default as FoodImage } from "../../../assets/icon/challenge/noodles.svg";
 import {
   ITodayPersonalChallenge,
   mealRecords,
@@ -70,8 +71,13 @@ export function MealGoal({ data, setItems }: MealGoalProps) {
             return (
               <View key={index} style={styles.MainContent}>
                 <View style={Commonstyles.flexRow}>
-                  <FoodImage />
-                  <Text style={[fontStyle.MD16, styles.Text]}>
+                  {item.type === "meal" ? <FoodImage /> : <SnackImage />}
+                  <Text
+                    style={[
+                      fontStyle.MD18,
+                      { color: Colors.basic.text_default },
+                    ]}
+                  >
                     {item.title}
                   </Text>
                 </View>
@@ -84,7 +90,7 @@ export function MealGoal({ data, setItems }: MealGoalProps) {
                   >
                     <Text
                       style={[
-                        fontStyle.MD14,
+                        fontStyle.RG14,
                         { color: Colors.primary.primary },
                       ]}
                     >
@@ -98,7 +104,7 @@ export function MealGoal({ data, setItems }: MealGoalProps) {
         })}
 
         <View style={Commonstyles.Line}>
-          <View style={SecondaryButtonStyle.buttonContainer}>
+          <View style={SecondaryButtonStyle.mealButtonContainer}>
             <Pressable
               style={({ pressed }) =>
                 pressed
@@ -117,7 +123,7 @@ export function MealGoal({ data, setItems }: MealGoalProps) {
               </Text>
             </Pressable>
           </View>
-          <View style={SecondaryButtonStyle.buttonContainer}>
+          <View style={SecondaryButtonStyle.snackButtonContainer}>
             <Pressable
               style={({ pressed }) =>
                 pressed
@@ -161,10 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: Colors.grayscale.gray100,
   },
-  Text: {
-    color: Colors.basic.text_default,
-    fontSize: 18,
-  },
+
   image: { width: "100%", height: 150, borderRadius: 10 },
 });
 
@@ -180,22 +183,27 @@ const ButtonStyle = StyleSheet.create({
     overflow: "hidden",
     display: "flex",
     height: 36,
-    paddingHorizontal: 16, // React Native에서 padding: 6px 16px; 대신 사용
+    paddingHorizontal: 16,
     alignItems: "center",
-    justifyContent: "center", // 텍스트를 버튼 중앙에 위치시킵니다.
-    flexDirection: "row", // 내부 요소(예: 아이콘과 텍스트)를 가로로 배치
-    gap: 8, // React Native에서는 gap 속성을 지원하지 않습니다. 대신 요소간 마진을 조정해야 합니다.
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 8,
     borderRadius: 40,
     borderWidth: 2,
-    borderColor: "#FFF",
-    backgroundColor: "#B8D3FF", // CSS var() 대신 직접 색상 코드를 사용
+    borderColor: "rgb(197,218,254)",
+    backgroundColor: Colors.primary.primary200,
   },
   addButtonContainer: {},
 });
 
 const SecondaryButtonStyle = StyleSheet.create({
-  buttonContainer: {
-    flex: 1,
+  mealButtonContainer: {
+    flex: 0.6,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  snackButtonContainer: {
+    flex: 0.4,
     alignItems: "center",
     justifyContent: "center",
   },

@@ -8,6 +8,7 @@ import {
 import { Colors } from "../../../assets/color/color";
 import CheckIcon from "../../../assets/icon/challenge/checkbox.svg";
 
+import { fontStyle } from "../../../assets/font/font";
 import {
   EtcGoal,
   ITodayPersonalChallenge,
@@ -39,7 +40,7 @@ export function EtcGoalFunction({ data, setData }: EtcGoalProps) {
         >
           {goal.done && <CheckIcon />}
         </View>
-        <Text style={styles.goalText}>{goal.goalName}</Text>
+        <Text style={[styles.goalText, fontStyle.RG15]}>{goal.goalName}</Text>
       </TouchableOpacity>
     );
   };

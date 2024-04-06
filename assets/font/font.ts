@@ -22,6 +22,11 @@ export const fontStyle = StyleSheet.create({
     fontSize: 20,
     lineHeight: 20 * 1.28,
   },
+  MD18: {
+    fontFamily: "Pretendard-Medium",
+    fontSize: 18,
+    lineHeight: 18 * 1.32,
+  },
   BD16: {
     fontFamily: "Pretendard-Bold",
     fontSize: 16,
@@ -74,7 +79,7 @@ export const fontStyle = StyleSheet.create({
   },
   MD13: {
     fontFamily: "Pretendard-Medium",
-    fontSize: 14,
+    fontSize: 13,
     lineHeight: 13 * 1.4,
   },
   SB12: {

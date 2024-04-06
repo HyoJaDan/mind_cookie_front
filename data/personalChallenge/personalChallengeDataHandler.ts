@@ -84,7 +84,6 @@ export const postMealGoal = async (FormData: any, MemberId: number) => {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
-    console.log(response.data);
   } catch (error) {
     console.error("Error uploading image:", error);
   }

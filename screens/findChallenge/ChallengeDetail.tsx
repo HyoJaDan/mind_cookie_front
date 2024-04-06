@@ -103,7 +103,7 @@ export function ChallengeDetailScreen({ route }: { route: any }) {
     const parsedGoals = JSON.stringify(
       goals.slice(2).map((item) => item.value.toLowerCase())
     );
-    console.log(currentTeam.startDate, "시간정보 ");
+
     await putUserteamUserName(id as number, user.userName);
     await putEtcGoal(
       id as number,

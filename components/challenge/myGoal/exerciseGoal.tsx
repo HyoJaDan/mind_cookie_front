@@ -1,4 +1,4 @@
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -6,7 +6,9 @@ import RNPickerSelect from "react-native-picker-select";
 import { useRecoilState } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import SwapChallengeIcon from "../../../assets/icon/challenge/swapChallenge.svg";
+import PlayIcon from "../../../assets/icon/challenge/play.svg";
+import { default as SwapChallengeIcon } from "../../../assets/icon/challenge/swapChallenge.svg";
+import MainIcon from "../../../assets/icon/mainIcon/main3.svg";
 import {
   IExercise,
   exerciseOptions,
@@ -83,13 +85,7 @@ export function ExerciseGoal({ id, goals }: IProps) {
     <View style={styles.Wrapper}>
       <Header text="운동" />
       <View style={styles.Content}>
-        <Text style={styles.timeText}>{formatTime(elapsedTime)}</Text>
-        <View style={styles.picker}>
-          <View style={[styles.circle, { backgroundColor: "#A9AEB8" }]}>
-            <Text style={[fontStyle.RG14, { color: Colors.basic.white }]}>
-              {caloriesBurned.toFixed(2)} kcal
-            </Text>
-          </View>
+        <View style={styles.container}>
           <RNPickerSelect
             onValueChange={(value) => setSelectedExercise(value)}
             items={exerciseOptions.map((exercise) => ({
@@ -97,7 +93,7 @@ export function ExerciseGoal({ id, goals }: IProps) {
               value: exercise.value,
             }))}
             placeholder={{ label: "운동 종목을 선택하세요...", value: null }}
-            value={selectedExercise} // RNPickerSelect에 현재 선택된 값을 전달
+            value={selectedExercise}
             style={{
               ...pickerSelectStyles,
               iconContainer: {
@@ -105,25 +101,58 @@ export function ExerciseGoal({ id, goals }: IProps) {
                 paddingRight: 20,
               },
             }}
-            useNativeAndroidPickerStyle={false} // Android에서도 iOS 스타일 적용
+            useNativeAndroidPickerStyle={false}
             Icon={() => <SwapChallengeIcon />}
           />
+          <View
+            style={[
+              styles.circle,
+              { backgroundColor: Colors.grayscale.gray100 },
+            ]}
+          >
+            <Text
+              style={[fontStyle.RG14, { color: Colors.basic.text_default }]}
+            >
+              {caloriesBurned.toFixed(2)} kcal
+            </Text>
+          </View>
         </View>
-        <LinearGradient
-          colors={["#FF6278", "#FF8731"]}
-          start={{ x: 0.0682, y: 0 }}
-          end={{ x: 0.9469, y: 1 }}
-          style={styles.gradient}
-        >
-          <TouchableOpacity style={styles.button} onPress={toggleStopwatch}>
-            {isActive ? (
-              <Entypo name="controller-stop" size={44} color="white" />
-            ) : (
-              <AntDesign name="caretright" size={44} color="white" />
-            )}
-          </TouchableOpacity>
-        </LinearGradient>
-        <Text style={styles.lastFont}>기록을 시작해 볼까요?</Text>
+        <View style={styles.container}>
+          <Text style={styles.timeText}>{formatTime(elapsedTime)}</Text>
+          {isActive ? (
+            <TouchableOpacity
+              style={styles.playButton}
+              onPress={toggleStopwatch}
+            >
+              <PlayIcon />
+            </TouchableOpacity>
+          ) : (
+            <LinearGradient
+              colors={["#FF6278", "#FF8731"]}
+              start={{ x: 0.0682, y: 0 }}
+              end={{ x: 0.9469, y: 1 }}
+              style={styles.gradient}
+            >
+              <TouchableOpacity
+                style={styles.stopButton}
+                onPress={toggleStopwatch}
+              >
+                <AntDesign name="caretright" size={44} color="white" />
+              </TouchableOpacity>
+            </LinearGradient>
+          )}
+        </View>
+        <View style={[styles.container, { gap: 10 }]}>
+          <MainIcon />
+          <View style={styles.textWrapper}>
+            <Text style={[fontStyle.RG12, { color: Colors.primary.primary }]}>
+              운동 목표를 달성하기 위해
+            </Text>
+            <Text style={[fontStyle.RG12, { color: Colors.primary.primary }]}>
+              15분 이상의 운동이 필요해요!
+            </Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -131,14 +160,19 @@ export function ExerciseGoal({ id, goals }: IProps) {
 const styles = StyleSheet.create({
   Wrapper: { gap: 8 },
   Content: {
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    gap: 15,
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    gap: 24,
     alignItems: "center",
     backgroundColor: Colors.basic.white,
     borderRadius: 10,
   },
-
+  container: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   timeText: {
     color: "#C3C4D1",
     fontSize: 64,
@@ -147,6 +181,8 @@ const styles = StyleSheet.create({
   },
   gradient: {
     borderRadius: 999,
+    width: 64,
+    height: 64,
     borderWidth: 2,
     borderColor: "rgba(255, 255, 255, 0.13)",
     shadowColor: "#000",
@@ -154,31 +190,49 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 10,
     elevation: 10,
-  },
-  button: {
-    width: 88,
-    height: 88,
     alignItems: "center",
     justifyContent: "center",
   },
-  picker: {
-    width: "100%",
-    justifyContent: "space-around",
-    flexDirection: "row",
-    alignItems: "stretch",
+  stopButton: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  playButton: {
+    width: 64,
+    height: 64,
+    paddingHorizontal: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    flexShrink: 0,
+    borderRadius: 999,
+    borderWidth: 5,
+    borderColor: "#FF6278",
+    backgroundColor: "#FFF",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.14,
+    shadowRadius: 11,
+    elevation: 10,
   },
   circle: {
     height: 36,
     paddingHorizontal: 16,
     alignItems: "center",
-
     flexDirection: "row",
-    borderRadius: 40,
+    borderRadius: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#DDDAD7",
+    backgroundColor: "#F7F7F7",
   },
-  lastFont: {
-    fontSize: 13,
-    fontFamily: "Pretendard-Medium",
-    color: "#CCC",
+  textWrapper: {
+    backgroundColor: Colors.primary.primary100,
+    borderRadius: 10,
+    padding: 16,
+    flex: 1,
+    justifyContent: "center",
   },
 });
 const pickerSelectStyles = StyleSheet.create({

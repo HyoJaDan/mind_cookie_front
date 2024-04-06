@@ -25,7 +25,7 @@ export default function TeamAchievementDashboard({
           <View style={styles.progressContainer}>
             <Progress.Bar
               progress={data.completedEtcGoals / totalEtcGoals}
-              width={234}
+              width={null}
               height={8}
               color={"rgba(146,182,255,1)"}
               unfilledColor={"rgba(92,114,157,0.06)"}
@@ -47,7 +47,7 @@ export default function TeamAchievementDashboard({
           <View style={styles.progressContainer}>
             <Progress.Bar
               progress={data.completedExercises / data.memberDTOS.length}
-              width={234}
+              width={null}
               height={8}
               color={"rgba(146,182,255,1)"}
               unfilledColor={"rgba(92,114,157,0.06)"}
@@ -69,7 +69,7 @@ export default function TeamAchievementDashboard({
           <View style={styles.progressContainer}>
             <Progress.Bar
               progress={data.completedExercises / data.memberDTOS.length}
-              width={234}
+              width={null}
               height={8}
               color={"rgba(146,182,255,1)"}
               unfilledColor={"rgba(92,114,157,0.06)"}
@@ -101,9 +101,10 @@ const styles = StyleSheet.create({
   statusBarWrapper: {
     flexDirection: "row",
     gap: 16,
+    alignItems: "center",
   },
   progressContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flex: 1,
+    width: "100%",
   },
 });

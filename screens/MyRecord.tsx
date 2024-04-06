@@ -59,7 +59,6 @@ export default function MyRecordScreen() {
             justifyContent: "center",
             gap: 24,
             backgroundColor: Colors.backgroundColor,
-
             paddingVertical: 10,
           }}
           showsVerticalScrollIndicator={false}

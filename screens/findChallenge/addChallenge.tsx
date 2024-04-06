@@ -65,6 +65,8 @@ export default function AddChallenge() {
       );
     } else if (challengeName === "") {
       Alert.alert("이름 오류", "챌린지 이름이 없습니다");
+    } else if (challengeName.length > 12) {
+      Alert.alert("이름 오류", "챌린지 이름이 12자 이상입니다");
     } else {
       const challengeTypeMapping: { [key in ChallengeType]: string } = {
         감량: "reduce",
@@ -99,9 +101,18 @@ export default function AddChallenge() {
             </Text>
           </View>
           <View style={styles.headerGap}>
-            <Text style={[fontStyle.BD15, { color: Colors.basic.text_light }]}>
-              챌린지 이름
-            </Text>
+            <View style={Commonstyles.flexRow}>
+              <Text
+                style={[fontStyle.BD15, { color: Colors.basic.text_light }]}
+              >
+                챌린지 이름
+              </Text>
+              <Text
+                style={[fontStyle.RG12, { color: Colors.basic.text_light }]}
+              >
+                *이름은 최대 12글자 입니다.
+              </Text>
+            </View>
             <View style={styles.goalInputContainer}>
               <TextInput
                 style={styles.input}

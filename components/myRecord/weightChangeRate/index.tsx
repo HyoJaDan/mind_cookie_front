@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   Wrapper: {
     width: 335,
     gap: 16,
+
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",

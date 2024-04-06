@@ -27,7 +27,6 @@ interface MealRecordBoardProps {
 
 // MealRecordBoard 컴포넌트 정의
 const MealRecordBoard: React.FC<MealRecordBoardProps> = ({ data }) => {
-  console.log("COMMEDDATE", data);
   const extendedMealRecords: ExtendedMealRecords = data.memberDTOS.flatMap(
     (member) =>
       member.mealRecords.map((mealRecord) => ({
@@ -67,34 +66,42 @@ const MealRecordBoard: React.FC<MealRecordBoardProps> = ({ data }) => {
     lastRenderedDate = formattedDate;
 
     return (
-      <View style={styles.flagListPadding}>
-        {dateDisplay}
-        <View style={styles.recordItem}>
-          <View style={styles.renderHeader}>
-            <View style={styles.circle} />
-            <View style={styles.renderHeaderContent}>
-              <Text>{item.teamUserName}</Text>
-              <Text
-                style={[
-                  fontStyle.RG14,
-                  { color: Colors.basic.text_extralight },
-                ]}
-              >
-                {formattedTime}
-              </Text>
+      <View>
+        <View style={styles.flagListPadding}>
+          {dateDisplay}
+          <View style={styles.recordItem}>
+            <View style={styles.renderHeader}>
+              <View style={styles.circle} />
+              <View style={styles.renderHeaderContent}>
+                <Text
+                  style={[fontStyle.MD14, { color: Colors.basic.text_light }]}
+                >
+                  {item.teamUserName}
+                </Text>
+                <Text
+                  style={[
+                    fontStyle.RG14,
+                    { color: Colors.basic.text_extralight },
+                  ]}
+                >
+                  {formattedTime}
+                </Text>
+              </View>
             </View>
+            <MealButton
+              type={item.recordType}
+              title={item.title}
+              backgroundColor={Colors.grayscale.gray100}
+            />
+            <Text
+              style={[fontStyle.RG15, { color: Colors.basic.text_default }]}
+            >
+              {item.content}
+            </Text>
+            {item.imageUrl && (
+              <Image source={{ uri: item.imageUrl }} style={styles.image} />
+            )}
           </View>
-          <MealButton
-            type={item.recordType}
-            title={item.title}
-            backgroundColor={Colors.grayscale.gray100}
-          />
-          <Text style={[fontStyle.RG15, { color: Colors.basic.text_default }]}>
-            {item.content}
-          </Text>
-          {item.imageUrl && (
-            <Image source={{ uri: item.imageUrl }} style={styles.image} />
-          )}
         </View>
         <View style={Commonstyles.line} />
       </View>
@@ -104,9 +111,13 @@ const MealRecordBoard: React.FC<MealRecordBoardProps> = ({ data }) => {
   return (
     <View style={styles.Wrapper}>
       {extendedMealRecordsSorted.length == 0 ? (
-        <View>
-          <TeamAchievementDashboard data={data} />
-          <Text style={styles.flagListWrapper}>아직 식단 사진이 없습니다</Text>
+        <View style={styles.dashBoardWrapper}>
+          <View style={styles.dashBoardPadding}>
+            <TeamAchievementDashboard data={data} />
+            <Text style={styles.flagListWrapper}>
+              아직 식단 사진이 없습니다
+            </Text>
+          </View>
         </View>
       ) : (
         <FlatList
@@ -147,6 +158,7 @@ const styles = StyleSheet.create({
   flagListPadding: {
     paddingHorizontal: 24,
     paddingTop: 16,
+    paddingBottom: 12,
     gap: 16,
   },
   recordItem: {

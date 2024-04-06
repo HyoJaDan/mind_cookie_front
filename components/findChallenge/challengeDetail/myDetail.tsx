@@ -8,6 +8,7 @@ import { IUserInProfile } from "../../../data/user/userData";
 import { fetchUserDataInProfile } from "../../../data/user/userDataHandler";
 import { GoalItem } from "../../../screens/findChallenge/ChallengeDetail";
 import { Commonstyles } from "../../../uitll/defaultStyle";
+import { generateID } from "../../../uitll/generateID";
 import { AddGoalModal } from "./addGoalModal";
 import { AddProfileModal } from "./addProfileModal";
 
@@ -31,9 +32,9 @@ export default function MyDetail({
       if (data) setUser(data);
     };
 
+    setGoals((prevGoals) => [...prevGoals, { id: generateID(), value: "" }]);
     loadUserData();
   }, []);
-
   const [modalContent, setModalContent] = useState("");
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["70%"], []);

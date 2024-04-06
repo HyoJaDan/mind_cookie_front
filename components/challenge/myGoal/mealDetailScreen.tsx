@@ -15,7 +15,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Colors } from "../../../assets/color/color";
 import { fontStyle } from "../../../assets/font/font";
-import PictureImage from "../../../assets/icon/photo.svg";
+import PictureImage from "../../../assets/icon/photo2.svg";
 import PlusIcon from "../../../assets/icon/plus";
 import { todayPersonalChallenge } from "../../../data/personalChallenge/personalChallengeData";
 import { postMealGoal } from "../../../data/personalChallenge/personalChallengeDataHandler";
@@ -138,7 +138,7 @@ export default function MealDetailScreen({ route }: { route: any }) {
           <MealButton
             type={item.type}
             title={item.title}
-            backgroundColor={Colors.basic.white}
+            backgroundColor={Colors.basic.bachground}
           />
           <Pressable onPress={() => setIsButtonClicked(!isButtonClicked)}>
             <View style={[Commonstyles.flexGap, styles.button]}>
@@ -160,20 +160,29 @@ export default function MealDetailScreen({ route }: { route: any }) {
           </View>
         )}
         <View
-          style={[Commonstyles.line, { borderColor: Colors.basic.white }]}
+          style={[Commonstyles.line, { borderColor: Colors.basic.line_light }]}
         />
-        <View style={styles.textContainer}>
+        <View style={styles.inputText}>
           <TextInput
-            style={[styles.inputText]}
+            style={styles.TextContainer}
             onChangeText={setContent}
             value={content}
             multiline
             placeholder="공유 하고싶은 이야기가 있나요?"
           />
+          <Text
+            style={[
+              fontStyle.MD13,
+              { color: Colors.basic.text_extralight },
+              styles.counterContainer,
+            ]}
+          >
+            {content.length}/200
+          </Text>
         </View>
-        <View
-          style={[Commonstyles.line, { borderColor: Colors.basic.white }]}
-        />
+        {/* <View
+          style={[Commonstyles.line, { borderColor: Colors.basic.line_light }]}
+        /> */}
         <DefaultButton pressHandler={submitHandler} text="저장하기" />
       </View>
     </ScrollView>
@@ -184,6 +193,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 24,
     gap: 24,
+    backgroundColor: Colors.basic.white,
   },
   Picture: {
     height: 257,
@@ -191,11 +201,11 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.basic.white,
+    backgroundColor: Colors.basic.bachground,
   },
   image: { width: "100%", height: "100%", borderRadius: 20 },
   button: {
-    backgroundColor: Colors.basic.white,
+    backgroundColor: Colors.basic.bachground,
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 40,
@@ -210,19 +220,26 @@ const styles = StyleSheet.create({
     borderColor: Colors.grayscale.gray300,
     borderRadius: 8,
   },
-  textContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   inputText: {
     height: 200,
-    width: "100%", // 화면 너비에 맞춤
-    paddingVertical: 16,
+    width: "100%",
+    paddingVertical: 12,
     paddingHorizontal: 12,
     borderWidth: 1,
     borderRadius: 8,
     backgroundColor: Colors.basic.white,
     borderColor: Colors.grayscale.gray300,
+    position: "relative",
+  },
+  TextContainer: {
+    flex: 0.9,
+  },
+
+  counterContainer: {
+    position: "absolute",
+    bottom: 5,
+    right: 12,
+    textAlign: "right",
   },
 });

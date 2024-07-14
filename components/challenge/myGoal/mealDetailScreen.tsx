@@ -58,6 +58,26 @@ export default function MealDetailScreen({ route }: { route: any }) {
       }
     })();
   }, []);
+  function temp(/* imageFile */ formData) {
+    //    console.log(imageFile, "inputed-image");
+    //    const formData = new FormData();
+    //    formData.append("file", imageFile);
+    //127.0.0.1:5001
+    fetch("http://127.0.0.1:5001/predict", {
+      method: "POST",
+      body: formData,
+      headers: {
+        "Content-Type": "multipart/form-data", // 이 헤더는 생략 가능
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Predicted Class:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
   const pickImage = async () => {
     let result: ImagePicker.ImagePickerResult =
@@ -72,6 +92,14 @@ export default function MealDetailScreen({ route }: { route: any }) {
       if (uri) {
         setImage(uri);
         setImageURI(uri);
+        // temp(uri);
+        const formData = new FormData();
+        formData.append("file", {
+          uri: uri,
+          name: "upload.jpg",
+          type: "image/jpeg",
+        });
+        temp(formData);
       } else {
         console.error("Image URI is undefined.");
       }

@@ -28,7 +28,7 @@ export const getTeamData = async (teamId: number) => {
 
   try {
     const response = await axios.get(url);
-
+    console.log(response);
     return response.data;
   } catch (error) {
     console.log("Error getTeamData", error);

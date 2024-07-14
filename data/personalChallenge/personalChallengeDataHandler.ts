@@ -24,7 +24,7 @@ export const getMyGoalData = async (userId: number) => {
   const url = `${MEMBER_URL}/${userId}/today-personal-challenges`;
   try {
     const response = await axios.get(url);
-
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error("Error getMyGoalData", error);
@@ -38,6 +38,7 @@ export const updateEtcGoalIsDone = async (goalId: number, isDone: boolean) => {
     const response = await axios.put(
       `${BASE_URL}/etc-personal-challenges/${goalId}/isDone?isDone=${isDone}`
     );
+    console.log(response);
     return response.data;
   } catch (error) {
     console.log("Error updateEtcGoalIsDone", error);
@@ -68,6 +69,7 @@ export const updateExerciseGoal = async (
         },
       }
     );
+    console.log(response);
     return response.data;
   } catch (error) {
     console.log("Error updateExerciseGoal", error);
@@ -76,6 +78,7 @@ export const updateExerciseGoal = async (
 };
 
 export const postMealGoal = async (FormData: any, MemberId: number) => {
+  console.log(FormData, "VALLO");
   try {
     const response = await axios.post(
       `${MEMBER_URL}/${MemberId}/todayPersonalChallenge/saveMealRecord`,
@@ -84,6 +87,7 @@ export const postMealGoal = async (FormData: any, MemberId: number) => {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
+    console.log(response);
   } catch (error) {
     console.error("Error uploading image:", error);
   }

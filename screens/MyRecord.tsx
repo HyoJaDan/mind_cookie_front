@@ -1,16 +1,18 @@
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import { Today } from "../components/myRecord/Date";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userDataInMyRecord, userId } from "../data/user/userData";
+import { useRecoilState } from "recoil";
+import DatePicker from "../components/DatePicker";
+import { todayStatusState } from "../data/todoList/todo";
+import { memberData } from "../data/user/userData";
 
 export default function MyRecordScreen() {
   const insets = useSafeAreaInsets();
-  const id = useRecoilValue(userId);
-  const [user, setUser] = useRecoilState(userDataInMyRecord);
+  const [member, setMember] = useRecoilState(memberData);
+  console.log("HELLO", member);
+  const [todayStatus, setTodayStatus] = useRecoilState(todayStatusState);
+  console.log(todayStatus, "FF");
 
   return (
     <BottomSheetModalProvider>
@@ -20,12 +22,12 @@ export default function MyRecordScreen() {
             alignItems: "center",
             justifyContent: "center",
             gap: 24,
-            backgroundColor: Colors.backgroundColor,
+            backgroundColor: "white", //Colors.backgroundColor,
             paddingVertical: 10,
           }}
           showsVerticalScrollIndicator={false}
         >
-          <Today />
+          <DatePicker />
         </ScrollView>
       </SafeAreaView>
     </BottomSheetModalProvider>
@@ -34,12 +36,8 @@ export default function MyRecordScreen() {
 
 const styles = StyleSheet.create({
   rootContainer: {
+    flex: 1,
     gap: 24,
-    backgroundColor: Colors.backgroundColor,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
+    backgroundColor: "white", //Colors.backgroundColor,
   },
 });

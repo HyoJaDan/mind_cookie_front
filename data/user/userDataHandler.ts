@@ -75,15 +75,3 @@ export const putUserteamUserName = async (userId: number, userName: string) => {
     throw error;
   }
 };
-
-export const getIsMemberWithTeam = async (userId: number) => {
-  try {
-    const response = await axios.get(
-      `${MEMBER_URL}/${userId}/isMemberWithTeam`
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching isMemberWithTeam:", error);
-    throw error;
-  }
-};

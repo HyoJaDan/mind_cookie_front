@@ -5,17 +5,20 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot } from "recoil";
 import AuthContextProvider from "./data/auth-context";
+import LoginScreen from "./screens/LoginScreen";
 import WelcomeScreen from "./screens/MyRecord";
+import RegisterScreen from "./screens/RegisterScreen";
+import SplashScreen from "./screens/SplashScreen";
 import ChallengeDetailScreen from "./screens/findChallenge/ChallengeDetail";
 import AddChallenge from "./screens/findChallenge/addChallenge";
 import { FindChallenge } from "./screens/findChallenge/findChallenge";
+
 const Stack = createNativeStackNavigator();
 
 function FindChallengeStack() {
@@ -62,16 +65,59 @@ function AuthenticatedStack() {
   );
 }
 
-function Navigation() {
+const Auth = () => {
+  // Stack Navigator for Login and Sign up Screen
   return (
-    <NavigationContainer>
-      <AuthenticatedStack />
-    </NavigationContainer>
+    <Stack.Navigator initialRouteName="LoginScreen">
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
+        options={{
+          title: "회원가입", //Set Header Title
+          headerStyle: {
+            backgroundColor: "#8785FF", //Set Header color
+          },
+          headerTintColor: "#fff", //Set Header text color
+          headerTitleStyle: {
+            fontWeight: "bold", //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
   );
-}
+};
 
 function Root() {
-  return <Navigation />;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  return (
+    <NavigationContainer>
+      {/* 로그인이 안되면 Auth, 되면 AuthenticatedStack*/}
+      {/*{isAuthenticated ? <AuthenticatedStack /> : <Auth />}*/}
+      <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Auth"
+          component={Auth}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AuthenticatedStack"
+          component={AuthenticatedStack}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 export default function App() {

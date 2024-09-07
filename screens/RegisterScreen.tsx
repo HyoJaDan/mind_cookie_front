@@ -42,7 +42,7 @@ function RegisterScreen({ navigation }) {
       username: userId,
       password: userPassword,
     };
-
+    console.log(dataToSend);
     try {
       await fetch("http://localhost:8080/join", {
         method: "POST",

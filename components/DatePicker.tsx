@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useRecoilValue } from "recoil";
+import { screenWidthData } from "../data/screen";
 
 const DatePicker = () => {
   const [dates, setDates] = useState<string[]>([]); // 날짜를 문자열로 저장 (예: '2024-04-27')
   const [selectedDate, setSelectedDate] = useState<string>(""); // 선택된 날짜를 저장
-  const screenWidth = Dimensions.get("window").width; // 화면 너비 가져오기
-
+  //const screenWidth = Dimensions.get("window").width - 20; // 화면 너비 가져오기
+  const screenWidth = useRecoilValue(screenWidthData);
   // 날짜 형식 변환 함수 (YYYY-MM-DD)
   const formatDate = (date: Date): string => {
     const year = date.getFullYear();
@@ -46,48 +41,42 @@ const DatePicker = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={dates}
-        horizontal={true} // 가로 스크롤 사용 안함 (기본 7개로 고정)
-        showsHorizontalScrollIndicator={false} // 스크롤바 숨김
-        keyExtractor={(item) => item} // 고유한 날짜 문자열을 key로 사용
-        renderItem={({ item }) => {
-          const isSelected = item === selectedDate;
-          return (
-            <TouchableOpacity
+    <FlatList
+      data={dates}
+      horizontal={true} // 가로 스크롤 사용 안함 (기본 7개로 고정)
+      showsHorizontalScrollIndicator={false} // 스크롤바 숨김
+      keyExtractor={(item) => item} // 고유한 날짜 문자열을 key로 사용
+      renderItem={({ item }) => {
+        const isSelected = item === selectedDate;
+        return (
+          <TouchableOpacity
+            style={[
+              styles.dateContainer,
+              isSelected ? styles.selectedDateContainer : null,
+              { width: screenWidth / 7 }, // 화면 너비를 7등분하여 각 날짜의 너비를 설정
+            ]}
+            onPress={() => handleDatePress(item)}
+          >
+            <Text
               style={[
-                styles.dateContainer,
-                isSelected ? styles.selectedDateContainer : null,
-                { width: screenWidth / 7 }, // 화면 너비를 7등분하여 각 날짜의 너비를 설정
+                styles.dateText,
+                isSelected ? styles.selectedDateText : null,
               ]}
-              onPress={() => handleDatePress(item)}
             >
-              <Text
-                style={[
-                  styles.dateText,
-                  isSelected ? styles.selectedDateText : null,
-                ]}
-              >
-                {new Date(item).getDate()}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
-    </View>
+              {new Date(item).getDate()}
+            </Text>
+          </TouchableOpacity>
+        );
+      }}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 20,
-  },
   dateContainer: {
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 10,
-
     backgroundColor: "white", // 기본 배경색
   },
   selectedDateContainer: {

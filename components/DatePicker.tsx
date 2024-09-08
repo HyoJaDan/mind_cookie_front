@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { dateData } from "../data/date";
 import { screenWidthData } from "../data/screen";
 
 const DatePicker = () => {
-  const [dates, setDates] = useState<string[]>([]); // 날짜를 문자열로 저장 (예: '2024-04-27')
-  const [selectedDate, setSelectedDate] = useState<string>(""); // 선택된 날짜를 저장
-  //const screenWidth = Dimensions.get("window").width - 20; // 화면 너비 가져오기
+  const [dates, setDates] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useRecoilState(dateData);
   const screenWidth = useRecoilValue(screenWidthData);
-  // 날짜 형식 변환 함수 (YYYY-MM-DD)
+
   const formatDate = (date: Date): string => {
     const year = date.getFullYear();
     const month = `0${date.getMonth() + 1}`.slice(-2);
@@ -16,7 +16,6 @@ const DatePicker = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // 최근 7일 날짜 리스트 생성 함수
   const getLast7Days = (): string[] => {
     const today = new Date();
     const datesArray: string[] = [];
@@ -29,15 +28,13 @@ const DatePicker = () => {
   };
 
   useEffect(() => {
-    const initialDates = getLast7Days(); // 최근 7일 날짜 생성
+    const initialDates = getLast7Days();
     setDates(initialDates);
-    setSelectedDate(formatDate(new Date())); // 기본적으로 오늘 날짜 선택
+    setSelectedDate(formatDate(new Date()));
   }, []);
 
-  // 날짜 클릭 시 호출되는 함수
   const handleDatePress = (date: string) => {
-    setSelectedDate(date); // 클릭한 날짜를 선택된 날짜로 설정
-    console.log(date); // 클릭한 날짜 출력 (추후 데이터를 불러오는 작업 예정)
+    setSelectedDate(date);
   };
 
   return (

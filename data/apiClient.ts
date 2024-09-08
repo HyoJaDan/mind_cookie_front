@@ -32,14 +32,13 @@
 //   }
 // };
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSetRecoilState } from "recoil";
-import { userToken } from "./user/userData";
 
 // API 호출 함수 (fetch 사용)
 export const apiClient = async (
   url: string,
   method: "GET" | "POST" = "GET",
-  data: any = null
+  data: any = null,
+  params: any = null
 ) => {
   try {
     const token = await AsyncStorage.getItem("user_token");
@@ -47,10 +46,12 @@ export const apiClient = async (
     if (!token) {
       throw new Error("토큰이 존재하지 않습니다.");
     }
-    setToken(token);
-    console.log(qq, "qqqqqqq");
+    const queryString = params
+      ? "?" + new URLSearchParams(params).toString()
+      : "";
+
     // fetch로 API 요청
-    const response = await fetch(`http://localhost:8080${url}`, {
+    const response = await fetch(`http://localhost:8080${url}${queryString}`, {
       method,
       headers: {
         Authorization: `${token}`,

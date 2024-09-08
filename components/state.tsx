@@ -1,8 +1,10 @@
 import Slider from "@react-native-community/slider";
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert, Dimensions, StyleSheet, Text, View } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
+import { apiClient } from "../data/apiClient";
+import { dateData } from "../data/date";
 import { StateDTO, stateData } from "../data/state/stateData";
 import { userToken } from "../data/user/userData";
 import { DefaultButton } from "../uitll/defaultButton";
@@ -12,8 +14,27 @@ const screenWidth = Dimensions.get("window").width;
 const State = () => {
   const [state, setState] = useRecoilState(stateData);
   const token = useRecoilValue(userToken);
-  console.log(token, "token");
+  const selectedDate = useRecoilValue(dateData);
 
+  useEffect(() => {
+    const fetchStateForSelectedDate = async () => {
+      try {
+        const response = await apiClient("/myState", "GET", null, {
+          date: selectedDate,
+        });
+
+        setState({
+          positive: response.data.positive,
+          negative: response.data.negative,
+          lifeSatisfaction: response.data.lifeSatisfaction,
+          physicalCondition: response.data.physicalCondition,
+        });
+      } catch (error) {
+        console.error("선택한 날짜의 상태를 가져오는 중 오류 발생:", error);
+      }
+    };
+    fetchStateForSelectedDate();
+  }, [selectedDate]);
   const updateState = (key: keyof StateDTO, value: number) => {
     setState((prevState) => ({
       ...prevState,
@@ -76,23 +97,25 @@ const State = () => {
 
   const saveStateFunction = async () => {
     try {
-      const response = await fetch("http://localhost:8080/myState", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`, // 헤더에 토큰 추가
-        },
-        body: JSON.stringify({
-          positive: state.positive,
-          negative: state.negative,
-          lifeSatisfaction: state.lifeSatisfaction,
-          physicalCondition: state.physicalCondition,
-        }),
-      });
-      console.log(response, "반환");
-      console.log(token);
+      const response = await fetch(
+        `http://localhost:8080/myState?date=${selectedDate}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`, // 헤더에 토큰 추가
+          },
+          body: JSON.stringify({
+            positive: state.positive,
+            negative: state.negative,
+            lifeSatisfaction: state.lifeSatisfaction,
+            physicalCondition: state.physicalCondition,
+          }),
+        }
+      );
+
       if (response.ok) {
-        Alert.alert("성공", "상태가 성공적으로 저장되었습니다.");
+        Alert.alert("상태가 성공적으로 저장되었습니다.");
       } else {
         Alert.alert("오류", "상태 저장에 실패했습니다.");
       }

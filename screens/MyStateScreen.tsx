@@ -6,7 +6,7 @@ import { Colors } from "../assets/color/color";
 import DatePicker from "../components/DatePicker";
 import State from "../components/state";
 
-export default function MyRecordScreen() {
+export default function MyStateScreen() {
   const insets = useSafeAreaInsets();
   return (
     <BottomSheetModalProvider>

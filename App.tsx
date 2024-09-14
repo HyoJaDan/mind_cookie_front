@@ -5,6 +5,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
+import * as ExpoSplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
@@ -12,13 +13,13 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot } from "recoil";
 import AuthContextProvider from "./data/auth-context";
 import LoginScreen from "./screens/LoginScreen";
-import WelcomeScreen from "./screens/MyRecord";
+import MyStateScreen from "./screens/MyStateScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import SplashScreen from "./screens/SplashScreen";
 import ChallengeDetailScreen from "./screens/findChallenge/ChallengeDetail";
 import AddChallenge from "./screens/findChallenge/addChallenge";
 import { FindChallenge } from "./screens/findChallenge/findChallenge";
-
+// 나머지 import는 동일
 const Stack = createNativeStackNavigator();
 
 function FindChallengeStack() {
@@ -38,8 +39,8 @@ function AuthenticatedStack() {
   return (
     <BottomTab.Navigator>
       <BottomTab.Screen
-        name="내 기록"
-        component={WelcomeScreen}
+        name="상태"
+        component={MyStateScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="face" color={color} size={size} />
@@ -49,7 +50,7 @@ function AuthenticatedStack() {
       />
       <BottomTab.Screen
         name="챌린지"
-        component={FindChallengeStack}
+        component={MyStateScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -97,8 +98,6 @@ function Root() {
 
   return (
     <NavigationContainer>
-      {/* 로그인이 안되면 Auth, 되면 AuthenticatedStack*/}
-      {/*{isAuthenticated ? <AuthenticatedStack /> : <Auth />}*/}
       <Stack.Navigator initialRouteName="SplashScreen">
         <Stack.Screen
           name="SplashScreen"
@@ -132,17 +131,19 @@ export default function App() {
   };
 
   const preLoad = async () => {
+    await ExpoSplashScreen.preventAutoHideAsync();
     return await fetchFonts();
   };
+
   useEffect(() => {
-    preLoad().then((context) => {
+    preLoad().then(() => {
       setIsReady(true);
-      SplashScreen.hideAsync();
+      ExpoSplashScreen.hideAsync(); // 스플래시 화면을 숨깁니다.
     });
   }, []);
 
   if (!isReady) {
-    return null; // 또는 로딩 화면을 렌더링
+    return null; // 로딩 중일 때는 화면을 렌더링하지 않음
   }
 
   return (

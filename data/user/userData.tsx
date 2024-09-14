@@ -5,6 +5,11 @@ export const userToken = atom<string>({
   default: "",
 });
 
+export const baseURLData = atom<string>({
+  key: "baseURLData",
+  default: "", // 기본 URL 설정
+});
+
 // MemberDTO의 타입 정의
 export interface MemberDTO {
   event_participants: string[];

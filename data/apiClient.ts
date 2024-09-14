@@ -35,8 +35,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // API 호출 함수 (fetch 사용)
 export const apiClient = async (
+  baseURL: string,
   url: string,
-  method: "GET" | "POST" = "GET",
+  method: "GET" | "PUT" | "POST" = "GET",
   data: any = null,
   params: any = null
 ) => {
@@ -51,7 +52,7 @@ export const apiClient = async (
       : "";
 
     // fetch로 API 요청
-    const response = await fetch(`http://localhost:8080${url}${queryString}`, {
+    const response = await fetch(`${baseURL}${url}${queryString}`, {
       method,
       headers: {
         Authorization: `${token}`,

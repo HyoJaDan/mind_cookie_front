@@ -2,6 +2,7 @@ import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Colors } from "../assets/color/color";
 import DatePicker from "../components/DatePicker";
 import State from "../components/state";
 
@@ -14,7 +15,7 @@ export default function MyRecordScreen() {
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: "center",
-            backgroundColor: "#FCFCFC", //Colors.backgroundColor,
+            backgroundColor: Colors.basic.bachground,
           }}
           showsVerticalScrollIndicator={false}
         >

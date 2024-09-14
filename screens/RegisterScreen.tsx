@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/splashIcon.svg";
-import { userToken } from "../data/user/userData";
+import { baseURLData, userToken } from "../data/user/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 
 function RegisterScreen({ navigation }) {
@@ -22,7 +22,7 @@ function RegisterScreen({ navigation }) {
   const setUserToken = useSetRecoilState(userToken);
   const passwordInputRef = useRef(null);
   const nameInputRef = useRef(null);
-
+  const baseURL = useRecoilValue(baseURLData);
   const handleRegister = async () => {
     if (!userId) {
       Alert.alert("아이디를 입력해주세요.");
@@ -44,7 +44,7 @@ function RegisterScreen({ navigation }) {
     };
     console.log(dataToSend);
     try {
-      await fetch("http://localhost:8080/join", {
+      await fetch(`${baseURL}/join`, {
         method: "POST",
         body: JSON.stringify(dataToSend),
         headers: {

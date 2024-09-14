@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/splashIcon.svg";
-import { userToken } from "../data/user/userData";
+import { baseURLData, userToken } from "../data/user/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 
 function LoginScreen({ navigation }) {
@@ -21,7 +21,7 @@ function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const passwordInputRef = useRef(null);
   const setUserToken = useSetRecoilState(userToken);
-
+  const baseURL = useRecoilValue(baseURLData);
   const handleLogin = async () => {
     if (!userId || !userPassword) {
       Alert.alert("아이디와 비밀번호를 입력해주세요.");
@@ -36,7 +36,7 @@ function LoginScreen({ navigation }) {
     };
 
     try {
-      let response = await fetch("http://localhost:8080/login", {
+      let response = await fetch(`${baseURL}/login`, {
         method: "POST",
         body: JSON.stringify(dataToSend),
         headers: {

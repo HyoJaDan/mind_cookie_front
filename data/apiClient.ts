@@ -72,7 +72,6 @@ export const apiClient = async (
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.error("API 요청 중 오류 발생:", error);
-    throw error;
+    console.log("ApiClient 오류 발생:", error);
   }
 };

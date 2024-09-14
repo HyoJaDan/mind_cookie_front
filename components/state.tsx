@@ -4,17 +4,15 @@ import { Alert, Dimensions, StyleSheet, Text, View } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
-import { dateData } from "../data/date";
 import { StateDTO, stateData } from "../data/state/stateData";
-import { baseURLData, userToken } from "../data/user/userData";
+import { baseURLData } from "../data/user/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 
 const screenWidth = Dimensions.get("window").width;
 
-const State = () => {
+const State = ({ selectedDate }: { selectedDate }) => {
   const [state, setState] = useRecoilState(stateData);
-  const token = useRecoilValue(userToken);
-  const selectedDate = useRecoilValue(dateData);
+
   const baseURL = useRecoilValue(baseURLData);
   useEffect(() => {
     const fetchStateForSelectedDate = async () => {
@@ -35,6 +33,7 @@ const State = () => {
     };
     fetchStateForSelectedDate();
   }, [selectedDate]);
+
   const updateState = (key: keyof StateDTO, value: number) => {
     setState((prevState) => ({
       ...prevState,
@@ -97,17 +96,17 @@ const State = () => {
 
   const saveStateFunction = async () => {
     try {
-      const response = await apiClient(
-        baseURL, // baseURL을 필요로 하므로 해당 값이 설정되어 있어야 합니다.
-        `/myState`, // 엔드포인트
-        "PUT", // PUT 메서드
+      await apiClient(
+        baseURL,
+        `/myState`,
+        "PUT",
         {
           positive: state.positive,
           negative: state.negative,
           lifeSatisfaction: state.lifeSatisfaction,
           physicalCondition: state.physicalCondition,
-        }, // body 데이터
-        { date: selectedDate } // query 파라미터
+        },
+        { date: selectedDate }
       );
 
       Alert.alert("상태가 성공적으로 저장되었습니다.");

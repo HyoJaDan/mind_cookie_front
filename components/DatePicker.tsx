@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { dateData } from "../data/date";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useRecoilValue } from "recoil";
 import { screenWidthData } from "../data/screen";
 
-const DatePicker = () => {
+const DatePicker = ({ selectedDate, setSelectedDate }) => {
   const [dates, setDates] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useRecoilState(dateData);
   const screenWidth = useRecoilValue(screenWidthData);
 
   const formatDate = (date: Date): string => {
@@ -38,38 +42,43 @@ const DatePicker = () => {
   };
 
   return (
-    <FlatList
-      data={dates}
-      horizontal={true} // 가로 스크롤 사용 안함 (기본 7개로 고정)
-      showsHorizontalScrollIndicator={false} // 스크롤바 숨김
-      keyExtractor={(item) => item} // 고유한 날짜 문자열을 key로 사용
-      renderItem={({ item }) => {
-        const isSelected = item === selectedDate;
-        return (
-          <TouchableOpacity
-            style={[
-              styles.dateContainer,
-              isSelected ? styles.selectedDateContainer : null,
-              { width: screenWidth / 7 }, // 화면 너비를 7등분하여 각 날짜의 너비를 설정
-            ]}
-            onPress={() => handleDatePress(item)}
-          >
-            <Text
+    <View style={styles.Wrapper}>
+      <FlatList
+        data={dates}
+        horizontal={true} // 가로 스크롤 사용 안함 (기본 7개로 고정)
+        showsHorizontalScrollIndicator={false} // 스크롤바 숨김
+        keyExtractor={(item) => item} // 고유한 날짜 문자열을 key로 사용
+        renderItem={({ item }) => {
+          const isSelected = item === selectedDate;
+          return (
+            <TouchableOpacity
               style={[
-                styles.dateText,
-                isSelected ? styles.selectedDateText : null,
+                styles.dateContainer,
+                isSelected ? styles.selectedDateContainer : null,
+                { width: screenWidth / 7 }, // 화면 너비를 7등분하여 각 날짜의 너비를 설정
               ]}
+              onPress={() => handleDatePress(item)}
             >
-              {new Date(item).getDate()}
-            </Text>
-          </TouchableOpacity>
-        );
-      }}
-    />
+              <Text
+                style={[
+                  styles.dateText,
+                  isSelected ? styles.selectedDateText : null,
+                ]}
+              >
+                {new Date(item).getDate()}
+              </Text>
+            </TouchableOpacity>
+          );
+        }}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  Wrapper: {
+    height: 43,
+  },
   dateContainer: {
     justifyContent: "center",
     alignItems: "center",

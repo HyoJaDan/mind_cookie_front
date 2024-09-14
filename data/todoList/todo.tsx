@@ -9,6 +9,7 @@ export interface HobbitStatus {
 export interface PrimaryHobbit {
   primaryHobbitId: number;
   primaryHobbit: string;
+  color: string;
   hobbitStatuses: HobbitStatus[];
 }
 

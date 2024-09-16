@@ -1,12 +1,15 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
 import * as ExpoSplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot } from "recoil";
 import AuthContextProvider from "./data/auth-context";
@@ -14,12 +17,31 @@ import LoginScreen from "./screens/LoginScreen";
 import MyStateScreen from "./screens/MyStateScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import SplashScreen from "./screens/SplashScreen";
+import StopwatchScreen from "./screens/StopwatchScreen";
 import TodoScreen from "./screens/TodoScreen";
-const Stack = createNativeStackNavigator();
 
+const Stack = createNativeStackNavigator();
+const Tab = createMaterialTopTabNavigator();
+
+// function StopwatchStack() {
+//   return (
+//     <Tab.Navigator
+//       screenOptions={{
+//         tabBarLabelStyle: {
+//           color: Colors.basic.text_default,
+//           fontSize: 18,
+//           fontFamily: "Pretendard-Bold",
+//         },
+//         tabBarIndicatorStyle: { height: 3 },
+//       }}
+//     >
+//       <Tab.Screen name="포모" component={Timer} />
+//       <Tab.Screen name="스탑워치" component={StopwatchScreen} />
+//     </Tab.Navigator>
+//   );
+// }
 function AuthenticatedStack() {
   const BottomTab = createBottomTabNavigator();
-
   return (
     <BottomTab.Navigator>
       <BottomTab.Screen
@@ -42,6 +64,16 @@ function AuthenticatedStack() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="face" color={color} size={size} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <BottomTab.Screen
+        name="타이머"
+        component={StopwatchScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="timer-outline" size={size} color={color} />
           ),
           headerShown: false,
         }}
@@ -128,10 +160,12 @@ export default function App() {
     <RecoilRoot>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <BottomSheetModalProvider>
-          <StatusBar style="dark" />
-          <AuthContextProvider>
-            <Root />
-          </AuthContextProvider>
+          <SafeAreaView style={{ flex: 1 }}>
+            <StatusBar style="dark" />
+            <AuthContextProvider>
+              <Root />
+            </AuthContextProvider>
+          </SafeAreaView>
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
     </RecoilRoot>

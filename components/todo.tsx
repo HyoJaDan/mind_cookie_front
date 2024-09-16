@@ -37,7 +37,6 @@ const TodoList = ({
   setSelectedDate: any;
 }) => {
   const [todos, setTodos] = useRecoilState(todoData);
-  const [isModalVisible, setModalVisible] = useState(false);
   const [selectedColor, setSelectedColor] = useState("");
   const [newPrimaryHobbit, setNewPrimaryHobbit] = useState("");
   const [newHobbit, setNewHobbit] = useState("");
@@ -222,16 +221,28 @@ const TodoList = ({
         setSelectedDate={setSelectedDate}
       />
       <View style={styles.container}>
-        <FlatList
-          data={todos}
-          renderItem={({ item: primaryHobbit }) =>
-            primaryHobbit.hobbitStatuses.map((hobbit) =>
-              renderHobbitStatus(primaryHobbit, hobbit)
-            )
-          }
-          keyExtractor={(item) => item.primaryHobbitId.toString()}
-          contentContainerStyle={styles.listContainer}
-        />
+        {todos.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={[fontStyle.BD24, styles.emptyText]}>
+              투두리스트가 아직 없습니다!
+            </Text>
+            <Text style={styles.instructions}>
+              목표를 추가하려면 아래 '+' 버튼을 눌러
+            </Text>
+            <Text style={styles.instructions}>새 목표를 설정하세요.</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={todos}
+            renderItem={({ item: primaryHobbit }) =>
+              primaryHobbit.hobbitStatuses.map((hobbit) =>
+                renderHobbitStatus(primaryHobbit, hobbit)
+              )
+            }
+            keyExtractor={(item) => item.primaryHobbitId.toString()}
+            contentContainerStyle={styles.listContainer}
+          />
+        )}
         <TouchableOpacity
           style={styles.addButton}
           onPress={handlePresentModalPress}
@@ -382,6 +393,23 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 5,
     borderWidth: 2,
+  },
+
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  emptyText: {
+    marginBottom: 20,
+    color: "#4CAF50",
+  },
+  instructions: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#333",
   },
 });
 

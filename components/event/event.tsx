@@ -98,6 +98,11 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
   };
 
   const addNewData = () => {
+    if (newData == "") {
+      bottomSheetModalRef.current?.dismiss();
+      return;
+    }
+
     if (dataType === "participants") {
       setMember((prev) => ({
         ...prev,

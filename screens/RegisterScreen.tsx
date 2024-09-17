@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { fontStyle } from "../assets/font/font";
-import SpashIcon from "../assets/icon/splashIcon.svg";
+import SpashIcon from "../assets/icon/main.svg";
 import { baseURLData, userToken } from "../data/user/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 

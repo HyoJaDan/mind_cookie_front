@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white", // 기본 배경색
   },
   selectedDateContainer: {
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: "#E0E0E0", // 선택된 날짜의 배경색
   },
   dateText: {

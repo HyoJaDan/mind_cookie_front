@@ -166,25 +166,25 @@ const styles = StyleSheet.create({
   circleWrapper: {
     justifyContent: "center",
     alignItems: "center",
-    height: 190, // circle을 고정된 위치에 배치하기 위한 높이 설정
-    marginBottom: 20, // 원과 슬라이더 사이 간격을 유지
+    height: 190,
+    marginBottom: 20,
   },
   circle: {
-    borderRadius: 100, // 원형으로 만들기
+    borderRadius: 100,
   },
 
   labelText: {
     fontSize: 18,
     marginBottom: 10,
     fontWeight: "bold",
-    alignSelf: "flex-start", // 박스 왼쪽 상단에 정렬
+    alignSelf: "flex-start",
   },
   statusText: {
     fontSize: 16,
     color: "#333",
   },
   slider: {
-    width: screenWidth * 0.65, // 슬라이더 너비 (화면의 80%)
+    width: screenWidth * 0.65,
     height: 40,
   },
 });

@@ -16,6 +16,10 @@ export default function MyStateScreen() {
   return (
     <BottomSheetModalProvider>
       <SafeAreaView style={[styles.rootContainer, { paddingTop: insets.top }]}>
+        <DatePicker
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+        />
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -24,10 +28,6 @@ export default function MyStateScreen() {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <DatePicker
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-          />
           <State selectedDate={selectedDate} />
         </ScrollView>
       </SafeAreaView>
@@ -38,7 +38,6 @@ export default function MyStateScreen() {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    gap: 24,
-    backgroundColor: "white", //Colors.backgroundColor,
+    backgroundColor: Colors.basic.bachground,
   },
 });

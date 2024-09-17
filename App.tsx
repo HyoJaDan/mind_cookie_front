@@ -13,13 +13,13 @@ import { SafeAreaView } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot } from "recoil";
 import AuthContextProvider from "./data/auth-context";
+import EventScreen from "./screens/EventScreen";
 import LoginScreen from "./screens/LoginScreen";
 import MyStateScreen from "./screens/MyStateScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import SplashScreen from "./screens/SplashScreen";
 import StopwatchScreen from "./screens/StopwatchScreen";
 import TodoScreen from "./screens/TodoScreen";
-
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
 
@@ -64,6 +64,16 @@ function AuthenticatedStack() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="face" color={color} size={size} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <BottomTab.Screen
+        name="이벤트"
+        component={EventScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="event-available" size={size} color={color} />
           ),
           headerShown: false,
         }}

@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-export interface EventData {
+export interface IEventData {
   date: string;
   participants: string[];
   whichActivity: string;
@@ -12,15 +12,18 @@ export interface EventResponse {
   status: number;
   message: string;
   code: string;
-  data: EventData[];
+  data: IEventData[];
 }
 
-export const eventData = atom<EventResponse>({
+export const eventData = atom<IEventData[]>({
   key: "eventData",
-  default: {
-    status: 200,
-    message: "요청에 성공하셨습니다",
-    code: "200",
-    data: [],
-  },
+  default: [
+    {
+      date: "",
+      participants: [],
+      whichActivity: "",
+      emotion: "",
+      emotionRate: 0,
+    },
+  ],
 });

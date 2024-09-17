@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet } from "react-native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Colors } from "../assets/color/color";
 import TodoList from "../components/todo";
 
 export default function TodoScreen() {
@@ -26,6 +27,6 @@ export default function TodoScreen() {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: "white", //Colors.backgroundColor,
+    backgroundColor: Colors.basic.bachground,
   },
 });

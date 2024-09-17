@@ -3,7 +3,9 @@ import { SafeAreaView, StyleSheet } from "react-native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Colors } from "../assets/color/color";
 import DatePicker from "../components/DatePicker";
+import Event from "../components/event/event";
 
 export default function EventScreen() {
   const insets = useSafeAreaInsets();
@@ -18,7 +20,7 @@ export default function EventScreen() {
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
         />
-        {/* <Event selectedDate={selectedDate} setSelectedDate={setSelectedDate} /> */}
+        <Event selectedDate={selectedDate} />
       </SafeAreaView>
     </BottomSheetModalProvider>
   );
@@ -27,6 +29,6 @@ export default function EventScreen() {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: "white", //Colors.backgroundColor,
+    backgroundColor: Colors.basic.bachground,
   },
 });

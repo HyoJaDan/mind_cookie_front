@@ -36,5 +36,6 @@ export const Colors = {
     approve: "#2e8eff",
     warning: "#ff2e60",
     black: "#1d1d1d",
+    text_head: "#313131",
   },
 };

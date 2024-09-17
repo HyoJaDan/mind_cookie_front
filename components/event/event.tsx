@@ -76,7 +76,7 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
     if (
       newEvent.participants.length === 0 ||
       !newEvent.whichActivity ||
-      !newEvent.emotion ||
+      !newEvent.emotion
     ) {
       Alert.alert("Error", "모든 데이터를 입력해주세요.");
       return;

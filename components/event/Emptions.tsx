@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import Slider from "@react-native-community/slider";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Slider from "@react-native-community/slider";
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { accordionStyle } from "./accordionStyle";
 
 interface EmotionsProps {
@@ -37,7 +37,6 @@ export const Emotions: React.FC<EmotionsProps> = ({
             <Text>{emotion}</Text>
           </TouchableOpacity>
         ))}
-        {/* + 버튼 */}
         <TouchableOpacity
           style={accordionStyle.circle}
           onPress={() => handlePresentModalPress("emotions")}
@@ -45,7 +44,6 @@ export const Emotions: React.FC<EmotionsProps> = ({
           <Ionicons name="add" size={20} color="black" />
         </TouchableOpacity>
       </View>
-      {/* 슬라이더 추가 */}
       <Slider
         style={accordionStyle.slider}
         minimumValue={0}

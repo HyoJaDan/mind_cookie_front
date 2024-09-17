@@ -40,7 +40,7 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
     participants: [],
     whichActivity: "",
     emotion: "",
-    emotionRate: 0,
+    emotionRate: 50,
   });
 
   const [newData, setNewData] = useState(""); // 추가할 새로운 데이터
@@ -77,7 +77,6 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
       newEvent.participants.length === 0 ||
       !newEvent.whichActivity ||
       !newEvent.emotion ||
-      newEvent.emotionRate === 0
     ) {
       Alert.alert("Error", "모든 데이터를 입력해주세요.");
       return;

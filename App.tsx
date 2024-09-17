@@ -22,7 +22,7 @@ import StopwatchScreen from "./screens/StopwatchScreen";
 import TodoScreen from "./screens/TodoScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
-
+import Octicons from "@expo/vector-icons/Octicons";
 // function StopwatchStack() {
 //   return (
 //     <Tab.Navigator
@@ -84,6 +84,16 @@ function AuthenticatedStack() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="timer-outline" size={size} color={color} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <BottomTab.Screen
+        name="통계"
+        component={StopwatchScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Octicons name="graph" size={size} color={color} />
           ),
           headerShown: false,
         }}

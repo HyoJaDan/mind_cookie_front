@@ -1,5 +1,5 @@
 import Slider from "@react-native-community/slider";
-import React, { useEffect } from "react";
+import React from "react";
 import { Alert, Dimensions, StyleSheet, Text, View } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
@@ -10,37 +10,54 @@ import { DefaultButton } from "../uitll/defaultButton";
 
 const screenWidth = Dimensions.get("window").width;
 
-const State = ({ selectedDate }: { selectedDate }) => {
-  const [state, setState] = useRecoilState(stateData);
-
+const State = ({ selectedDate }: { selectedDate: string }) => {
+  const [stateList, setStateList] = useRecoilState<StateDTO[]>(stateData);
   const baseURL = useRecoilValue(baseURLData);
-  useEffect(() => {
-    const fetchStateForSelectedDate = async () => {
-      try {
-        const response = await apiClient(baseURL, "/myState", "GET", null, {
-          date: selectedDate,
-        });
 
-        setState({
-          positive: response.data.positive,
-          negative: response.data.negative,
-          lifeSatisfaction: response.data.lifeSatisfaction,
-          physicalCondition: response.data.physicalCondition,
-        });
-      } catch (error) {
-        console.error("선택한 날짜의 상태를 가져오는 중 오류 발생:", error);
-      }
-    };
-    fetchStateForSelectedDate();
-  }, [selectedDate]);
-
-  const updateState = (key: keyof StateDTO, value: number) => {
-    setState((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
+  // 선택한 날짜에 해당하는 state를 가져오기
+  const selectedState = stateList.find(
+    (state) => state.date === selectedDate
+  ) || {
+    date: selectedDate,
+    positive: 50,
+    negative: 50,
+    lifeSatisfaction: 50,
+    physicalCondition: 50,
   };
-  const getStatusDescription = (value: number) => {
+  console.log(stateList);
+
+  /** Slider를 움직여서 데이터가 업데이트될 때마다 실행 */
+  const updateState = (key: keyof StateDTO, value: number) => {
+    // 해당 날짜의 상태가 없으면 기본값을 추가
+    setStateList((prevStateList) => {
+      const stateExists = prevStateList.some(
+        (state) => state.date === selectedDate
+      );
+
+      if (!stateExists) {
+        // 오늘 날짜의 상태가 없을 경우 새로 추가
+        return [
+          ...prevStateList,
+          {
+            date: selectedDate,
+            positive: 50,
+            negative: 50,
+            lifeSatisfaction: 50,
+            physicalCondition: 50,
+          },
+        ].map((state) =>
+          state.date === selectedDate ? { ...state, [key]: value } : state
+        );
+      }
+
+      // 기존 날짜의 상태를 업데이트
+      return prevStateList.map((state) =>
+        state.date === selectedDate ? { ...state, [key]: value } : state
+      );
+    });
+  };
+
+  const getStatusDescription = (value: number): string => {
     if (value <= 5) return "매우 그렇지 않다";
     if (value <= 15) return "그렇지 않다";
     if (value <= 30) return "약간 그렇지 않다";
@@ -101,34 +118,42 @@ const State = ({ selectedDate }: { selectedDate }) => {
         `/myState`,
         "PUT",
         {
-          positive: state.positive,
-          negative: state.negative,
-          lifeSatisfaction: state.lifeSatisfaction,
-          physicalCondition: state.physicalCondition,
+          positive: selectedState.positive,
+          negative: selectedState.negative,
+          lifeSatisfaction: selectedState.lifeSatisfaction,
+          physicalCondition: selectedState.physicalCondition,
         },
         { date: selectedDate }
       );
-
       Alert.alert("상태가 성공적으로 저장되었습니다.");
     } catch (error) {
-      console.error("상태 저장 중 오류 발생:", error);
       Alert.alert("오류", "상태 저장 중 문제가 발생했습니다.");
     }
   };
 
   return (
     <View style={styles.container}>
-      {renderSlider("긍정 감각", state.positive, "positive", "#E45252")}
-      {renderSlider("부정 감각", state.negative, "negative", "#5284E4")}
+      {renderSlider(
+        "긍정 감각",
+        selectedState.positive ?? 0,
+        "positive",
+        "#E45252"
+      )}
+      {renderSlider(
+        "부정 감각",
+        selectedState.negative ?? 0,
+        "negative",
+        "#5284E4"
+      )}
       {renderSlider(
         "삶의 만족도",
-        state.lifeSatisfaction,
+        selectedState.lifeSatisfaction ?? 0,
         "lifeSatisfaction",
         "#52E48C"
       )}
       {renderSlider(
         "몸 상태",
-        state.physicalCondition,
+        selectedState.physicalCondition ?? 0,
         "physicalCondition",
         "#E4DE52"
       )}
@@ -172,7 +197,6 @@ const styles = StyleSheet.create({
   circle: {
     borderRadius: 100,
   },
-
   labelText: {
     fontSize: 18,
     marginBottom: 10,

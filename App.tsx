@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Octicons from "@expo/vector-icons/Octicons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -18,11 +19,11 @@ import LoginScreen from "./screens/LoginScreen";
 import MyStateScreen from "./screens/MyStateScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import SplashScreen from "./screens/SplashScreen";
+import StatisticsScreen from "./screens/StatisticsScreen";
 import StopwatchScreen from "./screens/StopwatchScreen";
 import TodoScreen from "./screens/TodoScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
-import Octicons from "@expo/vector-icons/Octicons";
 // function StopwatchStack() {
 //   return (
 //     <Tab.Navigator
@@ -90,7 +91,7 @@ function AuthenticatedStack() {
       />
       <BottomTab.Screen
         name="통계"
-        component={StopwatchScreen}
+        component={StatisticsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Octicons name="graph" size={size} color={color} />

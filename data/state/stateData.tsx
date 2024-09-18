@@ -6,7 +6,7 @@ export interface StateDTO {
   positive: number;
   negative: number;
   lifeSatisfaction: number;
-  physicalCondition: number;
+  physicalConnection: number;
 }
 
 export const stateData = atom<StateDTO[]>({

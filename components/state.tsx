@@ -15,17 +15,15 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
   const baseURL = useRecoilValue(baseURLData);
 
   // 선택한 날짜에 해당하는 state를 가져오기
-  const selectedState = stateList.find(
+  const selectedState: StateDTO = stateList.find(
     (state) => state.date === selectedDate
   ) || {
     date: selectedDate,
     positive: 50,
     negative: 50,
     lifeSatisfaction: 50,
-    physicalCondition: 50,
+    physicalConnection: 50,
   };
-  console.log(stateList);
-
   /** Slider를 움직여서 데이터가 업데이트될 때마다 실행 */
   const updateState = (key: keyof StateDTO, value: number) => {
     // 해당 날짜의 상태가 없으면 기본값을 추가
@@ -43,7 +41,7 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
             positive: 50,
             negative: 50,
             lifeSatisfaction: 50,
-            physicalCondition: 50,
+            physicalConnection: 50,
           },
         ].map((state) =>
           state.date === selectedDate ? { ...state, [key]: value } : state
@@ -121,7 +119,7 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
           positive: selectedState.positive,
           negative: selectedState.negative,
           lifeSatisfaction: selectedState.lifeSatisfaction,
-          physicalCondition: selectedState.physicalCondition,
+          physicalConnection: selectedState.physicalConnection,
         },
         { date: selectedDate }
       );
@@ -153,8 +151,8 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
       )}
       {renderSlider(
         "몸 상태",
-        selectedState.physicalCondition ?? 0,
-        "physicalCondition",
+        selectedState.physicalConnection ?? 0,
+        "physicalConnection",
         "#E4DE52"
       )}
       <DefaultButton

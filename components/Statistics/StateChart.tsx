@@ -1,13 +1,16 @@
 import React from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 import { fontStyle } from "../../assets/font/font";
 import { StateDTO } from "../../data/state/stateData";
 
-export default function StateBar({ stateList }: { stateList: StateDTO[] }) {
-  const screenWidth = Dimensions.get("window").width;
-
-  // 날짜 기준으로 정렬된 데이터
+export default function StateChart({
+  stateList,
+  screenWidth,
+}: {
+  stateList: StateDTO[];
+  screenWidth: number;
+}) {
   const sortedStateList = [...stateList].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
@@ -38,7 +41,7 @@ export default function StateBar({ stateList }: { stateList: StateDTO[] }) {
   const renderTitle = () => {
     return (
       <View>
-        <Text style={[{ textAlign: "center" }, fontStyle.BD20]}>상태 통계</Text>
+        <Text style={[{ textAlign: "center" }, fontStyle.BD20]}>마음 상태</Text>
         <View style={styles.navigator}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <View
@@ -77,18 +80,21 @@ export default function StateBar({ stateList }: { stateList: StateDTO[] }) {
           data={barData}
           barWidth={16}
           initialSpacing={20}
+          endSpacing={15}
           spacing={30}
           scrollToEnd={true}
           scrollAnimation={true}
-          disablePress={false}
+          disablePress={true}
           barBorderTopLeftRadius={4}
           barBorderTopRightRadius={4}
           minHeight={5}
           parentWidth={Math.max(barData.length * 30, screenWidth)}
           maxValue={100}
-          noOfSections={4}
-          xAxisLength={screenWidth}
+          xAxisColor={"gray"}
+          noOfSections={5}
           rulesLength={screenWidth}
+          width={screenWidth - 65}
+          xAxisLength={screenWidth - 65}
           yAxisThickness={0}
           yAxisTextStyle={{ color: "gray" }}
           showLine

@@ -4,14 +4,18 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRecoilValue } from "recoil";
 import { Colors } from "../assets/color/color";
-import StateBar from "../components/Statistics/state";
-import { StateDTO, stateData } from "../data/state/stateData";
+import StateChart from "../components/Statistics/StateChart";
+import StopwatchChart from "../components/Statistics/StopwatchChart";
 import { screenWidthData } from "../data/screen";
+import { StateDTO, stateData } from "../data/state/stateData";
+import { IAllStopwatch, allStopwatchData } from "../data/stopwatch";
 
 export default function StatisticsScreen() {
   const insets = useSafeAreaInsets();
   const stateList = useRecoilValue<StateDTO[]>(stateData);
+  const stopwatchList = useRecoilValue<IAllStopwatch[]>(allStopwatchData);
   const screenWidth = useRecoilValue(screenWidthData);
+
   return (
     <BottomSheetModalProvider>
       <SafeAreaView style={[styles.Wrapper, { paddingTop: insets.top }]}>
@@ -23,7 +27,11 @@ export default function StatisticsScreen() {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <StateBar stateList={stateList} screenWidth={screenWidth} />
+          <StateChart stateList={stateList} screenWidth={screenWidth} />
+          <StopwatchChart
+            stopwatchData={stopwatchList}
+            screenWidth={screenWidth}
+          />
         </ScrollView>
       </SafeAreaView>
     </BottomSheetModalProvider>

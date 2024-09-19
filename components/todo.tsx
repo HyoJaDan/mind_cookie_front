@@ -142,6 +142,7 @@ const TodoList = ({
       hobbit: newHobbit,
       color: newPrimaryHobbit ? selectedColor : null,
     });
+    console.log(response);
     if (response.status === 200) {
       const addedHobbit = response.data;
       bottomSheetModalRef.current?.close();
@@ -170,7 +171,7 @@ const TodoList = ({
                   hobbitStatuses: [
                     ...primaryHobbit.hobbitStatuses,
                     {
-                      hobbitId: addedHobbit.hobbitId,
+                      hobbitId: addedHobbit.hobbitStatuses[0].hobbitId,
                       hobbit: newHobbit,
                       done: false,
                     },

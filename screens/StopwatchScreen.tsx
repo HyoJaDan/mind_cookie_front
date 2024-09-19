@@ -22,7 +22,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { Colors } from "../assets/color/color";
 import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
-import { stopwatchData } from "../data/stopwatch";
+import { allStopwatchData, stopwatchData } from "../data/stopwatch";
 import { baseURLData } from "../data/user/userData";
 import { formatDate3 } from "../uitll/dateConverter";
 import { DefaultButton } from "../uitll/defaultButton";
@@ -38,6 +38,8 @@ export default function StopwatchScreen() {
   const [selectedTarget, setSelectedTarget] = useState("");
   const [newTarget, setNewTarget] = useState("");
   const [totalElapsedTime, setTotalElapsedTime] = useState(0); // 총 집중량 시간
+  const [allStopwatchTargets, setAllStopwatchTargets] =
+    useRecoilState(allStopwatchData);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["30%"], []);
@@ -97,10 +99,67 @@ export default function StopwatchScreen() {
     setStartTime(Date.now() - elapsedTime);
     setIsRunning(true);
   };
+  const updateAllStopwatchData = (target: string) => {
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${String(
+      currentDate.getMonth() + 1
+    ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`; // yyyy-MM-dd 형식으로 날짜 포맷
+    const formattedTime = formatTime(elapsedTime); // 기존의 시간 포맷 함수
+
+    setAllStopwatchTargets((prevTargets) => {
+      const targetIndex = prevTargets.findIndex(
+        (item) => item.target === target
+      );
+
+      if (targetIndex >= 0) {
+        // 타겟이 이미 존재할 경우
+        const existingDateIndex = prevTargets[
+          targetIndex
+        ].dateTimeList.findIndex((dateTime) => dateTime.date === formattedDate);
+
+        let updatedDateTimeList;
+        if (existingDateIndex >= 0) {
+          // 이미 해당 날짜가 존재할 경우 시간 업데이트
+          updatedDateTimeList = prevTargets[targetIndex].dateTimeList.map(
+            (dateTime, index) =>
+              index === existingDateIndex
+                ? { ...dateTime, time: formattedTime }
+                : dateTime
+          );
+        } else {
+          // 해당 날짜가 존재하지 않을 경우 새로 추가
+          updatedDateTimeList = [
+            ...prevTargets[targetIndex].dateTimeList,
+            { date: formattedDate, time: formattedTime },
+          ];
+        }
+
+        const updatedTarget = {
+          ...prevTargets[targetIndex],
+          dateTimeList: updatedDateTimeList,
+        };
+        return [
+          ...prevTargets.slice(0, targetIndex),
+          updatedTarget,
+          ...prevTargets.slice(targetIndex + 1),
+        ];
+      } else {
+        // 타겟이 존재하지 않을 경우 새로 추가
+        return [
+          ...prevTargets,
+          {
+            target: target,
+            dateTimeList: [{ date: formattedDate, time: formattedTime }],
+          },
+        ];
+      }
+    });
+  };
 
   const stopStopwatch = (target: string) => {
     setIsRunning(false);
     submitStopwatchTime(target);
+    updateAllStopwatchData(target);
   };
 
   // 매 1초마다 남은 시간 업데이트 및 해당 타이머의 시간 업데이트

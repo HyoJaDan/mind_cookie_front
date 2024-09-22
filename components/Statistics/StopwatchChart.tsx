@@ -128,53 +128,75 @@ export default function StopwatchChart({
       </View>
     );
   };
-  return (
-    <View style={styles.container}>
-      {renderTitle()}
-      <LineChart
-        areaChart={true}
-        data={chartData1}
-        data2={chartData2}
-        data3={chartData3}
-        data4={chartData4}
-        data5={chartData5}
-        width={screenWidth - 65}
-        height={150}
-        xAxisLength={screenWidth - 65}
-        verticalLinesColor="#E0E0E0"
-        yAxisThickness={0}
-        yAxisTextStyle={{ color: "gray" }}
-        xAxisLabelTextStyle={{ color: "gray", paddingLeft: 15 }}
-        xAxisColor={"gray"}
-        spacing={60}
-        initialSpacing={15}
-        endSpacing={15}
-        noOfSections={4}
-        scrollToEnd={true}
-        scrollAnimation={true}
-        color1="skyblue"
-        color2="orange"
-        color3="purple"
-        color4="green"
-        color5="red"
-        textColor1="green"
-        hideDataPoints
-        dataPointsColor1="blue"
-        dataPointsColor2="red"
-        dataPointsColor3="purple"
-        dataPointsColor4="green"
-        dataPointsColor5="red"
-        startFillColor1="skyblue"
-        startFillColor2="orange"
-        startFillColor3="purple"
-        startFillColor4="green"
-        startFillColor5="red"
-        startOpacity={0.8}
-        endOpacity={0.6}
-        yAxisLabelSuffix="분"
-      />
-    </View>
-  );
+  const renderEmptyState = () => {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={[fontStyle.BD16, { color: "gray" }]}>
+          데이터가 없습니다.
+        </Text>
+        <Text style={[fontStyle.RG14, { color: "gray", marginTop: 8 }]}>
+          생활 습관을 기록해주세요.
+        </Text>
+      </View>
+    );
+  };
+
+  if (stopwatchData.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={[{ textAlign: "center" }, fontStyle.BD20]}>생활 습관</Text>
+        {renderEmptyState()}
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        {renderTitle()}
+        <LineChart
+          areaChart={true}
+          data={chartData1}
+          data2={chartData2}
+          data3={chartData3}
+          data4={chartData4}
+          data5={chartData5}
+          width={screenWidth - 65}
+          height={150}
+          xAxisLength={screenWidth - 65}
+          verticalLinesColor="#E0E0E0"
+          yAxisThickness={0}
+          yAxisTextStyle={{ color: "gray" }}
+          xAxisLabelTextStyle={{ color: "gray", paddingLeft: 15 }}
+          xAxisColor={"gray"}
+          spacing={60}
+          initialSpacing={15}
+          endSpacing={15}
+          noOfSections={4}
+          scrollToEnd={true}
+          scrollAnimation={true}
+          color1="skyblue"
+          color2="orange"
+          color3="purple"
+          color4="green"
+          color5="red"
+          textColor1="green"
+          hideDataPoints
+          dataPointsColor1="blue"
+          dataPointsColor2="red"
+          dataPointsColor3="purple"
+          dataPointsColor4="green"
+          dataPointsColor5="red"
+          startFillColor1="skyblue"
+          startFillColor2="orange"
+          startFillColor3="purple"
+          startFillColor4="green"
+          startFillColor5="red"
+          startOpacity={0.8}
+          endOpacity={0.6}
+          yAxisLabelSuffix="분"
+        />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -216,5 +238,11 @@ const styles = StyleSheet.create({
   xAxisStyle: {
     color: "gray",
     textAlign: "center",
+  },
+
+  emptyContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 150, // 적당한 높이 설정
   },
 });

@@ -71,57 +71,77 @@ export default function StateChart({
       </View>
     );
   };
-
-  return (
-    <View style={styles.container}>
-      {renderTitle()}
-      <View style={{ flexDirection: "row" }}>
-        <BarChart
-          data={barData}
-          barWidth={16}
-          initialSpacing={20}
-          endSpacing={15}
-          spacing={30}
-          scrollToEnd={true}
-          scrollAnimation={true}
-          disablePress={true}
-          barBorderTopLeftRadius={4}
-          barBorderTopRightRadius={4}
-          minHeight={5}
-          parentWidth={Math.max(barData.length * 30, screenWidth)}
-          maxValue={100}
-          xAxisColor={"gray"}
-          noOfSections={5}
-          rulesLength={screenWidth}
-          width={screenWidth - 65}
-          xAxisLength={screenWidth - 65}
-          yAxisThickness={0}
-          yAxisTextStyle={{ color: "gray" }}
-          showLine
-          lineData={lineData}
-          lineConfig={{
-            initialSpacing: 28,
-            spacing: 48,
-            thickness: 2,
-            color: "#52E48C",
-            hideDataPoints: false,
-            dataPointsColor: "#52E48C",
-            dataPointsRadius: 4,
-          }}
-          lineData2={lineData2}
-          lineConfig2={{
-            initialSpacing: 28,
-            spacing: 48,
-            thickness: 2,
-            color: "#E4DE52",
-            dataPointsColor: "#E4DE52",
-            hideDataPoints: false,
-            dataPointsRadius: 4,
-          }}
-        />
+  const renderEmptyState = () => {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={[fontStyle.BD16, { color: "gray" }]}>
+          데이터가 없습니다.
+        </Text>
+        <Text style={[fontStyle.RG14, { color: "gray", marginTop: 8 }]}>
+          마음 상태를 기록해주세요.
+        </Text>
       </View>
-    </View>
-  );
+    );
+  };
+  if (stateList.length === 0) {
+    return (
+      <View style={styles.container}>
+        {renderTitle()}
+        {renderEmptyState()}
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        {renderTitle()}
+        <View style={{ flexDirection: "row" }}>
+          <BarChart
+            data={barData}
+            barWidth={16}
+            initialSpacing={20}
+            endSpacing={15}
+            spacing={30}
+            scrollToEnd={true}
+            scrollAnimation={true}
+            disablePress={true}
+            barBorderTopLeftRadius={4}
+            barBorderTopRightRadius={4}
+            minHeight={5}
+            parentWidth={Math.max(barData.length * 30, screenWidth)}
+            maxValue={100}
+            xAxisColor={"gray"}
+            noOfSections={5}
+            rulesLength={screenWidth}
+            width={screenWidth - 65}
+            xAxisLength={screenWidth - 65}
+            yAxisThickness={0}
+            yAxisTextStyle={{ color: "gray" }}
+            showLine
+            lineData={lineData}
+            lineConfig={{
+              initialSpacing: 28,
+              spacing: 48,
+              thickness: 2,
+              color: "#52E48C",
+              hideDataPoints: false,
+              dataPointsColor: "#52E48C",
+              dataPointsRadius: 4,
+            }}
+            lineData2={lineData2}
+            lineConfig2={{
+              initialSpacing: 28,
+              spacing: 48,
+              thickness: 2,
+              color: "#E4DE52",
+              dataPointsColor: "#E4DE52",
+              hideDataPoints: false,
+              dataPointsRadius: 4,
+            }}
+          />
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -154,9 +174,13 @@ const styles = StyleSheet.create({
     color: "gray",
     textAlign: "center",
   },
-
   xAxisStyle: {
     color: "gray",
     textAlign: "center",
+  },
+  emptyContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 150, // 적당한 높이 설정
   },
 });

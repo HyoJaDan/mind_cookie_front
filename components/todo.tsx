@@ -24,7 +24,13 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import RNPickerSelect from "react-native-picker-select"; // RNPickerSelect 임포트
 import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
-import { HobbitStatus, PrimaryHobbit, todoData } from "../data/todoList/todo";
+import {
+  HobbitStatus,
+  IStatusByDate,
+  PrimaryHobbit,
+  statusByDateData,
+  tempTodoData,
+} from "../data/todoList/todo";
 import { baseURLData } from "../data/user/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 import DatePicker from "./DatePicker";
@@ -36,7 +42,11 @@ const TodoList = ({
   selectedDate: string;
   setSelectedDate: any;
 }) => {
-  const [todos, setTodos] = useRecoilState(todoData);
+  const [todos, setTodos] = useState<PrimaryHobbit[]>([]);
+  const [tempTodos, setTempTodos] = useRecoilState(tempTodoData);
+  const [statusByDate, setStatusByDate] = useRecoilState(statusByDateData);
+  const [isInitialized, setIsInitialized] = useState(false);
+
   const [selectedColor, setSelectedColor] = useState("");
   const [newPrimaryHobbit, setNewPrimaryHobbit] = useState("");
   const [newHobbit, setNewHobbit] = useState("");
@@ -77,57 +87,97 @@ const TodoList = ({
   );
 
   useEffect(() => {
-    const fetchTodosForSelectedDate = async () => {
-      try {
-        const response = await apiClient(
-          baseURL,
-          "/today-status",
-          "GET",
-          null,
-          {
-            date: selectedDate,
+    if (tempTodos.length === 0) {
+      return;
+    }
+    if (todos.length === 0) {
+      // 처음 로딩 시 tempTodoData에서 모든 데이터를 가져옴
+
+      const initialTodos = tempTodos.map((tempPrimaryHobbit) => {
+        const hobbitStatuses = tempPrimaryHobbit.hobbitStatuses.map(
+          (hobbit) => ({
+            hobbitId: hobbit.hobbitId,
+            hobbit: hobbit.hobbit,
+            done: false, // 초기값은 false로 설정
+          })
+        );
+
+        return {
+          primaryHobbitId: tempPrimaryHobbit.primaryHobbitId,
+          primaryHobbit: tempPrimaryHobbit.primaryHobbit,
+          color: tempPrimaryHobbit.color,
+          hobbitStatuses,
+        };
+      });
+
+      setTodos(initialTodos); // 초기 todoData 설정
+    }
+    setIsInitialized(true); // 초기화 완료 상태로 설정
+  }, [tempTodos]);
+
+  // selectedDate가 변경될 때마다 isDone 값을 업데이트하는 로직
+  useEffect(() => {
+    if (isInitialized && todos.length > 0) {
+      // selectedDate에 맞는 statusByDate 데이터를 찾음
+      const statusForSelectedDate: IStatusByDate = statusByDate.find(
+        (status) => status.date === selectedDate
+      );
+      // 선택된 날짜에 대한 status가 없을 경우에는 더 진행하지 않음
+      if (!statusForSelectedDate) return;
+
+      // 새로운 isDone 상태를 할당하기 위해 hobbit의 순서를 유지하며 업데이트
+      let statusIndex = 0; // hobbitStatuses의 index 관리
+      const updatedTodos = todos.map((primaryHobbit) => {
+        const updatedHobbitStatuses = primaryHobbit.hobbitStatuses.map(
+          (hobbit) => {
+            // hobbitStatuses의 순서대로 done 값을 업데이트
+            const done = statusForSelectedDate.hobbitStatus[statusIndex];
+            statusIndex += 1; // 다음 hobbit의 done 상태로 넘어가기 위한 index 증가
+            return {
+              ...hobbit,
+              done, // isDone 값 업데이트
+            };
           }
         );
-        setTodos(response.data);
-      } catch (error) {
-        console.error("선택한 날짜의 todo를 가져오는 중 오류 발생:", error);
-      }
-    };
-    fetchTodosForSelectedDate();
-  }, [selectedDate]);
+
+        return {
+          ...primaryHobbit,
+          hobbitStatuses: updatedHobbitStatuses,
+        };
+      });
+
+      setTodos(updatedTodos); // todoData 업데이트
+    }
+  }, [selectedDate, statusByDate, isInitialized]);
 
   const handleHobbitClick = async (
     primaryHobbitId: number,
     hobbitId: number
   ) => {
-    try {
-      const response = await apiClient(
-        baseURL,
-        `/update-status/${primaryHobbitId}/${hobbitId}`,
-        "PUT",
-        null,
-        {
-          date: selectedDate,
-        }
-      );
-      if (response.status === 200) {
-        const updatedTodos = todos.map((primaryHobbit) => {
-          if (primaryHobbit.primaryHobbitId === primaryHobbitId) {
-            return {
-              ...primaryHobbit,
-              hobbitStatuses: primaryHobbit.hobbitStatuses.map((hobbit) =>
-                hobbit.hobbitId === hobbitId
-                  ? { ...hobbit, done: !hobbit.done }
-                  : hobbit
-              ),
-            };
-          }
-          return primaryHobbit;
-        });
-        setTodos(updatedTodos);
+    const response = await apiClient(
+      baseURL,
+      `/update-status/${primaryHobbitId}/${hobbitId}`,
+      "PUT",
+      null,
+      {
+        date: selectedDate,
       }
-    } catch (error) {
-      console.error("업데이트 중 오류 발생:", error);
+    );
+    if (response.status === 200) {
+      const updatedTodos = todos.map((primaryHobbit) => {
+        if (primaryHobbit.primaryHobbitId === primaryHobbitId) {
+          return {
+            ...primaryHobbit,
+            hobbitStatuses: primaryHobbit.hobbitStatuses.map((hobbit) =>
+              hobbit.hobbitId === hobbitId
+                ? { ...hobbit, done: !hobbit.done }
+                : hobbit
+            ),
+          };
+        }
+        return primaryHobbit;
+      });
+      setTodos(updatedTodos);
     }
   };
 
@@ -142,7 +192,6 @@ const TodoList = ({
       hobbit: newHobbit,
       color: newPrimaryHobbit ? selectedColor : null,
     });
-    console.log(response);
     if (response.status === 200) {
       const addedHobbit = response.data;
       bottomSheetModalRef.current?.close();
@@ -171,7 +220,7 @@ const TodoList = ({
                   hobbitStatuses: [
                     ...primaryHobbit.hobbitStatuses,
                     {
-                      hobbitId: addedHobbit.hobbitStatuses[0].hobbitId,
+                      hobbitId: addedHobbit.hobbitId,
                       hobbit: newHobbit,
                       done: false,
                     },

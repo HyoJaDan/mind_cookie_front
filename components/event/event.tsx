@@ -21,7 +21,7 @@ import {
 import { useRecoilState, useRecoilValue } from "recoil";
 import { apiClient } from "../../data/apiClient";
 import { eventData } from "../../data/event";
-import { baseURLData, memberData } from "../../data/user/userData";
+import { baseURLData, memberData } from "../../data/userData";
 
 import { DefaultButton } from "../../uitll/defaultButton";
 import { Activities } from "./Activities";
@@ -46,8 +46,8 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
   const [newData, setNewData] = useState(""); // 추가할 새로운 데이터
   const [dataType, setDataType] = useState(""); // 추가할 데이터 타입
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  const snapPoints = useMemo(() => ["30%"], []);
+  const handleSheetChanges = useCallback((index: number) => {}, []);
+  const snapPoints = useMemo(() => ["90%"], []);
   const renderBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -157,6 +157,7 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
           paddingHorizontal: 16,
           paddingVertical: 24,
           gap: 20,
+          flexGrow: 1,
         }}
       >
         {renderEvents(event)}
@@ -187,23 +188,30 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
         </CustomAccordion>
       </ScrollView>
 
-      {/* BottomSheetModal */}
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
         snapPoints={snapPoints}
+        onChange={handleSheetChanges}
         backdropComponent={renderBackdrop}
       >
         <View style={BottomSheetModalStyle.wrapper}>
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-            새 항목 추가
-          </Text>
-          <TextInput
-            placeholder="새 항목 입력"
-            value={newData}
-            onChangeText={setNewData}
-            style={BottomSheetModalStyle.text}
-          />
+          <View>
+            <Text
+              style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}
+            >
+              새 항목 추가
+            </Text>
+            <TextInput
+              placeholder="새 항목 입력"
+              autoFocus={true}
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={newData}
+              onChangeText={setNewData}
+              style={BottomSheetModalStyle.text}
+            />
+          </View>
           <DefaultButton pressHandler={() => addNewData()} text="항목 추가" />
         </View>
       </BottomSheetModal>
@@ -215,6 +223,8 @@ export const BottomSheetModalStyle = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     gap: 10,
+    flex: 1,
+    justifyContent: "space-between",
   },
   text: {
     borderWidth: 1,

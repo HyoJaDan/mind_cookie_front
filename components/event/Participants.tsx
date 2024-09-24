@@ -1,6 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { accordionStyle } from "./accordionStyle";
 
 interface ParticipantsProps {
@@ -19,7 +19,11 @@ export const Participants: React.FC<ParticipantsProps> = ({
   return (
     <View style={accordionStyle.boxContainer}>
       <Text>누구와 있었던 일인가요?</Text>
-      <View style={accordionStyle.participantContainer}>
+      <ScrollView
+        horizontal={true} // 가로 스크롤 활성화
+        showsHorizontalScrollIndicator={false} // 스크롤바 숨기기 (선택사항)
+        contentContainerStyle={accordionStyle.participantContainer}
+      >
         {participants.map((participant, index) => (
           <TouchableOpacity
             key={index}
@@ -41,7 +45,7 @@ export const Participants: React.FC<ParticipantsProps> = ({
         >
           <Ionicons name="add" size={20} color="black" />
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   );
 };

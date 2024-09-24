@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Slider from "@react-native-community/slider";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { accordionStyle } from "./accordionStyle";
 
 interface EmotionsProps {
@@ -24,7 +24,11 @@ export const Emotions: React.FC<EmotionsProps> = ({
   return (
     <View style={accordionStyle.boxContainer}>
       <Text>어떤 감정을 느꼈나요?</Text>
-      <View style={accordionStyle.participantContainer}>
+      <ScrollView
+        horizontal={true} // 가로 스크롤 활성화
+        showsHorizontalScrollIndicator={false} // 스크롤바 숨기기 (선택사항)
+        contentContainerStyle={accordionStyle.participantContainer}
+      >
         {emotions.map((emotion, index) => (
           <TouchableOpacity
             key={index}
@@ -43,7 +47,7 @@ export const Emotions: React.FC<EmotionsProps> = ({
         >
           <Ionicons name="add" size={20} color="black" />
         </TouchableOpacity>
-      </View>
+      </ScrollView>
       <Slider
         style={accordionStyle.slider}
         minimumValue={0}

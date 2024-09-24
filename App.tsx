@@ -3,7 +3,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Octicons from "@expo/vector-icons/Octicons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
@@ -23,7 +22,7 @@ import StatisticsScreen from "./screens/StatisticsScreen";
 import StopwatchScreen from "./screens/StopwatchScreen";
 import TodoScreen from "./screens/TodoScreen";
 const Stack = createNativeStackNavigator();
-const Tab = createMaterialTopTabNavigator();
+// const Tab = createMaterialTopTabNavigator();
 // function StopwatchStack() {
 //   return (
 //     <Tab.Navigator
@@ -114,13 +113,13 @@ const Auth = () => (
       name="RegisterScreen"
       component={RegisterScreen}
       options={{
-        title: "회원가입", //Set Header Title
+        title: "회원가입",
         headerStyle: {
-          backgroundColor: "#8785FF", //Set Header color
+          backgroundColor: "#8785FF",
         },
-        headerTintColor: "#fff", //Set Header text color
+        headerTintColor: "#fff",
         headerTitleStyle: {
-          fontWeight: "bold", //Set Header text style
+          fontWeight: "bold",
         },
       }}
     />

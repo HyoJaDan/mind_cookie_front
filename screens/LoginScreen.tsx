@@ -12,7 +12,7 @@ import {
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/main.svg";
-import { baseURLData, userToken } from "../data/user/userData";
+import { baseURLData, userToken } from "../data/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 
 function LoginScreen({ navigation }) {
@@ -22,6 +22,8 @@ function LoginScreen({ navigation }) {
   const passwordInputRef = useRef(null);
   const setUserToken = useSetRecoilState(userToken);
   const baseURL = useRecoilValue(baseURLData);
+  const URL = baseURL.split("/api")[0];
+
   const handleLogin = async () => {
     if (!userId || !userPassword) {
       Alert.alert("아이디와 비밀번호를 입력해주세요.");
@@ -36,7 +38,7 @@ function LoginScreen({ navigation }) {
     };
 
     try {
-      let response = await fetch(`${baseURL}/login`, {
+      let response = await fetch(`${URL}/login`, {
         method: "POST",
         body: JSON.stringify(dataToSend),
         headers: {
@@ -52,13 +54,12 @@ function LoginScreen({ navigation }) {
       setLoading(false);
       if (authToken) {
         await AsyncStorage.setItem("user_token", authToken);
-
-        navigation.replace("AuthenticatedStack");
+        // navigation.replace("AuthenticatedStack");
+        navigation.navigate("SplashScreen");
       } else {
         Alert.alert("아이디와 비밀번호를 확인해주세요.");
       }
     } catch (error) {
-      console.error(error);
       setLoading(false);
       Alert.alert("아이디와 비밀번호를 확인해주세요.");
     }

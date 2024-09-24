@@ -30,8 +30,9 @@ import {
   PrimaryHobbit,
   statusByDateData,
   tempTodoData,
-} from "../data/todoList/todo";
-import { baseURLData } from "../data/user/userData";
+  top3SucceessData,
+} from "../data/todo";
+import { baseURLData } from "../data/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 import DatePicker from "./DatePicker";
 
@@ -46,7 +47,7 @@ const TodoList = ({
   const [tempTodos, setTempTodos] = useRecoilState(tempTodoData);
   const [statusByDate, setStatusByDate] = useRecoilState(statusByDateData);
   const [isInitialized, setIsInitialized] = useState(false);
-
+  const [top3Succeed, setTop3Succeed] = useRecoilState(top3SucceessData);
   const [selectedColor, setSelectedColor] = useState("");
   const [newPrimaryHobbit, setNewPrimaryHobbit] = useState("");
   const [newHobbit, setNewHobbit] = useState("");
@@ -69,7 +70,7 @@ const TodoList = ({
   ];
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["70%"], []);
+  const snapPoints = useMemo(() => ["90%"], []);
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
@@ -148,10 +149,11 @@ const TodoList = ({
 
       setTodos(updatedTodos); // todoData 업데이트
     }
-  }, [selectedDate, statusByDate, isInitialized]);
+  }, [selectedDate, isInitialized]);
 
   const handleHobbitClick = async (
     primaryHobbitId: number,
+    primaryHobbit: string,
     hobbitId: number
   ) => {
     const response = await apiClient(
@@ -177,7 +179,32 @@ const TodoList = ({
         }
         return primaryHobbit;
       });
+
       setTodos(updatedTodos);
+      // statusByDate 업데이트
+      const updatedStatusByDate = statusByDate.map((status) => {
+        if (status.date === selectedDate) {
+          const updatedHobbitStatus = [...status.hobbitStatus];
+
+          // 해당 hobbitId의 인덱스를 찾아 상태를 토글
+          const hobbitIndex = todos
+            .flatMap((primaryHobbit) => primaryHobbit.hobbitStatuses)
+            .findIndex((hobbit) => hobbit.hobbitId === hobbitId);
+
+          if (hobbitIndex !== -1) {
+            updatedHobbitStatus[hobbitIndex] =
+              !updatedHobbitStatus[hobbitIndex];
+          }
+
+          return {
+            ...status,
+            hobbitStatus: updatedHobbitStatus,
+          };
+        }
+        return status;
+      });
+
+      setStatusByDate(updatedStatusByDate);
     }
   };
 
@@ -251,7 +278,11 @@ const TodoList = ({
           { backgroundColor: hobbit.done ? "#d4edda" : backgroundColor },
         ]}
         onPress={() =>
-          handleHobbitClick(primaryHobbit.primaryHobbitId, hobbit.hobbitId)
+          handleHobbitClick(
+            primaryHobbit.primaryHobbitId,
+            primaryHobbit.primaryHobbit,
+            hobbit.hobbitId
+          )
         }
       >
         <Text style={[styles.hobbitText, hobbit.done && styles.hobbitTextDone]}>
@@ -334,6 +365,7 @@ const TodoList = ({
                 style={styles.input}
                 value={newHobbit}
                 onChangeText={setNewHobbit}
+                autoFocus={true}
               />
               {newPrimaryHobbit !== "" && (
                 <View>

@@ -1,22 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { fontStyle } from "../../assets/font/font";
-import { ITop3Succeess } from "../../data/todoList/todo";
+import { ITop3Succeess } from "../../data/todo";
 
 export default function TodoChart({
   top3Succeess,
 }: {
   top3Succeess: ITop3Succeess[];
 }) {
-  console.log(top3Succeess);
-  const renderTitle = () => {
-    return (
-      <View>
-        <Text style={fontStyle.BD20}>생활 습관</Text>
-        <Text style={fontStyle.BD20}>생활 습관</Text>
-      </View>
-    );
-  };
   const renderEmptyState = () => {
     return (
       <View style={styles.emptyContainer}>
@@ -24,7 +15,7 @@ export default function TodoChart({
           데이터가 없습니다.
         </Text>
         <Text style={[fontStyle.RG14, { color: "gray", marginTop: 8 }]}>
-          생활 습관을 기록해주세요.
+          목표를 기록해주세요.
         </Text>
       </View>
     );
@@ -32,8 +23,8 @@ export default function TodoChart({
 
   if (top3Succeess.length === 0) {
     return (
-      <View style={styles.container}>
-        <Text style={[{ textAlign: "center" }, fontStyle.BD20]}>생활 습관</Text>
+      <View style={styles.emptyWrapper}>
+        <Text style={[{ textAlign: "center" }, fontStyle.BD20]}>목표 달성</Text>
         {renderEmptyState()}
       </View>
     );
@@ -63,9 +54,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  emptyWrapper: {
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    margin: 10,
+    padding: 10,
+  },
   emptyContainer: {
     justifyContent: "center",
     alignItems: "center",
-    height: 150, // 적당한 높이 설정
+    height: 150,
   },
 });

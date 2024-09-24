@@ -7,6 +7,7 @@ export const accordionStyle = StyleSheet.create({
   },
   Header: {},
   accordionContent: {
+    flexGrow: 1,
     paddingTop: 10,
   },
   header: {

@@ -4,8 +4,8 @@ import { Alert, Dimensions, StyleSheet, Text, View } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
-import { StateDTO, stateData } from "../data/state/stateData";
-import { baseURLData } from "../data/user/userData";
+import { StateDTO, stateData } from "../data/stateData";
+import { baseURLData } from "../data/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 
 const screenWidth = Dimensions.get("window").width;

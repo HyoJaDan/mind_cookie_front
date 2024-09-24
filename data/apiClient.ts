@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 // API 호출 함수 (fetch 사용)
 export const apiClient = async (
@@ -8,8 +9,6 @@ export const apiClient = async (
   data: any = null,
   params: any = null
 ) => {
-  console.log("--------------API CALLED--------------");
-  console.log(url);
   try {
     const token = await AsyncStorage.getItem("user_token");
 
@@ -41,40 +40,6 @@ export const apiClient = async (
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log("ApiClient 오류 발생:", error);
+    Alert.alert("데이터 연동 실패", "서버에 문제가 있습니다.");
   }
 };
-
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import axios from "axios";
-
-// // API 호출 함수
-// export const apiClient = async (
-//   url: string,
-//   method: "GET" | "POST" = "GET",
-//   data: any = null
-// ) => {
-//   try {
-//     // 토큰 가져오기
-//     const token = await AsyncStorage.getItem("user_token");
-//     if (!token) {
-//       throw new Error("토큰이 존재하지 않습니다.");
-//     }
-
-//     // axios로 API 요청
-//     const response = await axios({
-//       method,
-//       url: `http://localhost:8080${url}`,
-//       headers: {
-//         Authorization: `${token}`,
-//         "Content-Type": "application/json",
-//       },
-//       data,
-//     });
-
-//     return response.data;
-//   } catch (error) {
-//     console.error("API 요청 중 오류 발생:", error);
-//     throw error;
-//   }
-// };

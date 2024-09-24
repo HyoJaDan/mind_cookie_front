@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 import { fontStyle } from "../../assets/font/font";
-import { StateDTO } from "../../data/state/stateData";
+import { StateDTO } from "../../data/stateData";
 
 export default function StateChart({
   stateList,
@@ -86,7 +86,7 @@ export default function StateChart({
   if (stateList.length === 0) {
     return (
       <View style={styles.container}>
-        {renderTitle()}
+        <Text style={[{ textAlign: "center" }, fontStyle.BD20]}>마음 상태</Text>
         {renderEmptyState()}
       </View>
     );

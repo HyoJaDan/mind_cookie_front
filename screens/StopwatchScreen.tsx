@@ -23,7 +23,7 @@ import { Colors } from "../assets/color/color";
 import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
 import { allStopwatchData, stopwatchData } from "../data/stopwatch";
-import { baseURLData } from "../data/user/userData";
+import { baseURLData } from "../data/userData";
 import { formatDate3 } from "../uitll/dateConverter";
 import { DefaultButton } from "../uitll/defaultButton";
 
@@ -42,7 +42,7 @@ export default function StopwatchScreen() {
     useRecoilState(allStopwatchData);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["30%"], []);
+  const snapPoints = useMemo(() => ["90%"], []);
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
@@ -287,9 +287,11 @@ export default function StopwatchScreen() {
         >
           {formatDate3()} 총 집중량
         </Text>
-        <Text style={[fontStyle.BD50, { color: "white" }]}>
-          {formatTime(totalElapsedTime)}
-        </Text>
+        <View>
+          <Text style={[fontStyle.BD50, { color: "white" }]}>
+            {formatTime(totalElapsedTime)}
+          </Text>
+        </View>
       </LinearGradient>
       <SafeAreaView style={[styles.rootContainer, { paddingTop: insets.top }]}>
         <View style={styles.container}>
@@ -316,15 +318,18 @@ export default function StopwatchScreen() {
           backdropComponent={renderBackdrop}
         >
           <View style={styles.modalContainer}>
-            <Text style={[fontStyle.BD24, { alignSelf: "flex-start" }]}>
-              목표 추가
-            </Text>
-            <TextInput
-              placeholder="새 목표 입력"
-              value={newTarget}
-              onChangeText={setNewTarget}
-              style={styles.input}
-            />
+            <View>
+              <Text style={[fontStyle.BD24, { alignSelf: "flex-start" }]}>
+                목표 추가
+              </Text>
+              <TextInput
+                placeholder="새 목표 입력"
+                value={newTarget}
+                onChangeText={setNewTarget}
+                style={styles.input}
+                autoFocus={true}
+              />
+            </View>
             <DefaultButton pressHandler={addTarget} text="목표 추가" />
           </View>
         </BottomSheetModal>
@@ -376,8 +381,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingBottom: 20,
   },

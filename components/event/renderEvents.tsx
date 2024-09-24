@@ -25,9 +25,7 @@ export const renderEvents = (event: IEventData[]) => {
           styleContent={accordionStyle.accordionContent}
         >
           <View style={accordionStyle.boxContainer}>
-            <Text style={[fontStyle.MD16, accordionStyle.header]}>
-              누구와 있었던 일인가요?
-            </Text>
+            <Text>누구와 있었던 일인가요?</Text>
             <View style={accordionStyle.participantContainer}>
               {eventItem.participants.map(
                 (participant: string, idx: number) => (
@@ -40,12 +38,12 @@ export const renderEvents = (event: IEventData[]) => {
           </View>
 
           <View style={accordionStyle.boxContainer}>
-            <Text style={[fontStyle.MD16, accordionStyle.header]}>
-              어떤 감정을 느꼈나요?
-            </Text>
-            <Text>
-              {eventItem.emotion} (감정 지수: {eventItem.emotionRate})
-            </Text>
+            <Text>누구와 있었던 일인가요?</Text>
+            <View style={accordionStyle.circle}>
+              <Text style={fontStyle.MD16}>
+                {eventItem.emotion} : {eventItem.emotionRate}
+              </Text>
+            </View>
           </View>
         </Accordion>
       ))}

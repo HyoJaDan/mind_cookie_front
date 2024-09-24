@@ -8,9 +8,9 @@ import StateChart from "../components/Statistics/StateChart";
 import StopwatchChart from "../components/Statistics/StopwatchChart";
 import TodoChart from "../components/Statistics/todoChart";
 import { screenWidthData } from "../data/screen";
-import { StateDTO, stateData } from "../data/state/stateData";
+import { StateDTO, stateData } from "../data/stateData";
 import { IAllStopwatch, allStopwatchData } from "../data/stopwatch";
-import { ITop3Succeess, top3SucceessData } from "../data/todoList/todo";
+import { ITop3Succeess, top3SucceessData } from "../data/todo";
 
 export default function StatisticsScreen() {
   const insets = useSafeAreaInsets();

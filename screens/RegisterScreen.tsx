@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/main.svg";
-import { baseURLData, userToken } from "../data/user/userData";
+import { baseURLData } from "../data/userData";
 import { DefaultButton } from "../uitll/defaultButton";
 
 function RegisterScreen({ navigation }) {
@@ -19,10 +19,11 @@ function RegisterScreen({ navigation }) {
   const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
-  const setUserToken = useSetRecoilState(userToken);
   const passwordInputRef = useRef(null);
   const nameInputRef = useRef(null);
   const baseURL = useRecoilValue(baseURLData);
+  const URL = baseURL.split("/api")[0];
+
   const handleRegister = async () => {
     if (!userId) {
       Alert.alert("아이디를 입력해주세요.");
@@ -42,9 +43,8 @@ function RegisterScreen({ navigation }) {
       username: userId,
       password: userPassword,
     };
-    console.log(dataToSend);
     try {
-      await fetch(`${baseURL}/join`, {
+      await fetch(`${URL}/join`, {
         method: "POST",
         body: JSON.stringify(dataToSend),
         headers: {
@@ -57,9 +57,8 @@ function RegisterScreen({ navigation }) {
       Alert.alert("회원가입 완료");
       navigation.replace("Auth");
     } catch (error) {
-      console.error(error);
       setLoading(false);
-      Alert.alert("회원가입 실패", "서버와의 통신 중 문제가 발생했습니다.");
+      Alert.alert("회원가입 실패", "서버에 문제가 있습니다.");
     }
   };
 

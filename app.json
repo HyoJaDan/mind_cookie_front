@@ -1,29 +1,29 @@
 {
   "expo": {
-    "name": "hobbit",
-    "slug": "hobbit",
+    "name": "mindCookie",
+    "slug": "mindCookie",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon/main.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon/main.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.hobbit"
+      "bundleIdentifier": "com.anonymous.mindCookie"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon/main.jpg",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon/main.jpg"
     },
     "expo": {
       "userInterfaceStyle": "automatic"

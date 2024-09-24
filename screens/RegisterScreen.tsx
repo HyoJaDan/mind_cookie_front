@@ -8,6 +8,8 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -114,12 +116,12 @@ function RegisterScreen({ navigation }) {
     } else if (currentAgreement === "marketing") {
       setMarketingCheck(true);
     }
-    bottomSheetModalRef.current?.close(); // 약관 동의 후 모달 닫기
+    bottomSheetModalRef.current?.close();
   };
-  // 약관 내용을 동적으로 변경
+
   const handleShowAgreement = (type) => {
-    setCurrentAgreement(type); // 어떤 약관을 보여줄지 설정
-    handlePresentModalPress(); // BottomSheetModal 열기
+    setCurrentAgreement(type);
+    handlePresentModalPress();
   };
 
   return (
@@ -131,39 +133,46 @@ function RegisterScreen({ navigation }) {
           나만의 습관을 시작해보세요!
         </Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder={"아이디"}
-          onChangeText={(userId) => setUserId(userId)}
-          autoCapitalize="none"
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            passwordInputRef.current && passwordInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder={"비밀번호"}
-          onChangeText={(userPassword) => setUserPassword(userPassword)}
-          autoCapitalize="none"
-          secureTextEntry={true}
-          ref={passwordInputRef}
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            nameInputRef.current && nameInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder={"이름"}
-          onChangeText={(userName) => setUserName(userName)}
-          autoCapitalize="none"
-          ref={nameInputRef}
-          returnKeyType="done"
-          onSubmitEditing={handleRegister}
-        />
+        <KeyboardAvoidingView
+          style={{ width: "100%" }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={100}
+        >
+          <TextInput
+            style={styles.input}
+            placeholder={"아이디"}
+            onChangeText={(userId) => setUserId(userId)}
+            autoCapitalize="none"
+            autoFocus={true}
+            returnKeyType="next"
+            onSubmitEditing={() =>
+              passwordInputRef.current && passwordInputRef.current.focus()
+            }
+            blurOnSubmit={false}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder={"비밀번호"}
+            onChangeText={(userPassword) => setUserPassword(userPassword)}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            ref={passwordInputRef}
+            returnKeyType="next"
+            onSubmitEditing={() =>
+              nameInputRef.current && nameInputRef.current.focus()
+            }
+            blurOnSubmit={false}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder={"이름"}
+            onChangeText={(userName) => setUserName(userName)}
+            autoCapitalize="none"
+            ref={nameInputRef}
+            returnKeyType="done"
+            onSubmitEditing={handleRegister}
+          />
+        </KeyboardAvoidingView>
 
         <View style={styles.agreementContainer}>
           <TouchableOpacity
@@ -239,7 +248,6 @@ function RegisterScreen({ navigation }) {
           </View>
         )}
 
-        {/* 약관 내용보기 BottomSheetModal */}
         <BottomSheetModal
           ref={bottomSheetModalRef}
           index={0}

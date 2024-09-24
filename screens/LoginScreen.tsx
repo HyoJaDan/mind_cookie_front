@@ -3,6 +3,8 @@ import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -75,28 +77,34 @@ function LoginScreen({ navigation }) {
       <Text style={[fontStyle.BD24, { marginBottom: 50 }]}>
         오신 것을 환영해요
       </Text>
-      <TextInput
-        style={styles.input}
-        placeholder={"아이디"}
-        onChangeText={(userId) => setUserId(userId)}
-        autoCapitalize="none"
-        returnKeyType="next"
-        onSubmitEditing={() =>
-          passwordInputRef.current && passwordInputRef.current.focus()
-        }
-        blurOnSubmit={false}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder={"비밀번호"}
-        onChangeText={(userPassword) => setUserPassword(userPassword)}
-        autoCapitalize="none"
-        secureTextEntry={true}
-        ref={passwordInputRef}
-        returnKeyType="done"
-        onSubmitEditing={handleLogin}
-        blurOnSubmit={false}
-      />
+      <KeyboardAvoidingView
+        style={{ width: "100%" }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={100}
+      >
+        <TextInput
+          style={styles.input}
+          placeholder={"아이디"}
+          onChangeText={(userId) => setUserId(userId)}
+          autoCapitalize="none"
+          returnKeyType="next"
+          onSubmitEditing={() =>
+            passwordInputRef.current && passwordInputRef.current.focus()
+          }
+          blurOnSubmit={false}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder={"비밀번호"}
+          onChangeText={(userPassword) => setUserPassword(userPassword)}
+          autoCapitalize="none"
+          secureTextEntry={true}
+          ref={passwordInputRef}
+          returnKeyType="done"
+          onSubmitEditing={handleLogin}
+          blurOnSubmit={false}
+        />
+      </KeyboardAvoidingView>
       {loading ? (
         <ActivityIndicator size="large" color="#307ecc" />
       ) : (

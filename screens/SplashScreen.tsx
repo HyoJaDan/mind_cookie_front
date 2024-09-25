@@ -20,7 +20,7 @@ import { stateData } from "../data/stateData";
 import { allStopwatchData, stopwatchData } from "../data/stopwatch";
 import { statusByDateData, tempTodoData, top3SucceessData } from "../data/todo";
 import { baseURLData, memberData, userToken } from "../data/userData";
-import { Android_URL, IOS_URL } from "../uitll/url";
+import { Android_URL, IOS_URL } from "../uitl/url";
 
 const SplashScreen = ({ navigation }: { navigation: any }) => {
   const [animating, setAnimating] = useState(true);

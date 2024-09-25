@@ -6,7 +6,7 @@ import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
 import { StateDTO, stateData } from "../data/stateData";
 import { baseURLData } from "../data/userData";
-import { DefaultButton } from "../uitll/defaultButton";
+import { DefaultButton } from "../uitl/defaultButton";
 
 const screenWidth = Dimensions.get("window").width;
 

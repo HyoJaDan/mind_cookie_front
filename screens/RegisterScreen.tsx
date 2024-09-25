@@ -21,7 +21,7 @@ import { useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/main.svg";
 import { baseURLData } from "../data/userData";
-import { DefaultButton } from "../uitll/defaultButton";
+import { DefaultButton } from "../uitl/defaultButton";
 
 function RegisterScreen({ navigation }) {
   const [userId, setUserId] = useState("");

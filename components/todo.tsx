@@ -33,7 +33,7 @@ import {
   top3SucceessData,
 } from "../data/todo";
 import { baseURLData } from "../data/userData";
-import { DefaultButton } from "../uitl/defaultButton";
+import { DefaultButton } from "../util/defaultButton";
 import DatePicker from "./DatePicker";
 
 const TodoList = ({

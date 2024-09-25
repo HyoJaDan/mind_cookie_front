@@ -24,7 +24,7 @@ import { apiClient } from "../data/apiClient";
 import { stopwatchData } from "../data/stopwatch";
 
 import { baseURLData } from "../data/userData";
-import { DefaultButton } from "../uitl/defaultButton";
+import { DefaultButton } from "../util/defaultButton";
 
 export default function TimerScreen() {
   const insets = useSafeAreaInsets();

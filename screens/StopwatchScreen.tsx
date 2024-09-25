@@ -24,8 +24,8 @@ import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
 import { allStopwatchData, stopwatchData } from "../data/stopwatch";
 import { baseURLData } from "../data/userData";
-import { formatDate3 } from "../uitl/dateConverter";
-import { DefaultButton } from "../uitl/defaultButton";
+import { formatDate3 } from "../util/dateConverter";
+import { DefaultButton } from "../util/defaultButton";
 
 export default function StopwatchScreen() {
   const insets = useSafeAreaInsets();

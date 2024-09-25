@@ -15,7 +15,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/main.svg";
 import { baseURLData, userToken } from "../data/userData";
-import { DefaultButton } from "../uitl/defaultButton";
+import { DefaultButton } from "../util/defaultButton";
 
 function LoginScreen({ navigation }) {
   const [userId, setUserId] = useState("");

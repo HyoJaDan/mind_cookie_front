@@ -23,7 +23,7 @@ import { apiClient } from "../../data/apiClient";
 import { eventData } from "../../data/event";
 import { baseURLData, memberData } from "../../data/userData";
 
-import { DefaultButton } from "../../uitl/defaultButton";
+import { DefaultButton } from "../../util/defaultButton";
 import { Activities } from "./Activities";
 
 import { CustomAccordion } from "./CustomAccordion";

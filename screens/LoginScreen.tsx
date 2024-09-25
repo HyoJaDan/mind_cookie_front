@@ -79,8 +79,8 @@ function LoginScreen({ navigation }) {
       </Text>
       <KeyboardAvoidingView
         style={{ width: "100%" }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={100}
+        behavior={Platform.OS === "ios" ? "position" : "height"}
+        keyboardVerticalOffset={10}
       >
         <TextInput
           style={styles.input}

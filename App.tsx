@@ -109,7 +109,7 @@ const Auth = () => (
       component={LoginScreen}
       options={{ headerShown: false }}
     />
-    <Stack.Screen
+    {/* <Stack.Screen
       name="RegisterScreen"
       component={RegisterScreen}
       options={{
@@ -118,6 +118,21 @@ const Auth = () => (
           backgroundColor: "#8785FF",
         },
         headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    /> */}
+    <Stack.Screen
+      name="RegisterScreen"
+      component={RegisterScreen}
+      options={{
+        headerTitle: "", // 타이틀을 비워서 없앰
+        headerBackTitle: "로그인 화면", // 뒤로가기 버튼 옆에 나올 문구
+        headerStyle: {
+          backgroundColor: "#fff",
+        },
+        headerTintColor: "#000",
         headerTitleStyle: {
           fontWeight: "bold",
         },

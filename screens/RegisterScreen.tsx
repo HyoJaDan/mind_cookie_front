@@ -4,12 +4,17 @@ import {
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import Checkbox from "expo-checkbox";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   Alert,
-  KeyboardAvoidingView,
-  Platform,
+  Animated,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,6 +22,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  KeyboardController,
+  useKeyboardController,
+} from "react-native-keyboard-controller"; // 추가
 import { useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/main.svg";
@@ -26,7 +35,6 @@ import { DefaultButton } from "../util/defaultButton";
 function RegisterScreen({ navigation }) {
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
@@ -34,9 +42,20 @@ function RegisterScreen({ navigation }) {
   const [marketingCheck, setMarketingCheck] = useState(false);
   const [currentAgreement, setCurrentAgreement] = useState(""); // 현재 보여줄 약관 내용 상태
   const passwordInputRef = useRef(null);
-  const nameInputRef = useRef(null);
   const baseURL = useRecoilValue(baseURLData);
   const URL = baseURL.split("/api")[0];
+
+  // 애니메이션 관련 설정
+  const { isKeyboardVisible, keyboardHeight } = useKeyboardController(); // 키보드 컨트롤러 훅
+  const animatedPositionY = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(animatedPositionY, {
+      toValue: isKeyboardVisible ? -keyboardHeight / 2 : 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [isKeyboardVisible, keyboardHeight]);
 
   // 약관 내용보기 관련 BottomSheetModal 설정
   const bottomSheetModalRef = useRef(null);
@@ -80,10 +99,6 @@ function RegisterScreen({ navigation }) {
       Alert.alert("비밀번호를 입력해주세요.");
       return;
     }
-    if (!userName) {
-      Alert.alert("이름을 입력해주세요.");
-      return;
-    }
     setLoading(true);
 
     let dataToSend = {
@@ -108,6 +123,7 @@ function RegisterScreen({ navigation }) {
       Alert.alert("회원가입 실패", "서버에 문제가 있습니다.");
     }
   };
+
   const handleAgree = () => {
     if (currentAgreement === "age") {
       setAgeCheck(true);
@@ -126,18 +142,20 @@ function RegisterScreen({ navigation }) {
 
   return (
     <BottomSheetModalProvider>
-      <View style={styles.container}>
-        <SpashIcon />
-        <Text style={fontStyle.BD36}>회원가입</Text>
-        <Text style={[fontStyle.BD24, { marginBottom: 50 }]}>
-          나만의 습관을 시작해보세요!
-        </Text>
-
-        <KeyboardAvoidingView
-          style={{ width: "100%" }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={100}
+      <KeyboardController /> {/* 키보드 컨트롤러 추가 */}
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Animated.View
+          style={[
+            styles.container,
+            { transform: [{ translateY: animatedPositionY }] },
+          ]}
         >
+          <SpashIcon />
+          <Text style={fontStyle.BD36}>회원가입</Text>
+          <Text style={[fontStyle.BD24, { marginBottom: 50 }]}>
+            나만의 습관을 시작해보세요!
+          </Text>
+
           <TextInput
             style={styles.input}
             placeholder={"아이디"}
@@ -157,124 +175,117 @@ function RegisterScreen({ navigation }) {
             autoCapitalize="none"
             secureTextEntry={true}
             ref={passwordInputRef}
-            returnKeyType="next"
-            onSubmitEditing={() =>
-              nameInputRef.current && nameInputRef.current.focus()
-            }
-            blurOnSubmit={false}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder={"이름"}
-            onChangeText={(userName) => setUserName(userName)}
-            autoCapitalize="none"
-            ref={nameInputRef}
             returnKeyType="done"
             onSubmitEditing={handleRegister}
+            blurOnSubmit={false}
           />
-        </KeyboardAvoidingView>
 
-        <View style={styles.agreementContainer}>
-          <TouchableOpacity
-            style={styles.checkboxContainer}
-            onPress={allBtnEvent}
-          >
-            <Checkbox
-              value={allCheck}
-              onValueChange={allBtnEvent}
-              color={allCheck ? "#2D81FF" : undefined}
-            />
-            <Text style={styles.checkboxLabel}>전체 동의</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.checkboxContainer}
-            onPress={() => setAgeCheck(!ageCheck)}
-          >
-            <Checkbox
-              value={ageCheck}
-              onValueChange={setAgeCheck}
-              color={ageCheck ? "#2D81FF" : undefined}
-            />
-            <Text style={styles.checkboxLabel}>만 14세 이상입니다. (필수)</Text>
-            <TouchableOpacity onPress={() => handleShowAgreement("age")}>
-              <Text style={styles.linkText}>내용보기</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.checkboxContainer}
-            onPress={() => setUseCheck(!useCheck)}
-          >
-            <Checkbox
-              value={useCheck}
-              onValueChange={setUseCheck}
-              color={useCheck ? "#2D81FF" : undefined}
-            />
-            <Text style={styles.checkboxLabel}>이용약관 (필수)</Text>
-            <TouchableOpacity onPress={() => handleShowAgreement("terms")}>
-              <Text style={styles.linkText}>내용보기</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.checkboxContainer}
-            onPress={() => setMarketingCheck(!marketingCheck)}
-          >
-            <Checkbox
-              value={marketingCheck}
-              onValueChange={setMarketingCheck}
-              color={marketingCheck ? "#2D81FF" : undefined}
-            />
-            <Text style={styles.checkboxLabel}>마케팅 동의 (선택)</Text>
-            <TouchableOpacity onPress={() => handleShowAgreement("marketing")}>
-              <Text style={styles.linkText}>내용보기</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </View>
-
-        {loading ? (
-          <ActivityIndicator size="large" color="#307ecc" />
-        ) : (
-          <View>
-            <DefaultButton pressHandler={handleRegister} text="회원가입" />
+          <View style={styles.agreementContainer}>
             <TouchableOpacity
-              onPress={() => navigation.navigate("LoginScreen")}
+              style={styles.checkboxContainer}
+              onPress={allBtnEvent}
             >
-              <Text style={styles.registerText}>
-                이미 계정이 있으신가요? 로그인하기
+              <Checkbox
+                value={allCheck}
+                onValueChange={allBtnEvent}
+                color={allCheck ? "#2D81FF" : undefined}
+              />
+              <Text style={styles.checkboxLabel}>전체 동의</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.checkboxContainer}
+              onPress={() => setAgeCheck(!ageCheck)}
+            >
+              <Checkbox
+                value={ageCheck}
+                onValueChange={setAgeCheck}
+                color={ageCheck ? "#2D81FF" : undefined}
+              />
+              <Text style={styles.checkboxLabel}>
+                만 14세 이상입니다. (필수)
               </Text>
+              <TouchableOpacity onPress={() => handleShowAgreement("age")}>
+                <Text style={styles.linkText}>내용보기</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.checkboxContainer}
+              onPress={() => setUseCheck(!useCheck)}
+            >
+              <Checkbox
+                value={useCheck}
+                onValueChange={setUseCheck}
+                color={useCheck ? "#2D81FF" : undefined}
+              />
+              <Text style={styles.checkboxLabel}>이용약관 (필수)</Text>
+              <TouchableOpacity onPress={() => handleShowAgreement("terms")}>
+                <Text style={styles.linkText}>내용보기</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.checkboxContainer}
+              onPress={() => setMarketingCheck(!marketingCheck)}
+            >
+              <Checkbox
+                value={marketingCheck}
+                onValueChange={setMarketingCheck}
+                color={marketingCheck ? "#2D81FF" : undefined}
+              />
+              <Text style={styles.checkboxLabel}>마케팅 동의 (선택)</Text>
+              <TouchableOpacity
+                onPress={() => handleShowAgreement("marketing")}
+              >
+                <Text style={styles.linkText}>내용보기</Text>
+              </TouchableOpacity>
             </TouchableOpacity>
           </View>
-        )}
 
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          index={0}
-          snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}
-        >
-          <View style={styles.modalContainer}>
-            <ScrollView style={styles.modalContentContainer}>
-              <Text style={[fontStyle.BD24, { alignSelf: "flex-start" }]}>
-                {currentAgreement === "age" && "만 14세 이상 동의"}
-                {currentAgreement === "terms" && "이용약관"}
-                {currentAgreement === "marketing" && "마케팅 동의"}
-              </Text>
-              <Text style={styles.modalContent}>
-                {currentAgreement === "age" &&
-                  "만 14세 이상이어야 서비스를 이용할 수 있습니다. 만약 14세 미만이면 부모님의 동의를 받아야 하며, 이용이 제한될 수 있습니다. (내용 임시 추가)"}
-                {currentAgreement === "terms" &&
-                  "이용약관 내용이 여기에 들어갑니다. 이용자의 권리와 의무, 서비스 제공의 조건 등에 대한 약관입니다. (내용 임시 추가)"}
-                {currentAgreement === "marketing" &&
-                  "마케팅 정보 수신에 동의하시면 다양한 혜택을 받아보실 수 있습니다. 동의는 선택 사항입니다. (내용 임시 추가)"}
-              </Text>
-            </ScrollView>
-            {/* 동의하기 버튼 */}
-            <DefaultButton pressHandler={handleAgree} text="동의하기" />
-          </View>
-        </BottomSheetModal>
-      </View>
+          {loading ? (
+            <ActivityIndicator size="large" color="#307ecc" />
+          ) : (
+            <View>
+              <DefaultButton pressHandler={handleRegister} text="회원가입" />
+              <TouchableOpacity
+                onPress={() => navigation.navigate("LoginScreen")}
+              >
+                <Text style={styles.registerText}>
+                  이미 계정이 있으신가요? 로그인하기
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={0}
+            snapPoints={snapPoints}
+            backdropComponent={renderBackdrop}
+          >
+            <View style={styles.modalContainer}>
+              <ScrollView style={styles.modalContentContainer}>
+                <Text style={[fontStyle.BD24, { alignSelf: "flex-start" }]}>
+                  {currentAgreement === "age" && "만 14세 이상 동의"}
+                  {currentAgreement === "terms" && "이용약관"}
+                  {currentAgreement === "marketing" && "마케팅 동의"}
+                </Text>
+                <Text style={styles.modalContent}>
+                  {currentAgreement === "age" &&
+                    "만 14세 이상이어야 서비스를 이용할 수 있습니다. 만약 14세 미만이면 부모님의 동의를 받아야 하며, 이용이 제한될 수 있습니다. (내용 임시 추가)"}
+                  {currentAgreement === "terms" &&
+                    "이용약관 내용이 여기에 들어갑니다. 이용자의 권리와 의무, 서비스 제공의 조건 등에 대한 약관입니다. (내용 임시 추가)"}
+                  {currentAgreement === "marketing" &&
+                    "마케팅 정보 수신에 동의하시면 다양한 혜택을 받아보실 수 있습니다. 동의는 선택 사항입니다. (내용 임시 추가)"}
+                </Text>
+              </ScrollView>
+              {/* 동의하기 버튼 */}
+              <DefaultButton pressHandler={handleAgree} text="동의하기" />
+            </View>
+          </BottomSheetModal>
+        </Animated.View>
+      </ScrollView>
     </BottomSheetModalProvider>
   );
 }

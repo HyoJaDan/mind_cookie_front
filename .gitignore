@@ -33,5 +33,4 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-screens/SplashScreen.tsx
 util/url.js

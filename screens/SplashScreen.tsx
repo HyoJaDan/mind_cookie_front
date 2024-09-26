@@ -87,7 +87,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
         setStopwatch(stopwatchResponse.data);
         setEvent(eventResponse.data);
         setAllStopwatch(allStopwatchResponse.data);
-        navigation.replace("Auth");
+        navigation.replace("AuthenticatedStack"); //AuthenticatedStack
       } catch (error) {
         Alert.alert("회원가입 실패", "서버에 문제가 있습니다.");
         navigation.replace("Auth");

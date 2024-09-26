@@ -13,10 +13,12 @@ import React, {
 import {
   Alert,
   FlatList,
+  Keyboard,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -30,7 +32,6 @@ import {
   PrimaryHobbit,
   statusByDateData,
   tempTodoData,
-  top3SucceessData,
 } from "../data/todo";
 import { baseURLData } from "../data/userData";
 import { DefaultButton } from "../util/defaultButton";
@@ -47,13 +48,11 @@ const TodoList = ({
   const [tempTodos, setTempTodos] = useRecoilState(tempTodoData);
   const [statusByDate, setStatusByDate] = useRecoilState(statusByDateData);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [top3Succeed, setTop3Succeed] = useRecoilState(top3SucceessData);
   const [selectedColor, setSelectedColor] = useState("");
   const [newPrimaryHobbit, setNewPrimaryHobbit] = useState("");
   const [newHobbit, setNewHobbit] = useState("");
   const [selectedPrimaryHobbit, setSelectedPrimaryHobbit] = useState("");
   const baseURL = useRecoilValue(baseURLData);
-
   const colorOptions = [
     "#7985CD",
     "#D44245",
@@ -88,6 +87,7 @@ const TodoList = ({
   );
 
   useEffect(() => {
+    setIsInitialized(true); // 초기화 완료 상태로 설정
     if (tempTodos.length === 0) {
       return;
     }
@@ -113,7 +113,6 @@ const TodoList = ({
 
       setTodos(initialTodos); // 초기 todoData 설정
     }
-    setIsInitialized(true); // 초기화 완료 상태로 설정
   }, [tempTodos]);
 
   // selectedDate가 변경될 때마다 isDone 값을 업데이트하는 로직
@@ -125,7 +124,6 @@ const TodoList = ({
       );
       // 선택된 날짜에 대한 status가 없을 경우에는 더 진행하지 않음
       if (!statusForSelectedDate) return;
-
       // 새로운 isDone 상태를 할당하기 위해 hobbit의 순서를 유지하며 업데이트
       let statusIndex = 0; // hobbitStatuses의 index 관리
       const updatedTodos = todos.map((primaryHobbit) => {
@@ -213,7 +211,49 @@ const TodoList = ({
       Alert.alert("모든 필드를 채워주세요.");
       return;
     }
+    if (selectedColor === "") {
+      Alert.alert("색을 정해주세요. 상위 목표를 구분하는데 사용됩니다.");
+      return;
+    }
+    // 이미 존재하는지 확인하는 로직
+    const isDuplicate = todos.some((primaryHobbit) => {
+      // 새로운 상위 목표와 세부 목표가 기존 todos에 있는지 확인
+      if (
+        primaryHobbit.primaryHobbit === newPrimaryHobbit ||
+        primaryHobbit.primaryHobbit === selectedPrimaryHobbit
+      ) {
+        return primaryHobbit.hobbitStatuses.some(
+          (hobbit) => hobbit.hobbit === newHobbit
+        );
+      }
+      return false;
+    });
 
+    if (isDuplicate) {
+      Alert.alert("이미 동일한 목표와 세부 목표가 존재합니다.");
+      return;
+    }
+    // newPrimaryHobbit가 기존 primaryHobbit과 중복되는지 확인
+    const isPrimaryHobbitDuplicate = todos.some(
+      (primaryHobbit) => primaryHobbit.primaryHobbit === newPrimaryHobbit
+    );
+
+    if (isPrimaryHobbitDuplicate) {
+      Alert.alert(
+        "이미 동일한 상위 목표가 존재합니다. 기존 상위 목표를 선택해주세요."
+      );
+      return;
+    }
+
+    // 색상 중복 확인 로직
+    const isColorDuplicate = todos.some(
+      (primaryHobbit) => primaryHobbit.color === selectedColor
+    );
+
+    if (isColorDuplicate) {
+      Alert.alert("이미 동일한 색상이 다른 목표에 사용되고 있습니다.");
+      return;
+    }
     const response = await apiClient(baseURL, "/add-hobbit", "POST", {
       primaryHobbit: newPrimaryHobbit || selectedPrimaryHobbit,
       hobbit: newHobbit,
@@ -257,7 +297,13 @@ const TodoList = ({
           )
         );
       }
-
+      const updatedStatusByDate = statusByDate.map((status) => {
+        return {
+          ...status,
+          hobbitStatus: [...status.hobbitStatus, false], // 모든 hobbitStatus에 false 추가
+        };
+      });
+      setStatusByDate(updatedStatusByDate);
       setNewPrimaryHobbit("");
       setNewHobbit("");
       setSelectedPrimaryHobbit("");
@@ -337,66 +383,70 @@ const TodoList = ({
           onChange={handleSheetChanges}
           backdropComponent={renderBackdrop}
         >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <RNPickerSelect
-                onValueChange={(itemValue) =>
-                  setSelectedPrimaryHobbit(itemValue)
-                }
-                items={todos.map((primaryHobbit) => ({
-                  label: primaryHobbit.primaryHobbit,
-                  value: primaryHobbit.primaryHobbit,
-                  key: primaryHobbit.primaryHobbitId,
-                }))}
-                placeholder={{ label: "기존 상위 목표 선택", value: "" }}
-                style={pickerSelectStyles}
-              />
-              <TextInput
-                placeholder="새로운 상위 목표 입력"
-                style={styles.input}
-                value={newPrimaryHobbit}
-                onChangeText={(text) => {
-                  setNewPrimaryHobbit(text);
-                  setSelectedPrimaryHobbit("");
-                }}
-              />
-              <TextInput
-                placeholder="세부 목표 입력"
-                style={styles.input}
-                value={newHobbit}
-                onChangeText={setNewHobbit}
-                autoFocus={true}
-              />
-              {newPrimaryHobbit !== "" && (
-                <View>
-                  <Text style={[fontStyle.MD16, { marginBottom: 20 }]}>
-                    고유색 선택
-                  </Text>
-                  <View style={styles.colorPickerContainer}>
-                    {colorOptions.map((color, index) => (
-                      <TouchableOpacity
-                        key={index}
-                        style={[
-                          styles.colorCircle,
-                          {
-                            backgroundColor: color,
-                            borderColor:
-                              selectedColor === color ? "#000" : "transparent",
-                          },
-                        ]}
-                        onPress={() => setSelectedColor(color)}
-                      />
-                    ))}
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <RNPickerSelect
+                  onValueChange={(itemValue) =>
+                    setSelectedPrimaryHobbit(itemValue)
+                  }
+                  items={todos.map((primaryHobbit) => ({
+                    label: primaryHobbit.primaryHobbit,
+                    value: primaryHobbit.primaryHobbit,
+                    key: primaryHobbit.primaryHobbitId,
+                  }))}
+                  placeholder={{ label: "기존 상위 목표 선택", value: "" }}
+                  style={pickerSelectStyles}
+                />
+                <TextInput
+                  placeholder="새로운 상위 목표 입력"
+                  style={styles.input}
+                  value={newPrimaryHobbit}
+                  onChangeText={(text) => {
+                    setNewPrimaryHobbit(text);
+                    setSelectedPrimaryHobbit("");
+                  }}
+                />
+                <TextInput
+                  placeholder="세부 목표 입력"
+                  style={styles.input}
+                  value={newHobbit}
+                  onChangeText={setNewHobbit}
+                  autoFocus={true}
+                />
+                {newPrimaryHobbit !== "" && (
+                  <View>
+                    <Text style={[fontStyle.MD16, { marginBottom: 20 }]}>
+                      고유색 선택
+                    </Text>
+                    <View style={styles.colorPickerContainer}>
+                      {colorOptions.map((color, index) => (
+                        <TouchableOpacity
+                          key={index}
+                          style={[
+                            styles.colorCircle,
+                            {
+                              backgroundColor: color,
+                              borderColor:
+                                selectedColor === color
+                                  ? "#000"
+                                  : "transparent",
+                            },
+                          ]}
+                          onPress={() => setSelectedColor(color)}
+                        />
+                      ))}
+                    </View>
                   </View>
-                </View>
-              )}
-            </View>
+                )}
+              </View>
 
-            <DefaultButton
-              pressHandler={handleAddTodo}
-              text="새로운 목표 추가"
-            />
-          </View>
+              <DefaultButton
+                pressHandler={handleAddTodo}
+                text="새로운 목표 추가"
+              />
+            </View>
+          </TouchableWithoutFeedback>
         </BottomSheetModal>
       </View>
     </BottomSheetModalProvider>

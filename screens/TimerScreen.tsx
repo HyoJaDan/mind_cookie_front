@@ -134,7 +134,15 @@ export default function TimerScreen() {
   // 목표 추가 함수
   const addTarget = async () => {
     if (!newTarget) return;
+    // 중복 확인 로직 추가
+    const isDuplicate = stopwatchTargets.some(
+      (stopwatch) => stopwatch.target === newTarget
+    );
 
+    if (isDuplicate) {
+      Alert.alert("이미 존재하는 목표입니다.");
+      return; // 중복일 경우 함수 종료
+    }
     await apiClient(baseURL, `/add-stopwatch-target`, "PUT", null, {
       add: newTarget,
     });

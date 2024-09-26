@@ -25,8 +25,8 @@ export const Emotions: React.FC<EmotionsProps> = ({
     <View style={accordionStyle.boxContainer}>
       <Text>어떤 감정을 느꼈나요?</Text>
       <ScrollView
-        horizontal={true} // 가로 스크롤 활성화
-        showsHorizontalScrollIndicator={false} // 스크롤바 숨기기 (선택사항)
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={accordionStyle.participantContainer}
       >
         {emotions.map((emotion, index) => (

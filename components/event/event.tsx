@@ -105,18 +105,33 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
     }
 
     if (dataType === "participants") {
+      const isDuplicate = member.event_participants.includes(newData);
+      if (isDuplicate) {
+        Alert.alert("이미 존재하는 참가자입니다.");
+        return;
+      }
       setMember((prev) => ({
         ...prev,
         event_participants: [...prev.event_participants, newData],
       }));
       handleSelection(newData, "participants");
     } else if (dataType === "activities") {
+      const isDuplicate = member.event_activities.includes(newData);
+      if (isDuplicate) {
+        Alert.alert("이미 존재하는 활동입니다.");
+        return;
+      }
       setMember((prev) => ({
         ...prev,
         event_activities: [...prev.event_activities, newData],
       }));
       handleSelection(newData, "activities");
     } else if (dataType === "emotions") {
+      const isDuplicate = member.event_emotions.includes(newData);
+      if (isDuplicate) {
+        Alert.alert("이미 존재하는 감정입니다.");
+        return;
+      }
       setMember((prev) => ({
         ...prev,
         event_emotions: [...prev.event_emotions, newData],

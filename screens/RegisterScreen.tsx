@@ -69,7 +69,7 @@ function RegisterScreen({ navigation }) {
 
   // 회원가입 처리 함수
   const handleRegister = async () => {
-    if (!ageCheck || !useCheck) {
+    if (!ageCheck || !useCheck || !marketingCheck) {
       Alert.alert("필수 약관에 동의해주세요.");
       return;
     }
@@ -166,13 +166,13 @@ function RegisterScreen({ navigation }) {
                   secureTextEntry={true}
                   ref={passwordInputRef}
                   returnKeyType="done"
-                  onSubmitEditing={() =>
-                    nameInputRef.current && nameInputRef.current.focus()
-                  }
+                  onSubmitEditing={() => {
+                    Keyboard.dismiss(); // 키보드 내리기
+                    nameInputRef.current && nameInputRef.current.focus();
+                  }}
                   blurOnSubmit={false}
                 />
               </KeyboardAvoidingView>
-
               <View style={styles.agreementContainer}>
                 <TouchableOpacity
                   style={styles.checkboxContainer}
@@ -202,7 +202,6 @@ function RegisterScreen({ navigation }) {
                     <Text style={styles.linkText}>내용보기</Text>
                   </TouchableOpacity>
                 </TouchableOpacity>
-
                 <TouchableOpacity
                   style={styles.checkboxContainer}
                   onPress={() => setUseCheck(!useCheck)}
@@ -229,7 +228,9 @@ function RegisterScreen({ navigation }) {
                     onValueChange={setMarketingCheck}
                     color={marketingCheck ? "#2D81FF" : undefined}
                   />
-                  <Text style={styles.checkboxLabel}>마케팅 동의 (선택)</Text>
+                  <Text style={styles.checkboxLabel}>
+                    개인정보 수집 및 이용동의 (필수)
+                  </Text>
                   <TouchableOpacity
                     onPress={() => handleShowAgreement("marketing")}
                   >
@@ -237,7 +238,6 @@ function RegisterScreen({ navigation }) {
                   </TouchableOpacity>
                 </TouchableOpacity>
               </View>
-
               {loading ? (
                 <ActivityIndicator size="large" color="#307ecc" />
               ) : (
@@ -266,19 +266,99 @@ function RegisterScreen({ navigation }) {
                   <ScrollView style={styles.modalContentContainer}>
                     <Text style={[fontStyle.BD24, { alignSelf: "flex-start" }]}>
                       {currentAgreement === "age" && "만 14세 이상 동의"}
-                      {currentAgreement === "terms" && "이용약관"}
-                      {currentAgreement === "marketing" && "마케팅 동의"}
+                      {currentAgreement === "terms" && "이용약관 동의"}
+                      {currentAgreement === "marketing" &&
+                        "개인정보 수집 및 이용동의"}
                     </Text>
                     <Text style={styles.modalContent}>
                       {currentAgreement === "age" &&
-                        "만 14세 이상이어야 서비스를 이용할 수 있습니다. 만약 14세 미만이면 부모님의 동의를 받아야 하며, 이용이 제한될 수 있습니다. (내용 임시 추가)"}
-                      {currentAgreement === "terms" &&
-                        "이용약관 내용이 여기에 들어갑니다. 이용자의 권리와 의무, 서비스 제공의 조건 등에 대한 약관입니다. (내용 임시 추가)"}
-                      {currentAgreement === "marketing" &&
-                        "마케팅 정보 수신에 동의하시면 다양한 혜택을 받아보실 수 있습니다. 동의는 선택 사항입니다. (내용 임시 추가)"}
+                        "만 14세 이상이어야 서비스를 이용할 수 있습니다. 만약 14세 미만이면 부모님의 동의를 받아야 하며, 이용이 제한될 수 있습니다."}
+                      {currentAgreement === "terms" && (
+                        <>
+                          <Text style={styles.termsTitle}>
+                            가. 서비스 이용 목적
+                          </Text>
+                          <Text>
+                            : 이 앱은 사용자의 건강 관리 및 습관 형성을 돕기
+                            위한 서비스로, 이를 위한 개인 정보와 활동 기록을
+                            분석하여 맞춤형 서비스를 제공합니다.
+                          </Text>
+                          {"\n\n"}
+
+                          <Text style={styles.termsTitle}>나. 사용자 책임</Text>
+                          <Text>
+                            : 사용자는 서비스 이용 시 본인의 정보를 정확히
+                            입력해야 하며, 부정확한 정보로 인해 발생한 문제에
+                            대해 책임을 질 수 있습니다.
+                          </Text>
+                          {"\n\n"}
+
+                          <Text style={styles.termsTitle}>
+                            다. 서비스 이용 제한
+                          </Text>
+                          <Text>
+                            : 사용자가 불법적인 활동을 하거나 약관을 위반할
+                            경우, 서비스 이용이 제한되거나 계정이 삭제될 수
+                            있습니다.
+                          </Text>
+                          {"\n\n"}
+
+                          <Text style={styles.termsTitle}>라. 서비스 중단</Text>
+                          <Text>
+                            : 서비스 제공자는 시스템 유지 보수나 기타 사유로
+                            인해 서비스 제공을 일시적으로 중단할 수 있으며, 이에
+                            대한 사전 공지를 할 수 있습니다.
+                          </Text>
+                          {"\n\n"}
+
+                          <Text style={styles.termsTitle}>마. 면책 사항</Text>
+                          <Text>
+                            : 서비스 제공자는 사용자가 본 서비스를 통해 얻은
+                            정보 및 자료에 대해 법적 책임을 지지 않으며,
+                            사용자는 본인의 판단에 따라 서비스를 이용해야
+                            합니다.
+                          </Text>
+                        </>
+                      )}
+                      {currentAgreement === "marketing" && (
+                        <>
+                          <Text style={styles.termsTitle}>
+                            가. 수집 및 이용 목적
+                          </Text>
+                          <Text>
+                            : 회원가입, 사용자 맞춤형 서비스 제공, 이용정보
+                            분석, 신제품 개발 및 연구
+                          </Text>
+                          {"\n\n"}
+
+                          <Text style={styles.termsTitle}>
+                            나. 개인정보 수집 항목
+                          </Text>
+                          <Text>
+                            : 이름, ID, 비밀번호, 어플리케이션 이용 정보(감정 및
+                            습관 기록, 이용시간 등)
+                          </Text>
+                          <Text style={{ fontWeight: "bold", color: "red" }}>
+                            * 심리 상태를 기록하는 어플리케이션 특성상 건강 등에
+                            관한 정보와 같은 민감정보가 포함될 수 있습니다.
+                          </Text>
+                          {"\n\n"}
+                          <Text style={styles.termsTitle}>
+                            다. 보유 및 이용기간
+                          </Text>
+                          <Text>: 회원 탈퇴시</Text>
+                          {"\n\n"}
+                          <Text style={styles.termsTitle}>
+                            라. 개인정보 수집에 대한 권리
+                          </Text>
+                          <Text>
+                            : 귀하는 개인정보 수집에 동의를 거부할 권리가
+                            있으며, 거부 시 서비스 이용이 제한됩니다.
+                          </Text>
+                        </>
+                      )}
                     </Text>
                   </ScrollView>
-                  {/* 동의하기 버튼 */}
                   <DefaultButton pressHandler={handleAgree} text="동의하기" />
                 </View>
               </BottomSheetModal>
@@ -338,12 +418,20 @@ const styles = StyleSheet.create({
   modalContent: {
     fontSize: 16,
     marginVertical: 20,
+    lineHeight: 24,
   },
   registerText: {
     marginTop: 15,
     fontSize: 16,
     color: "#2D81FF",
     textDecorationLine: "underline",
+  },
+
+  termsTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 5,
   },
 });
 

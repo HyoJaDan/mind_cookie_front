@@ -12,10 +12,12 @@ import React, {
 } from "react";
 import {
   Alert,
+  Keyboard,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -195,25 +197,27 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
         onChange={handleSheetChanges}
         backdropComponent={renderBackdrop}
       >
-        <View style={BottomSheetModalStyle.wrapper}>
-          <View>
-            <Text
-              style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}
-            >
-              새 항목 추가
-            </Text>
-            <TextInput
-              placeholder="새 항목 입력"
-              autoFocus={true}
-              autoCapitalize="none"
-              autoCorrect={false}
-              value={newData}
-              onChangeText={setNewData}
-              style={BottomSheetModalStyle.text}
-            />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={BottomSheetModalStyle.wrapper}>
+            <View>
+              <Text
+                style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}
+              >
+                새 항목 추가
+              </Text>
+              <TextInput
+                placeholder="새 항목 입력"
+                autoFocus={true}
+                autoCapitalize="none"
+                autoCorrect={false}
+                value={newData}
+                onChangeText={setNewData}
+                style={BottomSheetModalStyle.text}
+              />
+            </View>
+            <DefaultButton pressHandler={() => addNewData()} text="항목 추가" />
           </View>
-          <DefaultButton pressHandler={() => addNewData()} text="항목 추가" />
-        </View>
+        </TouchableWithoutFeedback>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

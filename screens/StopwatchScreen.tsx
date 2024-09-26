@@ -10,11 +10,13 @@ import {
   Alert,
   AppState,
   FlatList,
+  Keyboard,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -317,21 +319,23 @@ export default function StopwatchScreen() {
           snapPoints={snapPoints}
           backdropComponent={renderBackdrop}
         >
-          <View style={styles.modalContainer}>
-            <View>
-              <Text style={[fontStyle.BD24, { alignSelf: "flex-start" }]}>
-                목표 추가
-              </Text>
-              <TextInput
-                placeholder="새 목표 입력"
-                value={newTarget}
-                onChangeText={setNewTarget}
-                style={styles.input}
-                autoFocus={true}
-              />
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalContainer}>
+              <View>
+                <Text style={[fontStyle.BD24, { alignSelf: "flex-start" }]}>
+                  목표 추가
+                </Text>
+                <TextInput
+                  placeholder="새 목표 입력"
+                  value={newTarget}
+                  onChangeText={setNewTarget}
+                  style={styles.input}
+                  autoFocus={true}
+                />
+              </View>
+              <DefaultButton pressHandler={addTarget} text="목표 추가" />
             </View>
-            <DefaultButton pressHandler={addTarget} text="목표 추가" />
-          </View>
+          </TouchableWithoutFeedback>
         </BottomSheetModal>
       </SafeAreaView>
     </BottomSheetModalProvider>

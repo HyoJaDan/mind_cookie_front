@@ -3,12 +3,14 @@ import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -68,56 +70,64 @@ function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <SpashIcon />
-      <Text>
-        <Text style={[fontStyle.BD36, { color: "#2D81FF" }]}>마인드 쿠키</Text>
-        <Text style={fontStyle.BD24}>에</Text>
-      </Text>
-      <Text style={[fontStyle.BD24, { marginBottom: 50 }]}>
-        오신 것을 환영해요
-      </Text>
-      <KeyboardAvoidingView
-        style={{ width: "100%" }}
-        behavior={Platform.OS === "ios" ? "position" : "height"}
-        keyboardVerticalOffset={10}
-      >
-        <TextInput
-          style={styles.input}
-          placeholder={"아이디"}
-          onChangeText={(userId) => setUserId(userId)}
-          autoCapitalize="none"
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            passwordInputRef.current && passwordInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder={"비밀번호"}
-          onChangeText={(userPassword) => setUserPassword(userPassword)}
-          autoCapitalize="none"
-          secureTextEntry={true}
-          ref={passwordInputRef}
-          returnKeyType="done"
-          onSubmitEditing={handleLogin}
-          blurOnSubmit={false}
-        />
-      </KeyboardAvoidingView>
-      {loading ? (
-        <ActivityIndicator size="large" color="#307ecc" />
-      ) : (
-        <View>
-          <DefaultButton pressHandler={handleLogin} text="로그인" />
-          <TouchableOpacity
-            onPress={() => navigation.navigate("RegisterScreen")}
-          >
-            <Text style={styles.registerText}>마인드 쿠키가 처음이신가요?</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <SpashIcon />
+        <Text>
+          <Text style={[fontStyle.BD36, { color: "#2D81FF" }]}>
+            마인드 쿠키
+          </Text>
+          <Text style={fontStyle.BD24}>에</Text>
+        </Text>
+        <Text style={[fontStyle.BD24, { marginBottom: 50 }]}>
+          오신 것을 환영해요
+        </Text>
+
+        <KeyboardAvoidingView
+          style={{ width: "100%" }}
+          behavior={Platform.OS === "ios" ? "position" : "height"}
+          keyboardVerticalOffset={10}
+        >
+          <TextInput
+            style={styles.input}
+            placeholder={"아이디"}
+            onChangeText={(userId) => setUserId(userId)}
+            autoCapitalize="none"
+            returnKeyType="next"
+            onSubmitEditing={() =>
+              passwordInputRef.current && passwordInputRef.current.focus()
+            }
+            blurOnSubmit={false}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder={"비밀번호"}
+            onChangeText={(userPassword) => setUserPassword(userPassword)}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            ref={passwordInputRef}
+            returnKeyType="done"
+            onSubmitEditing={handleLogin}
+            blurOnSubmit={false}
+          />
+        </KeyboardAvoidingView>
+
+        {loading ? (
+          <ActivityIndicator size="large" color="#307ecc" />
+        ) : (
+          <View>
+            <DefaultButton pressHandler={handleLogin} text="로그인" />
+            <TouchableOpacity
+              onPress={() => navigation.navigate("RegisterScreen")}
+            >
+              <Text style={styles.registerText}>
+                마인드 쿠키가 처음이신가요?
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

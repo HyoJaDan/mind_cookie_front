@@ -4,28 +4,21 @@ import {
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import Checkbox from "expo-checkbox";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Animated,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
-import {
-  KeyboardController,
-  useKeyboardController,
-} from "react-native-keyboard-controller"; // 추가
 import { useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/main.svg";
@@ -35,6 +28,7 @@ import { DefaultButton } from "../util/defaultButton";
 function RegisterScreen({ navigation }) {
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
@@ -42,20 +36,9 @@ function RegisterScreen({ navigation }) {
   const [marketingCheck, setMarketingCheck] = useState(false);
   const [currentAgreement, setCurrentAgreement] = useState(""); // 현재 보여줄 약관 내용 상태
   const passwordInputRef = useRef(null);
+  const nameInputRef = useRef(null);
   const baseURL = useRecoilValue(baseURLData);
   const URL = baseURL.split("/api")[0];
-
-  // 애니메이션 관련 설정
-  const { isKeyboardVisible, keyboardHeight } = useKeyboardController(); // 키보드 컨트롤러 훅
-  const animatedPositionY = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(animatedPositionY, {
-      toValue: isKeyboardVisible ? -keyboardHeight / 2 : 0,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  }, [isKeyboardVisible, keyboardHeight]);
 
   // 약관 내용보기 관련 BottomSheetModal 설정
   const bottomSheetModalRef = useRef(null);
@@ -99,6 +82,10 @@ function RegisterScreen({ navigation }) {
       Alert.alert("비밀번호를 입력해주세요.");
       return;
     }
+    if (!userName) {
+      Alert.alert("이름을 입력해주세요.");
+      return;
+    }
     setLoading(true);
 
     let dataToSend = {
@@ -123,7 +110,6 @@ function RegisterScreen({ navigation }) {
       Alert.alert("회원가입 실패", "서버에 문제가 있습니다.");
     }
   };
-
   const handleAgree = () => {
     if (currentAgreement === "age") {
       setAgeCheck(true);
@@ -142,43 +128,54 @@ function RegisterScreen({ navigation }) {
 
   return (
     <BottomSheetModalProvider>
-      <KeyboardController /> {/* 키보드 컨트롤러 추가 */}
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <Animated.View
-          style={[
-            styles.container,
-            { transform: [{ translateY: animatedPositionY }] },
-          ]}
-        >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
           <SpashIcon />
           <Text style={fontStyle.BD36}>회원가입</Text>
           <Text style={[fontStyle.BD24, { marginBottom: 50 }]}>
             나만의 습관을 시작해보세요!
           </Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder={"아이디"}
-            onChangeText={(userId) => setUserId(userId)}
-            autoCapitalize="none"
-            autoFocus={true}
-            returnKeyType="next"
-            onSubmitEditing={() =>
-              passwordInputRef.current && passwordInputRef.current.focus()
-            }
-            blurOnSubmit={false}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder={"비밀번호"}
-            onChangeText={(userPassword) => setUserPassword(userPassword)}
-            autoCapitalize="none"
-            secureTextEntry={true}
-            ref={passwordInputRef}
-            returnKeyType="done"
-            onSubmitEditing={handleRegister}
-            blurOnSubmit={false}
-          />
+          <KeyboardAvoidingView
+            style={{ width: "100%" }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={100}
+          >
+            <TextInput
+              style={styles.input}
+              placeholder={"아이디"}
+              onChangeText={(userId) => setUserId(userId)}
+              autoCapitalize="none"
+              autoFocus={true}
+              returnKeyType="next"
+              onSubmitEditing={() =>
+                passwordInputRef.current && passwordInputRef.current.focus()
+              }
+              blurOnSubmit={false}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder={"비밀번호"}
+              onChangeText={(userPassword) => setUserPassword(userPassword)}
+              autoCapitalize="none"
+              secureTextEntry={true}
+              ref={passwordInputRef}
+              returnKeyType="next"
+              onSubmitEditing={() =>
+                nameInputRef.current && nameInputRef.current.focus()
+              }
+              blurOnSubmit={false}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder={"이름"}
+              onChangeText={(userName) => setUserName(userName)}
+              autoCapitalize="none"
+              ref={nameInputRef}
+              returnKeyType="done"
+              onSubmitEditing={handleRegister}
+            />
+          </KeyboardAvoidingView>
 
           <View style={styles.agreementContainer}>
             <TouchableOpacity
@@ -284,8 +281,8 @@ function RegisterScreen({ navigation }) {
               <DefaultButton pressHandler={handleAgree} text="동의하기" />
             </View>
           </BottomSheetModal>
-        </Animated.View>
-      </ScrollView>
+        </View>
+      </TouchableWithoutFeedback>
     </BottomSheetModalProvider>
   );
 }

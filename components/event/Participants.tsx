@@ -30,7 +30,7 @@ export const Participants: React.FC<ParticipantsProps> = ({
       >
         <Text>누구와 있었던 일인가요? </Text>
         <Text style={[fontStyle.SB10, { color: Colors.grayscale.gray800 }]}>
-          *다중 선택 가능합니다.
+          *복수 선택 가능
         </Text>
       </View>
 

@@ -21,6 +21,7 @@ import {
   View,
 } from "react-native";
 import { useRecoilValue } from "recoil";
+import { Colors } from "../assets/color/color";
 import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/main.svg";
 import { baseURLData } from "../data/userData";
@@ -34,13 +35,17 @@ function RegisterScreen({ navigation }) {
   const [ageCheck, setAgeCheck] = useState(false);
   const [useCheck, setUseCheck] = useState(false);
   const [marketingCheck, setMarketingCheck] = useState(false);
-  const [currentAgreement, setCurrentAgreement] = useState(""); // 현재 보여줄 약관 내용 상태
+  const [currentAgreement, setCurrentAgreement] = useState("");
   const passwordInputRef = useRef(null);
   const nameInputRef = useRef(null);
   const baseURL = useRecoilValue(baseURLData);
   const URL = baseURL.split("/api")[0];
 
-  // 약관 내용보기 관련 BottomSheetModal 설정
+  const MIN_ID_LENGTH = 5;
+  const MAX_ID_LENGTH = 15;
+  const MIN_PASSWORD_LENGTH = 8;
+  const MAX_PASSWORD_LENGTH = 20;
+
   const bottomSheetModalRef = useRef(null);
   const snapPoints = useMemo(() => ["90%"], []);
   const handlePresentModalPress = useCallback(() => {
@@ -67,10 +72,26 @@ function RegisterScreen({ navigation }) {
     setMarketingCheck(newValue);
   };
 
-  // 회원가입 처리 함수
   const handleRegister = async () => {
     if (!ageCheck || !useCheck || !marketingCheck) {
       Alert.alert("필수 약관에 동의해주세요.");
+      return;
+    }
+
+    if (userId.length < MIN_ID_LENGTH || userId.length > MAX_ID_LENGTH) {
+      Alert.alert(
+        `아이디는 ${MIN_ID_LENGTH}자 이상 ${MAX_ID_LENGTH}자 이하로 입력해주세요.`
+      );
+      return;
+    }
+
+    if (
+      userPassword.length < MIN_PASSWORD_LENGTH ||
+      userPassword.length > MAX_PASSWORD_LENGTH
+    ) {
+      Alert.alert(
+        `비밀번호는 ${MIN_PASSWORD_LENGTH}자 이상 ${MAX_PASSWORD_LENGTH}자 이하로 입력해주세요.`
+      );
       return;
     }
 
@@ -89,8 +110,9 @@ function RegisterScreen({ navigation }) {
       username: userId,
       password: userPassword,
     };
+
     try {
-      await fetch(`${URL}/join`, {
+      const response = await fetch(`${URL}/join`, {
         method: "POST",
         body: JSON.stringify(dataToSend),
         headers: {
@@ -98,15 +120,23 @@ function RegisterScreen({ navigation }) {
           Accept: "application/json",
         },
       });
-
+      console.log(response);
+      const result = await response.json();
+      console.log(result);
       setLoading(false);
-      Alert.alert("회원가입 완료");
-      navigation.replace("Auth");
+
+      if (result) {
+        Alert.alert("회원가입 완료");
+        navigation.replace("Auth");
+      } else {
+        Alert.alert("회원가입 실패", "이미 존재하는 아이디 입니다.");
+      }
     } catch (error) {
       setLoading(false);
-      Alert.alert("회원가입 실패", "서버에 문제가 있습니다.");
+      Alert.alert("회원가입 실패", "이미 존재하는 아이디 입니다.");
     }
   };
+
   const handleAgree = () => {
     if (currentAgreement === "age") {
       setAgeCheck(true);
@@ -144,7 +174,7 @@ function RegisterScreen({ navigation }) {
               <KeyboardAvoidingView
                 style={{ width: "100%" }}
                 behavior={Platform.OS === "ios" ? "position" : "height"}
-                keyboardVerticalOffset={60}
+                keyboardVerticalOffset={50}
               >
                 <TextInput
                   style={styles.input}
@@ -158,6 +188,16 @@ function RegisterScreen({ navigation }) {
                   }
                   blurOnSubmit={false}
                 />
+
+                <Text
+                  style={[
+                    fontStyle.SB10,
+                    { color: Colors.grayscale.gray400, paddingBottom: 5 },
+                  ]}
+                >
+                  {`* 아이디는 ${MIN_ID_LENGTH}자 이상 ${MAX_ID_LENGTH}자 이하로 입력해주세요.`}
+                </Text>
+
                 <TextInput
                   style={styles.input}
                   placeholder={"비밀번호"}
@@ -172,7 +212,13 @@ function RegisterScreen({ navigation }) {
                   }}
                   blurOnSubmit={false}
                 />
+                <Text
+                  style={[fontStyle.SB10, { color: Colors.grayscale.gray400 }]}
+                >
+                  {`* 비밀번호는 ${MIN_PASSWORD_LENGTH}자 이상 ${MAX_PASSWORD_LENGTH}자 이하로 입력해주세요.`}
+                </Text>
               </KeyboardAvoidingView>
+
               <View style={styles.agreementContainer}>
                 <TouchableOpacity
                   style={styles.checkboxContainer}
@@ -238,6 +284,7 @@ function RegisterScreen({ navigation }) {
                   </TouchableOpacity>
                 </TouchableOpacity>
               </View>
+
               {loading ? (
                 <ActivityIndicator size="large" color="#307ecc" />
               ) : (
@@ -384,7 +431,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 10,
-    marginBottom: 10,
+    marginBottom: 5,
     borderRadius: 5,
   },
   agreementContainer: {

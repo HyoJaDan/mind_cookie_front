@@ -40,7 +40,7 @@ import DatePicker from "../DatePicker";
 import EmptyTodo from "./EmptyTodo";
 
 const TodoList = () => {
-  const [selectedDate, setSelectedDate] = useState(
+  const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
   const [todos, setTodos] = useState<PrimaryHobbit[]>([]);

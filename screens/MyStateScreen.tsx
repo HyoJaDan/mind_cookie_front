@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "../assets/color/color";
 import DatePicker from "../components/DatePicker";
-import State from "../components/state";
+import State from "../components/state/state";
 
 export default function MyStateScreen() {
   const insets = useSafeAreaInsets();

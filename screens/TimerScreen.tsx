@@ -29,11 +29,11 @@ import { DefaultButton } from "../util/defaultButton";
 export default function TimerScreen() {
   const insets = useSafeAreaInsets();
   const baseURL = useRecoilValue(baseURLData);
-  const [startTime, setStartTime] = useState(0); // 시작 시간
-  const [remainingTime, setRemainingTime] = useState(60); // 남은 시간
-  const [isRunning, setIsRunning] = useState(false); // 타이머 상태 (시작/정지)
+  const [startTime, setStartTime] = useState(0);
+  const [remainingTime, setRemainingTime] = useState(60);
+  const [isRunning, setIsRunning] = useState(false);
   const [appState, setAppState] = useState(AppState.currentState);
-  const [stopwatchTargets, setStopwatchTargets] = useRecoilState(stopwatchData); // 목표 데이터
+  const [stopwatchTargets, setStopwatchTargets] = useRecoilState(stopwatchData);
   const [selectedTarget, setSelectedTarget] = useState(
     stopwatchTargets[0]?.target || ""
   );
@@ -89,21 +89,20 @@ export default function TimerScreen() {
   }, [selectedTarget]);
 
   const startTimer = () => {
-    setStartTime(Date.now()); // 타이머 시작 시간 설정
+    setStartTime(Date.now());
     setIsRunning(true);
   };
 
   const stopTimer = () => {
-    setIsRunning(false); // 타이머 정지
-    submitTimerTime(); // 타이머 종료 시 시간 업데이트
+    setIsRunning(false);
+    submitTimerTime();
   };
 
-  // 매 1초마다 남은 시간 업데이트
   useEffect(() => {
     let interval: string | number | NodeJS.Timeout | undefined;
     if (isRunning) {
       interval = setInterval(() => {
-        setRemainingTime((prev) => (prev > 0 ? prev - 1 : 0)); // 1초마다 감소
+        setRemainingTime((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
     } else {
       clearInterval(interval);
@@ -111,7 +110,6 @@ export default function TimerScreen() {
     return () => clearInterval(interval);
   }, [isRunning, startTime]);
 
-  // 시간 형식 변환 함수
   const formatTime = (timeInSeconds: number) => {
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
@@ -124,24 +122,22 @@ export default function TimerScreen() {
   };
 
   const submitTimerTime = async () => {
-    const formattedTime = formatTime(remainingTime); // 포맷된 시간을 서버로 전송
+    const formattedTime = formatTime(remainingTime);
     await apiClient(baseURL, "/stopwatch/update-time", "PUT", {
       target: selectedTarget,
       time: formattedTime,
     });
   };
 
-  // 목표 추가 함수
   const addTarget = async () => {
     if (!newTarget) return;
-    // 중복 확인 로직 추가
     const isDuplicate = stopwatchTargets.some(
       (stopwatch) => stopwatch.target === newTarget
     );
 
     if (isDuplicate) {
       Alert.alert("이미 존재하는 목표입니다.");
-      return; // 중복일 경우 함수 종료
+      return;
     }
     await apiClient(baseURL, `/add-stopwatch-target`, "PUT", null, {
       add: newTarget,
@@ -152,11 +148,10 @@ export default function TimerScreen() {
       { target: newTarget, time: "00:00:00" },
     ]);
 
-    setNewTarget(""); // 입력값 초기화
-    bottomSheetModalRef.current?.close(); // 모달 닫기
+    setNewTarget("");
+    bottomSheetModalRef.current?.close();
   };
 
-  // 목표 삭제 함수
   const removeTarget = async (targetToRemove: string) => {
     Alert.alert(
       "목표 삭제",
@@ -176,7 +171,7 @@ export default function TimerScreen() {
             setStopwatchTargets((prev) =>
               prev.filter((target) => target.target !== targetToRemove)
             );
-            bottomSheetModalRef.current?.close(); // 목표 삭제 후 모달 닫기
+            bottomSheetModalRef.current?.close();
           },
         },
       ]
@@ -215,7 +210,7 @@ export default function TimerScreen() {
               onChangeText={(text) => {
                 const num = parseInt(text, 10);
                 if (!isNaN(num)) {
-                  setRemainingTime(num); // 선택한 시간 설정
+                  setRemainingTime(num);
                 }
               }}
             />
@@ -294,7 +289,7 @@ const styles = StyleSheet.create({
   pickerWrapper: {
     borderBottomWidth: 1,
     borderColor: "black",
-    width: 150, // 적절한 width 설정
+    width: 150,
   },
   addButton: {
     position: "absolute",

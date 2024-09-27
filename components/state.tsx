@@ -2,6 +2,7 @@ import Slider from "@react-native-community/slider";
 import React, { useEffect, useState } from "react";
 import { Alert, Dimensions, StyleSheet, Text, View } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { Colors } from "../assets/color/color";
 import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
 import { StateDTO, stateData } from "../data/stateData";
@@ -140,7 +141,9 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
     <View style={styles.container}>
       {isTodayDataExist ? null : (
         <View style={styles.noDataContainer}>
-          <Text style={fontStyle.BD16}>아직 상태를 추가하지 않았어요.</Text>
+          <Text style={[fontStyle.BD16, { color: Colors.basic.warning }]}>
+            아직 상태를 추가하지 않았어요.
+          </Text>
         </View>
       )}
       {renderSlider(
@@ -221,6 +224,7 @@ const styles = StyleSheet.create({
   noDataContainer: {
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
     padding: 20,
     backgroundColor: "#FFF",
     borderRadius: 16,

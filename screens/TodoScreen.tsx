@@ -1,24 +1,17 @@
 import { SafeAreaView, StyleSheet } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "../assets/color/color";
-import TodoList from "../components/todo";
+import TodoList from "../components/todo/todo";
 
 export default function TodoScreen() {
   const insets = useSafeAreaInsets();
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
 
   return (
     <BottomSheetModalProvider>
       <SafeAreaView style={[styles.rootContainer, { paddingTop: insets.top }]}>
-        <TodoList
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-        />
+        <TodoList />
       </SafeAreaView>
     </BottomSheetModalProvider>
   );

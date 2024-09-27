@@ -1,13 +1,16 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Colors } from "../../assets/color/color";
+import { fontStyle } from "../../assets/font/font";
 import { accordionStyle } from "./accordionStyle";
+import { handlePresentModalPressType } from "./event";
 
 interface ParticipantsProps {
   participants: string[];
   selectedParticipants: string[];
   handleSelection: (participant: string, type: string) => void;
-  handlePresentModalPress: (type: string) => void;
+  handlePresentModalPress: (type: handlePresentModalPressType) => void;
 }
 
 export const Participants: React.FC<ParticipantsProps> = ({
@@ -18,10 +21,22 @@ export const Participants: React.FC<ParticipantsProps> = ({
 }) => {
   return (
     <View style={accordionStyle.boxContainer}>
-      <Text>누구와 있었던 일인가요?</Text>
+      <View
+        style={{
+          justifyContent: "space-around",
+          width: "100%",
+          flexDirection: "row",
+        }}
+      >
+        <Text>누구와 있었던 일인가요? </Text>
+        <Text style={[fontStyle.SB10, { color: Colors.grayscale.gray800 }]}>
+          *다중 선택 가능합니다.
+        </Text>
+      </View>
+
       <ScrollView
-        horizontal={true} // 가로 스크롤 활성화
-        showsHorizontalScrollIndicator={false} // 스크롤바 숨기기 (선택사항)
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={accordionStyle.participantContainer}
       >
         {participants.map((participant, index) => (
@@ -33,7 +48,7 @@ export const Participants: React.FC<ParticipantsProps> = ({
                 backgroundColor: "#BAA9FF",
               },
             ]}
-            onPress={() => handleSelection(participant, "participants")}
+            onPress={() => handleSelection(participant, "참가자")}
           >
             <Text>{participant}</Text>
           </TouchableOpacity>
@@ -41,7 +56,7 @@ export const Participants: React.FC<ParticipantsProps> = ({
         {/* + 버튼 */}
         <TouchableOpacity
           style={accordionStyle.circle}
-          onPress={() => handlePresentModalPress("participants")}
+          onPress={() => handlePresentModalPress("참가자")}
         >
           <Ionicons name="add" size={20} color="black" />
         </TouchableOpacity>

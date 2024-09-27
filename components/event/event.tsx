@@ -3,6 +3,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import React, {
   useCallback,
   useEffect,
@@ -10,28 +11,20 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  Alert,
-  Keyboard,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Alert, ScrollView } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { apiClient } from "../../data/apiClient";
 import { eventData } from "../../data/event";
 import { baseURLData, memberData } from "../../data/userData";
-
 import { DefaultButton } from "../../util/defaultButton";
 import { Activities } from "./Activities";
-
+import { BottomSheetInput } from "./BottomSheetInput";
 import { CustomAccordion } from "./CustomAccordion";
 import { Emotions } from "./Emptions";
 import { Participants } from "./Participants";
 import { renderEvents } from "./renderEvents";
+import { BottomSheetModalStyle } from "./styles";
+export type handlePresentModalPressType = "참가자" | "활동" | "감정";
 
 export default function Event({ selectedDate }: { selectedDate: string }) {
   const [event, setEvent] = useRecoilState(eventData);
@@ -44,14 +37,15 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
     emotion: "",
     emotionRate: 50,
   });
-
-  const [newData, setNewData] = useState(""); // 추가할 새로운 데이터
-  const [dataType, setDataType] = useState(""); // 추가할 데이터 타입
+  const [newData, setNewData] = useState("");
+  const [dataType, setDataType] = useState("");
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const handleSheetChanges = useCallback((index: number) => {}, []);
+  const handleSheetChanges = useCallback(() => {}, []);
   const snapPoints = useMemo(() => ["90%"], []);
   const renderBackdrop = useCallback(
-    (props) => (
+    (
+      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
+    ) => (
       <BottomSheetBackdrop
         {...props}
         pressBehavior="close"
@@ -61,7 +55,6 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
     ),
     []
   );
-
   useEffect(() => {
     async function fetchEventData() {
       const response = await apiClient(baseURL, "/event-list", "GET", null, {
@@ -73,6 +66,11 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
     }
     fetchEventData();
   }, [selectedDate]);
+
+  const handlePresentModalPress = (type: handlePresentModalPressType) => {
+    setDataType(type);
+    bottomSheetModalRef.current?.present();
+  };
 
   const addEvent = async () => {
     if (
@@ -89,94 +87,81 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
       ...newEvent,
     });
     setEvent((prev) => [...prev, newEvent]);
+    resetNewEvent();
+    bottomSheetModalRef.current?.close();
+  };
+
+  const resetNewEvent = () => {
     setNewEvent({
       participants: [],
       whichActivity: "",
       emotion: "",
-      emotionRate: 0,
+      emotionRate: 50,
     });
-    bottomSheetModalRef.current?.close();
   };
 
-  const addNewData = () => {
-    if (newData == "") {
+  const handleAddNewData = (newDataType: string) => {
+    if (!newData) {
       bottomSheetModalRef.current?.dismiss();
       return;
     }
 
-    if (dataType === "participants") {
-      const isDuplicate = member.event_participants.includes(newData);
-      if (isDuplicate) {
-        Alert.alert("이미 존재하는 참가자입니다.");
-        return;
-      }
-      setMember((prev) => ({
-        ...prev,
-        event_participants: [...prev.event_participants, newData],
-      }));
-      handleSelection(newData, "participants");
-    } else if (dataType === "activities") {
-      const isDuplicate = member.event_activities.includes(newData);
-      if (isDuplicate) {
-        Alert.alert("이미 존재하는 활동입니다.");
-        return;
-      }
-      setMember((prev) => ({
-        ...prev,
-        event_activities: [...prev.event_activities, newData],
-      }));
-      handleSelection(newData, "activities");
-    } else if (dataType === "emotions") {
-      const isDuplicate = member.event_emotions.includes(newData);
-      if (isDuplicate) {
-        Alert.alert("이미 존재하는 감정입니다.");
-        return;
-      }
-      setMember((prev) => ({
-        ...prev,
-        event_emotions: [...prev.event_emotions, newData],
-      }));
-      handleSelection(newData, "emotions");
+    const isDuplicate = checkForDuplicates(newDataType, newData);
+    if (isDuplicate) {
+      Alert.alert("Error", `이미 존재하는 ${newDataType}입니다.`);
+      return;
     }
+
+    updateMemberData(newDataType, newData);
+    handleSelection(newData, newDataType);
     setNewData("");
     bottomSheetModalRef.current?.dismiss();
   };
 
-  const handleSelection = (item: string, type: string) => {
-    if (type === "participants") {
-      setNewEvent((prevEvent) => ({
-        ...prevEvent,
-        participants: prevEvent.participants.includes(item)
-          ? prevEvent.participants.filter((p) => p !== item)
-          : [...prevEvent.participants, item],
-      }));
-    } else if (type === "activities") {
-      setNewEvent((prevEvent) => ({
-        ...prevEvent,
-        whichActivity: item,
-      }));
-    } else if (type === "emotions") {
-      setNewEvent((prevEvent) => ({
-        ...prevEvent,
-        emotion: item,
-      }));
-    }
+  const checkForDuplicates = (type: string, value: string) => {
+    if (type === "참가자") return member.event_participants.includes(value);
+    if (type === "활동") return member.event_activities.includes(value);
+    if (type === "감정") return member.event_emotions.includes(value);
+    return false;
   };
-  const handlePresentModalPress = (type) => {
-    setDataType(type); // 추가할 데이터 타입 설정 (participants, activities, emotions)
-    bottomSheetModalRef.current?.present();
+
+  const updateMemberData = (type: string, value: string) => {
+    setMember((prev) => {
+      if (type === "참가자") {
+        return {
+          ...prev,
+          event_participants: [...prev.event_participants, value],
+        };
+      } else if (type === "활동") {
+        return { ...prev, event_activities: [...prev.event_activities, value] };
+      } else if (type === "감정") {
+        return { ...prev, event_emotions: [...prev.event_emotions, value] };
+      }
+      return prev;
+    });
+  };
+
+  const handleSelection = (item: string, type: string) => {
+    setNewEvent((prevEvent) => {
+      if (type === "참가자") {
+        return {
+          ...prevEvent,
+          participants: prevEvent.participants.includes(item)
+            ? prevEvent.participants.filter((p) => p !== item)
+            : [...prevEvent.participants, item],
+        };
+      } else if (type === "활동") {
+        return { ...prevEvent, whichActivity: item };
+      } else if (type === "감정") {
+        return { ...prevEvent, emotion: item };
+      }
+      return prevEvent;
+    });
   };
 
   return (
     <BottomSheetModalProvider>
-      <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingVertical: 24,
-          gap: 20,
-          flexGrow: 1,
-        }}
-      >
+      <ScrollView contentContainerStyle={BottomSheetModalStyle.scrollContainer}>
         {renderEvents(event)}
         <CustomAccordion headerText="새로운 이벤트를 추가해 보세요!">
           <Participants
@@ -201,55 +186,20 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
             }
             handlePresentModalPress={handlePresentModalPress}
           />
-          <DefaultButton pressHandler={addEvent} text="Event 추가하기" />
+          <DefaultButton pressHandler={addEvent} text="이벤트 추가하기" />
         </CustomAccordion>
       </ScrollView>
 
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={0}
+      <BottomSheetInput
+        bottomSheetModalRef={bottomSheetModalRef}
+        newData={newData}
+        setNewData={setNewData}
+        handleAddNewData={handleAddNewData}
+        dataType={dataType}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        backdropComponent={renderBackdrop}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={BottomSheetModalStyle.wrapper}>
-            <View>
-              <Text
-                style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}
-              >
-                새 항목 추가
-              </Text>
-              <TextInput
-                placeholder="새 항목 입력"
-                autoFocus={true}
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={newData}
-                onChangeText={setNewData}
-                style={BottomSheetModalStyle.text}
-              />
-            </View>
-            <DefaultButton pressHandler={() => addNewData()} text="항목 추가" />
-          </View>
-        </TouchableWithoutFeedback>
-      </BottomSheetModal>
+        handleSheetChanges={handleSheetChanges}
+        renderBackdrop={renderBackdrop}
+      />
     </BottomSheetModalProvider>
   );
 }
-export const BottomSheetModalStyle = StyleSheet.create({
-  wrapper: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    gap: 10,
-    flex: 1,
-    justifyContent: "space-between",
-  },
-  text: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    borderRadius: 8,
-    width: "100%",
-  },
-});

@@ -3,13 +3,14 @@ import Slider from "@react-native-community/slider";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { accordionStyle } from "./accordionStyle";
+import { handlePresentModalPressType } from "./event";
 
 interface EmotionsProps {
   emotions: string[];
   selectedEmotion: string;
   emotionRate: number;
   handleSelection: (emotion: string, type: string) => void;
-  handlePresentModalPress: (type: string) => void;
+  handlePresentModalPress: (type: handlePresentModalPressType) => void;
   setEmotionRate: (value: number) => void;
 }
 
@@ -36,18 +37,21 @@ export const Emotions: React.FC<EmotionsProps> = ({
               accordionStyle.circle,
               selectedEmotion === emotion && { backgroundColor: "#BAA9FF" },
             ]}
-            onPress={() => handleSelection(emotion, "emotions")}
+            onPress={() => handleSelection(emotion, "감정")}
           >
             <Text>{emotion}</Text>
           </TouchableOpacity>
         ))}
         <TouchableOpacity
           style={accordionStyle.circle}
-          onPress={() => handlePresentModalPress("emotions")}
+          onPress={() => handlePresentModalPress("감정")}
         >
           <Ionicons name="add" size={20} color="black" />
         </TouchableOpacity>
       </ScrollView>
+      <View style={{ paddingTop: 20 }}>
+        <Text>해당 감정이 얼만큼 강렬했나요?</Text>
+      </View>
       <Slider
         style={accordionStyle.slider}
         minimumValue={0}

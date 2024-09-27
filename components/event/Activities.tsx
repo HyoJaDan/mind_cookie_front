@@ -2,12 +2,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { accordionStyle } from "./accordionStyle";
+import { handlePresentModalPressType } from "./event";
 
 interface ActivitiesProps {
   activities: string[];
   selectedActivity: string;
   handleSelection: (activity: string, type: string) => void;
-  handlePresentModalPress: (type: string) => void;
+  handlePresentModalPress: (type: handlePresentModalPressType) => void;
 }
 
 export const Activities: React.FC<ActivitiesProps> = ({
@@ -20,8 +21,8 @@ export const Activities: React.FC<ActivitiesProps> = ({
     <View style={accordionStyle.boxContainer}>
       <Text>어떤 일을 했나요?</Text>
       <ScrollView
-        horizontal={true} // 가로 스크롤 활성화
-        showsHorizontalScrollIndicator={false} // 스크롤바 숨기기 (선택사항)
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={accordionStyle.participantContainer}
       >
         {activities.map((activity, index) => (
@@ -31,7 +32,7 @@ export const Activities: React.FC<ActivitiesProps> = ({
               accordionStyle.circle,
               selectedActivity === activity && { backgroundColor: "#BAA9FF" },
             ]}
-            onPress={() => handleSelection(activity, "activities")}
+            onPress={() => handleSelection(activity, "활동")}
           >
             <Text>{activity}</Text>
           </TouchableOpacity>
@@ -39,7 +40,7 @@ export const Activities: React.FC<ActivitiesProps> = ({
         {/* + 버튼 */}
         <TouchableOpacity
           style={accordionStyle.circle}
-          onPress={() => handlePresentModalPress("activities")}
+          onPress={() => handlePresentModalPress("활동")}
         >
           <Ionicons name="add" size={20} color="black" />
         </TouchableOpacity>

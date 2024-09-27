@@ -1,5 +1,5 @@
 import Slider from "@react-native-community/slider";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Dimensions, StyleSheet, Text, View } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { fontStyle } from "../assets/font/font";
@@ -13,7 +13,7 @@ const screenWidth = Dimensions.get("window").width;
 const State = ({ selectedDate }: { selectedDate: string }) => {
   const [stateList, setStateList] = useRecoilState<StateDTO[]>(stateData);
   const baseURL = useRecoilValue(baseURLData);
-
+  const [isTodayDataExist, setIsTodayDataExist] = useState<boolean>(true);
   // 선택한 날짜에 해당하는 state를 가져오기
   const selectedState: StateDTO = stateList.find(
     (state) => state.date === selectedDate
@@ -24,16 +24,21 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
     lifeSatisfaction: 50,
     physicalConnection: 50,
   };
+  useEffect(() => {
+    const stateExists = stateList.some((state) => state.date === selectedDate);
+
+    // 오늘 날짜의 데이터가 존재하는지 여부에 따라 상태 업데이트
+    setIsTodayDataExist(stateExists);
+  }, [selectedDate]); // selectedDate 또는 stateList가 변경될 때마다 실행
+
   /** Slider를 움직여서 데이터가 업데이트될 때마다 실행 */
   const updateState = (key: keyof StateDTO, value: number) => {
-    // 해당 날짜의 상태가 없으면 기본값을 추가
     setStateList((prevStateList) => {
       const stateExists = prevStateList.some(
         (state) => state.date === selectedDate
       );
 
       if (!stateExists) {
-        // 오늘 날짜의 상태가 없을 경우 새로 추가
         return [
           ...prevStateList,
           {
@@ -110,6 +115,8 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
   };
 
   const saveStateFunction = async () => {
+    // 해당 날짜의 상태가 없으면 기본값을 추가
+    setIsTodayDataExist(true);
     try {
       await apiClient(
         baseURL,
@@ -131,6 +138,11 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
 
   return (
     <View style={styles.container}>
+      {isTodayDataExist ? null : (
+        <View style={styles.noDataContainer}>
+          <Text style={fontStyle.BD16}>아직 상태를 추가하지 않았어요.</Text>
+        </View>
+      )}
       {renderSlider(
         "긍정 감각",
         selectedState.positive ?? 0,
@@ -155,10 +167,7 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
         "physicalConnection",
         "#E4DE52"
       )}
-      <DefaultButton
-        pressHandler={saveStateFunction}
-        text="오늘 상태 저장하기"
-      />
+      <DefaultButton pressHandler={saveStateFunction} text="상태 저장하기" />
     </View>
   );
 };
@@ -208,6 +217,18 @@ const styles = StyleSheet.create({
   slider: {
     width: screenWidth * 0.65,
     height: 40,
+  },
+  noDataContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#FFF",
+    borderRadius: 16,
+    shadowColor: "rgba(0, 18, 38, 0.03)",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 1,
+    shadowRadius: 20,
+    elevation: 5,
   },
 });
 

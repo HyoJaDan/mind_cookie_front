@@ -36,9 +36,14 @@ export const renderEvents = (event: IEventData[]) => {
               )}
             </View>
           </View>
-
           <View style={accordionStyle.boxContainer}>
-            <Text>누구와 있었던 일인가요?</Text>
+            <Text>어떤 일을 했나요?</Text>
+            <View style={accordionStyle.circle}>
+              <Text style={fontStyle.MD16}>{eventItem.whichActivity}</Text>
+            </View>
+          </View>
+          <View style={accordionStyle.boxContainer}>
+            <Text>어떤 감정을 느꼈나요?</Text>
             <View style={accordionStyle.circle}>
               <Text style={fontStyle.MD16}>
                 {eventItem.emotion} : {eventItem.emotionRate}

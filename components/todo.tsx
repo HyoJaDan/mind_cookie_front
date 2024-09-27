@@ -412,7 +412,6 @@ const TodoList = ({
                   style={styles.input}
                   value={newHobbit}
                   onChangeText={setNewHobbit}
-                  autoFocus={true}
                 />
                 {newPrimaryHobbit !== "" && (
                   <View>

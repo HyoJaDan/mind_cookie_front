@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.mindCookie"
@@ -20,13 +22,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/main.jpg",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.mindCookie"
     },
     "web": {
       "favicon": "./assets/icon/main.jpg"
     },
     "expo": {
       "userInterfaceStyle": "automatic"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "85f5d302-89d3-499f-8de6-cd4cfd5f6157"
+      }
     }
   }
 }

@@ -27,7 +27,7 @@ import SpashIcon from "../assets/icon/main.svg";
 import { baseURLData } from "../data/userData";
 import { DefaultButton } from "../util/defaultButton";
 
-function RegisterScreen({ navigation }) {
+function RegisterScreen({ navigation }: { navigation: any }) {
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -164,7 +164,7 @@ function RegisterScreen({ navigation }) {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
               <SpashIcon />
-              <Text style={fontStyle.BD36}>회원가입</Text>
+              <Text style={fontStyle.BD36}>회원가입2</Text>
               <Text style={[fontStyle.BD24, { marginBottom: 50 }]}>
                 나만의 습관을 시작해보세요!
               </Text>
@@ -194,7 +194,6 @@ function RegisterScreen({ navigation }) {
                 >
                   {`* 아이디는 ${MIN_ID_LENGTH}자 이상 ${MAX_ID_LENGTH}자 이하로 입력해주세요.`}
                 </Text>
-
                 <TextInput
                   style={styles.input}
                   placeholder={"비밀번호"}
@@ -204,8 +203,9 @@ function RegisterScreen({ navigation }) {
                   ref={passwordInputRef}
                   returnKeyType="done"
                   onSubmitEditing={() => {
-                    Keyboard.dismiss(); // 키보드 내리기
-                    nameInputRef.current && nameInputRef.current.focus();
+                    setTimeout(() => {
+                      Keyboard.dismiss();
+                    }, 0);
                   }}
                   blurOnSubmit={false}
                 />
@@ -215,7 +215,6 @@ function RegisterScreen({ navigation }) {
                   {`* 비밀번호는 ${MIN_PASSWORD_LENGTH}자 이상 ${MAX_PASSWORD_LENGTH}자 이하로 입력해주세요.`}
                 </Text>
               </KeyboardAvoidingView>
-
               <View style={styles.agreementContainer}>
                 <TouchableOpacity
                   style={styles.checkboxContainer}
@@ -228,7 +227,6 @@ function RegisterScreen({ navigation }) {
                   />
                   <Text style={styles.checkboxLabel}>전체 동의</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity
                   style={styles.checkboxContainer}
                   onPress={() => setAgeCheck(!ageCheck)}
@@ -281,7 +279,6 @@ function RegisterScreen({ navigation }) {
                   </TouchableOpacity>
                 </TouchableOpacity>
               </View>
-
               {loading ? (
                 <ActivityIndicator size="large" color="#307ecc" />
               ) : (

@@ -55,7 +55,7 @@ export const BottomSheetInput: React.FC<BottomSheetInputProps> = ({
           </View>
           <DefaultButton
             pressHandler={() => handleAddNewData(dataType)}
-            text={`${dataType}`}
+            text={`${dataType} 추가`}
           />
         </View>
       </TouchableWithoutFeedback>

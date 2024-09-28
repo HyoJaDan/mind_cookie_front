@@ -26,6 +26,7 @@ export const Participants: React.FC<ParticipantsProps> = ({
           justifyContent: "space-around",
           width: "100%",
           flexDirection: "row",
+          alignItems: "center",
         }}
       >
         <Text>누구와 있었던 일인가요? </Text>

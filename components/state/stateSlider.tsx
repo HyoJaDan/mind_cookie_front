@@ -68,7 +68,7 @@ const StateSlider: React.FC<StateSliderProps> = ({
 
 const styles = StyleSheet.create({
   boxContainer: {
-    width: 327,
+    width: "100%",
     height: 344,
     padding: 20,
     flexShrink: 0,

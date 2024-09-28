@@ -72,7 +72,7 @@ const State = ({ selectedDate }: { selectedDate: string }) => {
       );
       Alert.alert("상태가 성공적으로 저장되었습니다.");
     } catch (error) {
-      Alert.alert("오류", "상태 저장 중 문제가 발생했습니다.");
+      Alert.alert("오류", "서버에 오류가 있습니다.");
     }
   };
 

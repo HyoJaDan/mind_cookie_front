@@ -120,9 +120,7 @@ function RegisterScreen({ navigation }) {
           Accept: "application/json",
         },
       });
-      console.log(response);
       const result = await response.json();
-      console.log(result);
       setLoading(false);
 
       if (result) {
@@ -181,7 +179,6 @@ function RegisterScreen({ navigation }) {
                   placeholder={"아이디"}
                   onChangeText={(userId) => setUserId(userId)}
                   autoCapitalize="none"
-                  autoFocus={true}
                   returnKeyType="next"
                   onSubmitEditing={() =>
                     passwordInputRef.current && passwordInputRef.current.focus()

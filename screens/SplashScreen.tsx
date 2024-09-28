@@ -2,9 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Dimensions,
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -20,7 +18,7 @@ import { stateData } from "../data/stateData";
 import { allStopwatchData, stopwatchData } from "../data/stopwatch";
 import { statusByDateData, tempTodoData, top3SucceessData } from "../data/todo";
 import { baseURLData, memberData, userToken } from "../data/userData";
-import { Android_URL, IOS_URL } from "../util/url";
+import { BASE_URL } from "../util/url";
 
 const SplashScreen = ({ navigation }: { navigation: any }) => {
   const [animating, setAnimating] = useState(true);
@@ -39,9 +37,9 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
 
   useEffect(() => {
     const loadInitialData = async () => {
-      const newBaseURL = Platform.OS === "android" ? Android_URL : IOS_URL;
-      setBaseURL(newBaseURL);
-      //setBaseURL(BASE_URL);
+      // const newBaseURL = Platform.OS === "android" ? Android_URL : IOS_URL;
+      // setBaseURL(newBaseURL);
+      setBaseURL(BASE_URL);
     };
 
     setScreenWidth(Dimensions.get("window").width);
@@ -89,7 +87,6 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
         setAllStopwatch(allStopwatchResponse.data);
         navigation.replace("AuthenticatedStack"); //AuthenticatedStack
       } catch (error) {
-        Alert.alert("회원가입 실패", "서버에 문제가 있습니다.");
         navigation.replace("Auth");
       } finally {
         setAnimating(false);

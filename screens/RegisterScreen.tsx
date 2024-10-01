@@ -111,6 +111,8 @@ function RegisterScreen({ navigation }: { navigation: any }) {
       password: userPassword,
     };
 
+    // url =http://43.202.105.187:8080/api;
+    //const URL = baseURL.split("/api")[0];
     try {
       const response = await fetch(`${URL}/join`, {
         method: "POST",
@@ -120,6 +122,14 @@ function RegisterScreen({ navigation }: { navigation: any }) {
           Accept: "application/json",
         },
       });
+      console.error(response);
+      // HTTP 상태 코드 확인
+      if (!response.ok) {
+        const errorData = await response.text(); // 서버에서 보내는 오류 메시지 확인
+        console.error("Error Data: ", errorData);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.error(response);
       const result = await response.json();
       setLoading(false);
 
@@ -131,7 +141,13 @@ function RegisterScreen({ navigation }: { navigation: any }) {
       }
     } catch (error) {
       setLoading(false);
-      Alert.alert("회원가입 실패", "이미 존재하는 아이디 입니다.");
+      // Alert.alert("회원가입 실패", "이미 존재하는 아이디 입니다.");
+      Alert.alert("회원가입 실패", JSON.stringify(error.message));
+      Alert.alert("회원가입 실패", JSON.stringify(error.stack));
+      console.error(error);
+      console.error(error.message);
+      console.error(error.stack);
+      console.error(error);
     }
   };
 
@@ -164,7 +180,7 @@ function RegisterScreen({ navigation }: { navigation: any }) {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
               <SpashIcon />
-              <Text style={fontStyle.BD36}>회원가입2</Text>
+              <Text style={fontStyle.BD36}>회원가입</Text>
               <Text style={[fontStyle.BD24, { marginBottom: 50 }]}>
                 나만의 습관을 시작해보세요!
               </Text>

@@ -86,7 +86,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
         setStopwatch(stopwatchResponse.data);
         setEvent(eventResponse.data);
         setAllStopwatch(allStopwatchResponse.data);
-        navigation.replace("Auth"); //AuthenticatedStack
+        navigation.replace("AuthenticatedStack"); //AuthenticatedStack
       } catch (error) {
         navigation.replace("Auth");
       } finally {

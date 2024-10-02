@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -19,7 +18,6 @@ import { stateData } from "../data/stateData";
 import { allStopwatchData, stopwatchData } from "../data/stopwatch";
 import { statusByDateData, tempTodoData, top3SucceessData } from "../data/todo";
 import { baseURLData, memberData, userToken } from "../data/userData";
-import { Android_URL, IOS_URL } from "../util/url";
 
 const SplashScreen = ({ navigation }: { navigation: any }) => {
   const [animating, setAnimating] = useState(true);
@@ -37,18 +35,13 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
   const [baseURL, setBaseURL] = useRecoilState(baseURLData);
   useEffect(() => {
     const loadInitialData = async () => {
-      const newBaseURL = Platform.OS === "android" ? Android_URL : IOS_URL;
-      setBaseURL(newBaseURL);
+      // const newBaseURL = Platform.OS === "android" ? Android_URL : IOS_URL;
+      // setBaseURL(newBaseURL);
       // setBaseURL(BASE_URL);
-      // setBaseURL("http://43.202.105.187:8080/api");
+      setBaseURL("http://43.202.105.187:8080/api");
       //43.202.105.187
     };
 
-    /**
-     * 소설 작가로 성공하기
-     * 글 쓰기
-     * 문학이론 책 읽기
-     */
     setScreenWidth(Dimensions.get("window").width);
     loadInitialData();
   }, [setBaseURL]);

@@ -1,4 +1,5 @@
 import {
+  BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
@@ -33,6 +34,7 @@ import {
   updateStatusByDate,
 } from "./todoHelpers";
 
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { apiClient } from "../../data/apiClient";
 import { PrimaryHobbit, statusByDateData, tempTodoData } from "../../data/todo";
 import { baseURLData } from "../../data/userData";
@@ -48,10 +50,10 @@ const TodoList = () => {
   const [statusByDate, setStatusByDate] = useRecoilState(statusByDateData);
   const [isInitialized, setIsInitialized] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string>("");
-  const [newPrimaryHobbit, setNewPrimaryHobbit] = useState<string>("");
-  const [newHobbit, setNewHobbit] = useState<string>("");
   const [selectedPrimaryHobbit, setSelectedPrimaryHobbit] =
     useState<string>("");
+  const [newPrimaryHobbit, setNewPrimaryHobbit] = useState<string>("");
+  const [newHobbit, setNewHobbit] = useState<string>("");
   const baseURL = useRecoilValue(baseURLData);
   const colorOptions = [
     "#7985CD",
@@ -68,13 +70,26 @@ const TodoList = () => {
     "#A9A9A9",
   ];
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["90%"], []);
   const handlePresentModalPress = useCallback(
     () => bottomSheetModalRef.current?.present(),
     []
   );
-
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const handleSheetChanges = useCallback(() => {}, []);
+  const snapPoints = useMemo(() => ["90%"], []);
+  const renderBackdrop = useCallback(
+    (
+      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
+    ) => (
+      <BottomSheetBackdrop
+        {...props}
+        pressBehavior="close"
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+      />
+    ),
+    []
+  );
   useEffect(() => {
     setIsInitialized(true);
     if (tempTodos.length === 0 || todos.length > 0) return;
@@ -110,12 +125,15 @@ const TodoList = () => {
   }, [selectedDate, isInitialized]);
   // 상위 목표와 세부 목표 추가
   const handleAddTodo = async () => {
+    console.log(newPrimaryHobbit);
+    console.log(selectedPrimaryHobbit);
+    console.log(newHobbit);
     if ((!newPrimaryHobbit && !selectedPrimaryHobbit) || !newHobbit) {
       Alert.alert("모든 필드를 채워주세요.");
       return;
     }
 
-    if (selectedColor === "") {
+    if (newPrimaryHobbit && selectedColor === "") {
       Alert.alert("색을 정해주세요. 상위 목표를 구분하는데 사용됩니다.");
       return;
     }
@@ -151,7 +169,8 @@ const TodoList = () => {
     });
 
     if (response.status === 200) {
-      const addedHobbit = response.data;
+      const addedHobbit: PrimaryHobbit = response.data;
+
       const updatedTodos = newPrimaryHobbit
         ? addNewPrimaryHobbit(
             todos,
@@ -246,6 +265,8 @@ const TodoList = () => {
           ref={bottomSheetModalRef}
           index={0}
           snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+          backdropComponent={renderBackdrop}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ModalContent

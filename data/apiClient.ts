@@ -26,7 +26,6 @@ export const apiClient = async (
     },
     body: method !== "GET" ? JSON.stringify(data) : null, // GET 요청은 body가 필요 없음
   });
-
   // JSON 데이터 변환 및 반환
   const responseData = await response.json();
   return responseData;

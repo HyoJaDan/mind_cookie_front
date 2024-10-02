@@ -21,7 +21,6 @@ const HobbitItem: React.FC<HobbitItemProps> = ({
   const backgroundColor = hobbit.done
     ? Colors.grayscale.gray400
     : primaryHobbit.color || "#f2f2f2";
-
   return (
     <TouchableOpacity
       style={[styles.hobbitStatusContainer, { backgroundColor }]}
@@ -59,9 +58,9 @@ const styles = StyleSheet.create({
   hobbitText: { fontSize: 16 },
   hobbitTextDone: {
     textDecorationLine: "line-through",
-    color: Colors.grayscale.gray800,
+    color: Colors.grayscale.gray900,
   },
-  primaryHobbitInfo: { fontSize: 12, color: "#999" },
+  primaryHobbitInfo: { fontSize: 12, color: Colors.grayscale.gray700 },
 });
 
 export default HobbitItem;

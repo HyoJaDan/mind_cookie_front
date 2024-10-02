@@ -36,7 +36,7 @@ export const isColorDuplicate = (
 // 새로 추가된 상위 목표를 todos에 추가하는 함수
 export const addNewPrimaryHobbit = (
   todos: PrimaryHobbit[],
-  addedHobbit: any,
+  addedHobbit: PrimaryHobbit,
   newPrimaryHobbit: string,
   selectedColor: string,
   newHobbit: string
@@ -53,14 +53,13 @@ export const addNewPrimaryHobbit = (
       },
     ],
   };
-
   return [...todos, newPrimaryHobbitData];
 };
 
 // 기존 상위 목표에 세부 목표를 추가하는 함수
 export const addHobbitToExistingPrimary = (
   todos: PrimaryHobbit[],
-  addedHobbit: any,
+  addedHobbit: PrimaryHobbit,
   selectedPrimaryHobbit: string,
   newHobbit: string
 ): PrimaryHobbit[] => {
@@ -71,7 +70,7 @@ export const addHobbitToExistingPrimary = (
           hobbitStatuses: [
             ...primaryHobbit.hobbitStatuses,
             {
-              hobbitId: addedHobbit.hobbitId,
+              hobbitId: addedHobbit.hobbitStatuses[0].hobbitId,
               hobbit: newHobbit,
               done: false,
             },

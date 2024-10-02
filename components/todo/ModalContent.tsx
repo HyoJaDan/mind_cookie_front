@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
+import { Colors } from "../../assets/color/color";
 import { fontStyle } from "../../assets/font/font";
 import { PrimaryHobbit } from "../../data/todo";
 import { DefaultButton } from "../../util/defaultButton";
@@ -42,7 +43,10 @@ const ModalContent: React.FC<ModalContentProps> = ({
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
         <RNPickerSelect
-          onValueChange={(itemValue) => setSelectedPrimaryHobbit(itemValue)}
+          onValueChange={(itemValue) => {
+            setNewPrimaryHobbit("");
+            setSelectedPrimaryHobbit(itemValue);
+          }}
           items={todos.map((primaryHobbit) => ({
             label: primaryHobbit.primaryHobbit,
             value: primaryHobbit.primaryHobbit,
@@ -66,9 +70,12 @@ const ModalContent: React.FC<ModalContentProps> = ({
           value={newHobbit}
           onChangeText={setNewHobbit}
         />
+        <Text style={[fontStyle.SB12, styles.inputNav]}>
+          *기존 상위 목표나, 새로운 상위 목표중 하나만 선택할수 있습니다.
+        </Text>
         {newPrimaryHobbit !== "" && (
           <View>
-            <Text style={[fontStyle.MD16, { marginBottom: 20 }]}>
+            <Text style={[fontStyle.MD16, { marginBottom: 10 }]}>
               고유색 선택
             </Text>
             <View style={styles.colorPickerContainer}>
@@ -117,6 +124,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 5,
     borderWidth: 2,
+  },
+  inputNav: {
+    color: Colors.grayscale.gray800,
+    textAlign: "right",
+    width: "100%",
+    position: "relative",
+    top: -10,
   },
 });
 

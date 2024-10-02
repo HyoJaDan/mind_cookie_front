@@ -123,11 +123,9 @@ const TodoList = () => {
 
     setTodos(updatedTodos);
   }, [selectedDate, isInitialized]);
+
   // 상위 목표와 세부 목표 추가
   const handleAddTodo = async () => {
-    console.log(newPrimaryHobbit);
-    console.log(selectedPrimaryHobbit);
-    console.log(newHobbit);
     if ((!newPrimaryHobbit && !selectedPrimaryHobbit) || !newHobbit) {
       Alert.alert("모든 필드를 채워주세요.");
       return;

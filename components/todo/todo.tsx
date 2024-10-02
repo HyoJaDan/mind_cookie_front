@@ -13,11 +13,9 @@ import React, {
 import {
   Alert,
   FlatList,
-  Keyboard,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -266,21 +264,19 @@ const TodoList = () => {
           onChange={handleSheetChanges}
           backdropComponent={renderBackdrop}
         >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ModalContent
-              todos={todos}
-              newPrimaryHobbit={newPrimaryHobbit}
-              selectedPrimaryHobbit={selectedPrimaryHobbit}
-              newHobbit={newHobbit}
-              selectedColor={selectedColor}
-              colorOptions={colorOptions}
-              setNewPrimaryHobbit={setNewPrimaryHobbit}
-              setSelectedPrimaryHobbit={setSelectedPrimaryHobbit}
-              setNewHobbit={setNewHobbit}
-              setSelectedColor={setSelectedColor}
-              handleAddTodo={handleAddTodo}
-            />
-          </TouchableWithoutFeedback>
+          <ModalContent
+            todos={todos}
+            newPrimaryHobbit={newPrimaryHobbit}
+            selectedPrimaryHobbit={selectedPrimaryHobbit}
+            newHobbit={newHobbit}
+            selectedColor={selectedColor}
+            colorOptions={colorOptions}
+            setNewPrimaryHobbit={setNewPrimaryHobbit}
+            setSelectedPrimaryHobbit={setSelectedPrimaryHobbit}
+            setNewHobbit={setNewHobbit}
+            setSelectedColor={setSelectedColor}
+            handleAddTodo={handleAddTodo}
+          />
         </BottomSheetModal>
       </View>
     </BottomSheetModalProvider>

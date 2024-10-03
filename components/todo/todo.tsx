@@ -12,6 +12,7 @@ import React, {
 } from "react";
 import {
   Alert,
+  BackHandler,
   FlatList,
   StyleSheet,
   Text,
@@ -88,6 +89,22 @@ const TodoList = () => {
     ),
     []
   );
+  useEffect(() => {
+    const backAction = () => {
+      if (bottomSheetModalRef.current) {
+        bottomSheetModalRef.current.close(); // 모달 닫기
+        return true; // 뒤로가기 기본 동작 방지
+      }
+      return false; // 기본 동작 허용
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
   useEffect(() => {
     setIsInitialized(true);
     if (tempTodos.length === 0 || todos.length > 0) return;

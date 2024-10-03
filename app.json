@@ -39,6 +39,7 @@
         "expo-build-properties",
         {
           "ios": {
+            "supportsTablet": true,
             "infoPlist": {
               "NSAppTransportSecurity": {
                 "NSAllowsArbitraryLoads": true

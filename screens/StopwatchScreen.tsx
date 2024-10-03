@@ -9,6 +9,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   AppState,
+  BackHandler,
   FlatList,
   Keyboard,
   SafeAreaView,
@@ -260,7 +261,22 @@ export default function StopwatchScreen() {
       ]
     );
   };
+  useEffect(() => {
+    const backAction = () => {
+      if (bottomSheetModalRef.current) {
+        bottomSheetModalRef.current.close(); // 모달 닫기
+        return true; // 뒤로가기 기본 동작 방지
+      }
+      return false; // 기본 동작 허용
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const renderTargetItem = ({ item }: { item: any }) => (
     <TouchableOpacity
       style={styles.targetItem}

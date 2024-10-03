@@ -11,7 +11,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Alert, ScrollView } from "react-native";
+import { Alert, BackHandler, ScrollView } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { apiClient } from "../../data/apiClient";
 import { eventData } from "../../data/event";
@@ -55,6 +55,22 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
     ),
     []
   );
+  useEffect(() => {
+    const backAction = () => {
+      if (bottomSheetModalRef.current) {
+        bottomSheetModalRef.current.close(); // 모달 닫기
+        return true; // 뒤로가기 기본 동작 방지
+      }
+      return false; // 기본 동작 허용
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
   useEffect(() => {
     async function fetchEventData() {
       const response = await apiClient(baseURL, "/event-list", "GET", null, {

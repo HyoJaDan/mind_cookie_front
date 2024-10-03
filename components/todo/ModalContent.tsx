@@ -71,7 +71,7 @@ const ModalContent: React.FC<ModalContentProps> = ({
                     : { backgroundColor: Colors.grayscale.gray400 },
                 ]}
                 onPress={() => {
-                  setNewPrimaryHobbit(primaryHobbit.primaryHobbit);
+                  setNewPrimaryHobbit("");
                   setSelectedPrimaryHobbit(primaryHobbit.primaryHobbit);
                 }}
               >

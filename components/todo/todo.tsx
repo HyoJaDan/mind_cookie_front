@@ -128,7 +128,6 @@ const TodoList = () => {
       Alert.alert("모든 필드를 채워주세요.");
       return;
     }
-
     if (newPrimaryHobbit && selectedColor === "") {
       Alert.alert("색을 정해주세요. 상위 목표를 구분하는데 사용됩니다.");
       return;

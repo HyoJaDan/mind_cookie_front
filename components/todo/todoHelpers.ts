@@ -4,11 +4,13 @@ import { PrimaryHobbit } from "../../data/todo";
 export const isHobbitDuplicate = (
   todos: PrimaryHobbit[],
   newPrimaryHobbit: string,
+  selectedPrimaryHobbit: string,
   newHobbit: string
 ): boolean => {
   return todos.some(
     (primaryHobbit) =>
-      primaryHobbit.primaryHobbit === newPrimaryHobbit &&
+      (primaryHobbit.primaryHobbit === newPrimaryHobbit ||
+        primaryHobbit.primaryHobbit === selectedPrimaryHobbit) &&
       primaryHobbit.hobbitStatuses.some((hobbit) => hobbit.hobbit === newHobbit)
   );
 };
@@ -51,6 +53,7 @@ export const addNewPrimaryHobbit = (
       },
     ],
   };
+
   return [...todos, newPrimaryHobbitData];
 };
 

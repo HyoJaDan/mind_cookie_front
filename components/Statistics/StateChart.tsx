@@ -108,7 +108,8 @@ export default function StateChart({
             barBorderTopRightRadius={4}
             minHeight={5}
             parentWidth={Math.max(barData.length * 30, screenWidth)}
-            maxValue={100}
+            maxValue={102}
+            yAxisLabelTexts={["0", "20", "40", "60", "80", "100"]}
             xAxisColor={"gray"}
             noOfSections={5}
             rulesLength={screenWidth}

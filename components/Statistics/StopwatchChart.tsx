@@ -165,6 +165,7 @@ export default function StopwatchChart({
           verticalLinesColor="#E0E0E0"
           yAxisThickness={0}
           yAxisTextStyle={{ color: "gray" }}
+          formatYLabel={(yValue) => Math.floor(Number(yValue)).toString()}
           xAxisLabelTextStyle={{ color: "gray", paddingLeft: 15 }}
           xAxisColor={"gray"}
           spacing={60}

@@ -48,9 +48,13 @@ const ModalContent: React.FC<ModalContentProps> = ({
         <Text style={fontStyle.BD16}>상위 목표</Text>
         <View style={styles.modalContent}>
           <TextInput
-            placeholder="새로운 상위 목표 입력"
+            placeholder={
+              selectedPrimaryHobbit === ""
+                ? "새로운 상위 목표 입력"
+                : selectedPrimaryHobbit
+            }
             style={styles.newPrimaryHobbitInput}
-            value={newPrimaryHobbit}
+            // value={newPrimaryHobbit}
             onChangeText={(text) => {
               setNewPrimaryHobbit(text);
               setSelectedPrimaryHobbit("");
@@ -81,7 +85,6 @@ const ModalContent: React.FC<ModalContentProps> = ({
           <TextInput
             placeholder="세부 목표 입력"
             style={styles.input}
-            value={newHobbit}
             onChangeText={setNewHobbit}
           />
           {newPrimaryHobbit !== "" && selectedPrimaryHobbit === "" && (

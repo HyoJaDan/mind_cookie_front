@@ -38,15 +38,15 @@
       [
         "expo-build-properties",
         {
-          "android": {
-            "usesCleartextTraffic": true
-          },
           "ios": {
             "infoPlist": {
               "NSAppTransportSecurity": {
                 "NSAllowsArbitraryLoads": true
               }
             }
+          },
+          "android": {
+            "usesCleartextTraffic": true
           }
         }
       ]

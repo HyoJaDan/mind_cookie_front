@@ -37,15 +37,12 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
     const loadInitialData = async () => {
       // const newBaseURL = Platform.OS === "android" ? Android_URL : IOS_URL;
       // setBaseURL(newBaseURL);
-      // setBaseURL(BASE_URL);
       setBaseURL("http://43.202.105.187:8080/api");
-      //43.202.105.187
     };
 
     setScreenWidth(Dimensions.get("window").width);
     loadInitialData();
   }, [setBaseURL]);
-
   useEffect(() => {
     const fetchData = async () => {
       const token = await AsyncStorage.getItem("user_token");
@@ -53,9 +50,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
         navigation.replace("Auth");
         return;
       }
-
       setToken(token as string);
-
       const todayDate = new Date().toISOString().split("T")[0];
       setDate(todayDate);
 
@@ -112,8 +107,6 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
   );
 };
 
-export default SplashScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -126,3 +119,5 @@ const styles = StyleSheet.create({
     height: 80,
   },
 });
+
+export default SplashScreen;

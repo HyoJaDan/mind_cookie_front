@@ -9,7 +9,6 @@ export const apiClient = async (
   params: any = null
 ) => {
   const token = await AsyncStorage.getItem("user_token");
-
   if (!token) {
     throw new Error("토큰이 존재하지 않습니다.");
   }

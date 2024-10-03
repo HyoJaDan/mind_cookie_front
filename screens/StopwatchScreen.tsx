@@ -336,7 +336,6 @@ export default function StopwatchScreen() {
                 </Text>
                 <TextInput
                   placeholder="새 목표 입력"
-                  value={newTarget}
                   onChangeText={setNewTarget}
                   style={styles.input}
                   autoFocus={true}

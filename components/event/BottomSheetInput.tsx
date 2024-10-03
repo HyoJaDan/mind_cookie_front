@@ -48,7 +48,6 @@ export const BottomSheetInput: React.FC<BottomSheetInputProps> = ({
               autoFocus={true}
               autoCapitalize="none"
               autoCorrect={false}
-              value={newData}
               onChangeText={setNewData}
               style={styles.textInput}
             />

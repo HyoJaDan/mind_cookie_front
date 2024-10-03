@@ -326,6 +326,7 @@ export default function StopwatchScreen() {
             data={stopwatchTargets}
             renderItem={renderTargetItem}
             keyExtractor={(item) => item.target}
+            scrollEnabled={false}
             ListFooterComponent={() => (
               <TouchableOpacity
                 style={styles.addTargetButton}

@@ -9,7 +9,8 @@ interface HobbitItemProps {
   onClick: (
     primaryHobbitId: number,
     primaryHobbit: string,
-    hobbitId: number
+    hobbitId: number,
+    isDone: boolean
   ) => void;
 }
 
@@ -28,7 +29,8 @@ const HobbitItem: React.FC<HobbitItemProps> = ({
         onClick(
           primaryHobbit.primaryHobbitId,
           primaryHobbit.primaryHobbit,
-          hobbit.hobbitId
+          hobbit.hobbitId,
+          hobbit.done
         )
       }
     >

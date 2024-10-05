@@ -34,7 +34,12 @@ import {
 
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { apiClient } from "../../data/apiClient";
-import { PrimaryHobbit, statusByDateData, tempTodoData } from "../../data/todo";
+import {
+  PrimaryHobbit,
+  statusByDateData,
+  tempTodoData,
+  top3SucceessData,
+} from "../../data/todo";
 import { baseURLData } from "../../data/userData";
 import DatePicker from "../DatePicker";
 import EmptyTodo from "./EmptyTodo";
@@ -50,6 +55,7 @@ const TodoList = () => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPrimaryHobbit, setSelectedPrimaryHobbit] =
     useState<string>("");
+  const [top3Success, setTop3Succeess] = useRecoilState(top3SucceessData);
   const [newPrimaryHobbit, setNewPrimaryHobbit] = useState<string>("");
   const [newHobbit, setNewHobbit] = useState<string>("");
   const baseURL = useRecoilValue(baseURLData);
@@ -91,10 +97,10 @@ const TodoList = () => {
   useEffect(() => {
     const backAction = () => {
       if (bottomSheetModalRef.current) {
-        bottomSheetModalRef.current.close(); // 모달 닫기
-        return true; // 뒤로가기 기본 동작 방지
+        bottomSheetModalRef.current.close();
+        return true;
       }
-      return false; // 기본 동작 허용
+      return false;
     };
 
     const backHandler = BackHandler.addEventListener(
@@ -138,7 +144,6 @@ const TodoList = () => {
     setTodos(updatedTodos);
   }, [selectedDate, isInitialized]);
 
-  // 상위 목표와 세부 목표 추가
   const handleAddTodo = async () => {
     if ((!newPrimaryHobbit && !selectedPrimaryHobbit) || !newHobbit) {
       Alert.alert("모든 필드를 채워주세요.");
@@ -206,11 +211,11 @@ const TodoList = () => {
     }
   };
 
-  // 세부 목표 클릭 시 상태 토글
   const handleHobbitClick = async (
     primaryHobbitId: number,
     primaryHobbit: string,
-    hobbitId: number
+    hobbitId: number,
+    isDone: boolean
   ) => {
     const response = await apiClient(
       baseURL,
@@ -232,9 +237,28 @@ const TodoList = () => {
         todos
       );
       setStatusByDate(updatedStatusByDate);
+
+      const foundHobbit = top3Success.find(
+        (item) => item.name === primaryHobbit
+      );
+
+      if (foundHobbit) {
+        setTop3Succeess((prevData) =>
+          prevData.map((item) => {
+            if (item.name === primaryHobbit) {
+              return {
+                ...item,
+                numOfSucceed: isDone
+                  ? item.numOfSucceed - 1
+                  : item.numOfSucceed + 1,
+              };
+            }
+            return item;
+          })
+        );
+      }
     }
   };
-
   return (
     <BottomSheetModalProvider>
       <DatePicker

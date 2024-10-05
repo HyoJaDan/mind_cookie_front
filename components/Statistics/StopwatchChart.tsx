@@ -31,11 +31,9 @@ export default function StopwatchChart({
 
   // LineChart에 필요한 데이터 형식으로 변환하는 함수
   const createChartData = (data: IAllStopwatch, allDates: string[]) => {
-    let cumulativeTime = 0;
-
     // 각 날짜에 대해 처리
     return allDates.map((date) => {
-      // 현재 날짜에 해당하는 time이 있으면 그 값을 사용하고, 없으면 이전 누적 시간을 그대로 사용
+      // 현재 날짜에 해당하는 time이 있으면 그 값을 사용하고, 없으면 0을 사용
       const dateTime = data.dateTimeList.find((dt) => {
         const dateLabel = new Date(dt.date)
           .toISOString()
@@ -44,17 +42,17 @@ export default function StopwatchChart({
         return dateLabel === date;
       });
 
-      if (dateTime) {
-        const timeInSeconds =
-          parseInt(dateTime.time.split(":")[0]) * 3600 +
-          parseInt(dateTime.time.split(":")[1]) * 60 +
-          parseInt(dateTime.time.split(":")[2]);
+      let timeInMinutes = 0;
 
-        cumulativeTime += timeInSeconds; // 초 단위로 누적
+      if (dateTime) {
+        // 시간을 바로 분 단위로 변환
+        timeInMinutes =
+          parseInt(dateTime.time.split(":")[0]) * 60 + // 시 -> 분 변환
+          parseInt(dateTime.time.split(":")[1]); // 분 그대로 사용
       }
 
       return {
-        value: Math.floor(cumulativeTime / 60), // 초를 분으로 변환하여 Y축 값으로 사용
+        value: timeInMinutes, // 바로 분으로 사용
         label: date, // 월/일 형식으로 변환된 날짜 라벨
       };
     });

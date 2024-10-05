@@ -69,21 +69,21 @@ function AuthenticatedStack() {
         }}
       />
       <BottomTab.Screen
-        name="상태"
-        component={MyStateScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="face" color={color} size={size} />
-          ),
-          headerShown: false,
-        }}
-      />
-      <BottomTab.Screen
         name="이벤트"
         component={EventScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="event-available" size={size} color={color} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <BottomTab.Screen
+        name="상태"
+        component={MyStateScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="face" color={color} size={size} />
           ),
           headerShown: false,
         }}

@@ -4,7 +4,7 @@
     "slug": "mindCookie",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon/main.jpg",
+    "icon": "./assets/icon/icon.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/icon/main.jpg",

@@ -54,7 +54,6 @@ const ModalContent: React.FC<ModalContentProps> = ({
                 : selectedPrimaryHobbit
             }
             style={styles.newPrimaryHobbitInput}
-            // value={newPrimaryHobbit}
             onChangeText={(text) => {
               setNewPrimaryHobbit(text);
               setSelectedPrimaryHobbit("");

@@ -25,14 +25,6 @@ export const isPrimaryHobbitDuplicate = (
   );
 };
 
-// 색상 중복 확인
-export const isColorDuplicate = (
-  todos: PrimaryHobbit[],
-  selectedColor: string
-): boolean => {
-  return todos.some((primaryHobbit) => primaryHobbit.color === selectedColor);
-};
-
 // 새로 추가된 상위 목표를 todos에 추가하는 함수
 export const addNewPrimaryHobbit = (
   todos: PrimaryHobbit[],

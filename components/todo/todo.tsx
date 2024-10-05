@@ -26,7 +26,6 @@ import ModalContent from "./ModalContent";
 import {
   addHobbitToExistingPrimary,
   addNewPrimaryHobbit,
-  isColorDuplicate,
   isHobbitDuplicate,
   isPrimaryHobbitDuplicate,
   toggleHobbitStatus,
@@ -166,11 +165,6 @@ const TodoList = () => {
       Alert.alert(
         "이미 동일한 상위 목표가 존재합니다. 기존 상위 목표를 선택해주세요."
       );
-      return;
-    }
-
-    if (isColorDuplicate(todos, selectedColor)) {
-      Alert.alert("이미 동일한 색상이 다른 목표에 사용되고 있습니다.");
       return;
     }
 

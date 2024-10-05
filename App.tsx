@@ -59,6 +59,16 @@ function AuthenticatedStack() {
         }}
       />
       <BottomTab.Screen
+        name="타이머"
+        component={StopwatchScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="timer-outline" size={size} color={color} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <BottomTab.Screen
         name="상태"
         component={MyStateScreen}
         options={{
@@ -74,16 +84,6 @@ function AuthenticatedStack() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="event-available" size={size} color={color} />
-          ),
-          headerShown: false,
-        }}
-      />
-      <BottomTab.Screen
-        name="타이머"
-        component={StopwatchScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="timer-outline" size={size} color={color} />
           ),
           headerShown: false,
         }}

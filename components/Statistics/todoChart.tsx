@@ -35,7 +35,7 @@ export default function TodoChart({
           return (
             <View key={index} style={styles.container}>
               <Text style={fontStyle.MD18}>{item.name}</Text>
-              <Text style={fontStyle.SB15}>{item.numOfSucceed}번 달성</Text>
+              <Text style={fontStyle.SB15}>총 {item.numOfSucceed}번 달성</Text>
             </View>
           );
         })}

@@ -259,6 +259,7 @@ const TodoList = () => {
             }
             keyExtractor={(item) => item.primaryHobbitId.toString()}
             contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
           />
         )}
         <TouchableOpacity

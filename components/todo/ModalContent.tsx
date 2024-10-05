@@ -41,7 +41,10 @@ const ModalContent: React.FC<ModalContentProps> = ({
 }) => {
   return (
     <View style={styles.modalContainer}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={[fontStyle.BD24, { marginBottom: 20 }]}>
           목표를 추가하세요
         </Text>

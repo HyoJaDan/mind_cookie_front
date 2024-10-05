@@ -326,7 +326,7 @@ export default function StopwatchScreen() {
             data={stopwatchTargets}
             renderItem={renderTargetItem}
             keyExtractor={(item) => item.target}
-            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
             ListFooterComponent={() => (
               <TouchableOpacity
                 style={styles.addTargetButton}
@@ -375,8 +375,9 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
-    padding: 20,
+    paddingHorizontal: 20,
     gap: 50,
+    flex: 1,
   },
   targetItem: {
     flexDirection: "row",
@@ -403,6 +404,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 10,
+    marginBottom: 20,
   },
   addButtonText: {
     fontSize: 30,

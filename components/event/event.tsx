@@ -177,7 +177,10 @@ export default function Event({ selectedDate }: { selectedDate: string }) {
 
   return (
     <BottomSheetModalProvider>
-      <ScrollView contentContainerStyle={BottomSheetModalStyle.scrollContainer}>
+      <ScrollView
+        contentContainerStyle={BottomSheetModalStyle.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         {renderEvents(event)}
         <CustomAccordion headerText="새로운 이벤트를 추가해 보세요!">
           <Participants

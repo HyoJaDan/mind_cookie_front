@@ -259,6 +259,50 @@ const TodoList = () => {
       }
     }
   };
+  const removeHobbit = async (hobbitId: number) => {
+    Alert.alert(
+      "목표 삭제",
+      "진짜 해당 목표를 삭제하시겠어요? \n* 목표를 삭제하면 기존의 기록을 볼 수 없어요!",
+      [
+        {
+          text: "아니오",
+          style: "cancel",
+        },
+        {
+          text: "예",
+          onPress: async () => {
+            await apiClient(baseURL, `/delete-hobbit/${hobbitId}`, "DELETE");
+            setTodos((prevTodos) => {
+              // 각 PrimaryHobbit에서 해당 hobbitId를 가진 hobbitStatus를 삭제
+              const updatedTodos = prevTodos
+                .map((primaryHobbit) => {
+                  const updatedHobbitStatuses =
+                    primaryHobbit.hobbitStatuses.filter(
+                      (hobbit) => hobbit.hobbitId !== hobbitId
+                    );
+
+                  // hobbitStatuses가 남아있으면 업데이트된 PrimaryHobbit 반환
+                  if (updatedHobbitStatuses.length > 0) {
+                    return {
+                      ...primaryHobbit,
+                      hobbitStatuses: updatedHobbitStatuses,
+                    };
+                  }
+
+                  // hobbitStatuses가 모두 삭제되었으면 null 반환 (나중에 필터링에서 제외)
+                  return null;
+                })
+                .filter((primaryHobbit) => primaryHobbit !== null); // PrimaryHobbit가 null이 아니면 유지
+
+              return updatedTodos;
+            });
+
+            bottomSheetModalRef.current?.close();
+          },
+        },
+      ]
+    );
+  };
   return (
     <BottomSheetModalProvider>
       <DatePicker
@@ -278,6 +322,7 @@ const TodoList = () => {
                   primaryHobbit={primaryHobbit}
                   hobbit={hobbit}
                   onClick={handleHobbitClick}
+                  removeHobbit={removeHobbit}
                 />
               ))
             }

@@ -25,26 +25,9 @@ import StopwatchScreen from "./screens/StopwatchScreen";
 import TodoScreen from "./screens/TodoScreen";
 
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator(); // Drawer Navigation 생성
+const Drawer = createDrawerNavigator();
 const BottomTab = createBottomTabNavigator();
-// const Tab = createMaterialTopTabNavigator();
-// function StopwatchStack() {
-//   return (
-//     <Tab.Navigator
-//       screenOptions={{
-//         tabBarLabelStyle: {
-//           color: Colors.basic.text_default,
-//           fontSize: 18,
-//           fontFamily: "Pretendard-Bold",
-//         },
-//         tabBarIndicatorStyle: { height: 3 },
-//       }}
-//     >
-//       <Tab.Screen name="포모" component={Timer} />
-//       <Tab.Screen name="스탑워치" component={StopwatchScreen} />
-//     </Tab.Navigator>
-//   );
-// }
+
 function BottomTabNavigator() {
   return (
     <BottomTab.Navigator>
@@ -111,12 +94,12 @@ function DrawerNavigator() {
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props} />}
       screenOptions={{
-        gestureEnabled: false, // 스와이프 제스처 비활성화
+        gestureEnabled: false,
       }}
     >
       <Drawer.Screen
         name="BottomTabs"
-        component={BottomTabNavigator} // BottomTab 포함
+        component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
     </Drawer.Navigator>
@@ -130,20 +113,6 @@ const Auth = () => (
       component={LoginScreen}
       options={{ headerShown: false }}
     />
-    {/* <Stack.Screen
-      name="RegisterScreen"
-      component={RegisterScreen}
-      options={{
-        title: "회원가입",
-        headerStyle: {
-          backgroundColor: "#8785FF",
-        },
-        headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
-      }}
-    /> */}
     <Stack.Screen
       name="RegisterScreen"
       component={RegisterScreen}
@@ -180,11 +149,6 @@ const Root = () => (
         component={DrawerNavigator}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen
-        name="AuthenticatedStack"
-        component={AuthenticatedStack}
-        options={{ headerShown: false }}
-      /> */}
     </Stack.Navigator>
   </NavigationContainer>
 );

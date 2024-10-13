@@ -3,6 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Octicons from "@expo/vector-icons/Octicons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
@@ -13,6 +14,7 @@ import { SafeAreaView } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RecoilRoot } from "recoil";
 import AuthContextProvider from "./data/auth-context";
+import { DrawerContent } from "./screens/DrawerScreen";
 import EventScreen from "./screens/EventScreen";
 import LoginScreen from "./screens/LoginScreen";
 import MyStateScreen from "./screens/MyStateScreen";
@@ -21,7 +23,10 @@ import SplashScreen from "./screens/SplashScreen";
 import StatisticsScreen from "./screens/StatisticsScreen";
 import StopwatchScreen from "./screens/StopwatchScreen";
 import TodoScreen from "./screens/TodoScreen";
+
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator(); // Drawer Navigation 생성
+const BottomTab = createBottomTabNavigator();
 // const Tab = createMaterialTopTabNavigator();
 // function StopwatchStack() {
 //   return (
@@ -40,8 +45,7 @@ const Stack = createNativeStackNavigator();
 //     </Tab.Navigator>
 //   );
 // }
-function AuthenticatedStack() {
-  const BottomTab = createBottomTabNavigator();
+function BottomTabNavigator() {
   return (
     <BottomTab.Navigator>
       <BottomTab.Screen
@@ -102,6 +106,18 @@ function AuthenticatedStack() {
   );
 }
 
+function DrawerNavigator() {
+  return (
+    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
+      <Drawer.Screen
+        name="BottomTabs"
+        component={BottomTabNavigator} // BottomTab 포함
+        options={{ headerShown: false }}
+      />
+    </Drawer.Navigator>
+  );
+}
+
 const Auth = () => (
   <Stack.Navigator initialRouteName="LoginScreen">
     <Stack.Screen
@@ -127,8 +143,8 @@ const Auth = () => (
       name="RegisterScreen"
       component={RegisterScreen}
       options={{
-        headerTitle: "", // 타이틀을 비워서 없앰
-        headerBackTitle: "로그인 화면", // 뒤로가기 버튼 옆에 나올 문구
+        headerTitle: "",
+        headerBackTitle: "로그인 화면",
         headerStyle: {
           backgroundColor: "#fff",
         },
@@ -156,9 +172,14 @@ const Root = () => (
       />
       <Stack.Screen
         name="AuthenticatedStack"
-        component={AuthenticatedStack}
+        component={DrawerNavigator}
         options={{ headerShown: false }}
       />
+      {/* <Stack.Screen
+        name="AuthenticatedStack"
+        component={AuthenticatedStack}
+        options={{ headerShown: false }}
+      /> */}
     </Stack.Navigator>
   </NavigationContainer>
 );

@@ -106,8 +106,8 @@ export default function StopwatchScreen() {
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}-${String(
       currentDate.getMonth() + 1
-    ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`; // yyyy-MM-dd 형식으로 날짜 포맷
-    const formattedTime = formatTime(elapsedTime); // 기존의 시간 포맷 함수
+    ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
+    const formattedTime = formatTime(elapsedTime);
 
     setAllStopwatchTargets((prevTargets) => {
       const targetIndex = prevTargets.findIndex(

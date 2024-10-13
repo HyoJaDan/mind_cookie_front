@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -19,7 +18,6 @@ import { stateData } from "../data/stateData";
 import { allStopwatchData, stopwatchData } from "../data/stopwatch";
 import { statusByDateData, tempTodoData, top3SucceessData } from "../data/todo";
 import { baseURLData, memberData, userToken } from "../data/userData";
-import { Android_URL, IOS_URL } from "../util/url";
 
 const SplashScreen = ({ navigation }: { navigation: any }) => {
   const [animating, setAnimating] = useState(true);
@@ -38,9 +36,9 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
 
   useEffect(() => {
     const loadInitialData = async () => {
-      const newBaseURL = Platform.OS === "android" ? Android_URL : IOS_URL;
-      setBaseURL(newBaseURL);
-      // setBaseURL("http://43.202.105.187:8080/api");
+      // const newBaseURL = Platform.OS === "android" ? Android_URL : IOS_URL;
+      // setBaseURL(newBaseURL);
+      setBaseURL("http://43.202.105.187:8080/api");
     };
 
     setScreenWidth(Dimensions.get("window").width);

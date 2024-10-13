@@ -153,7 +153,6 @@ const TodoList = () => {
       Alert.alert("색을 정해주세요. 상위 목표를 구분하는데 사용됩니다.");
       return;
     }
-
     if (
       isHobbitDuplicate(
         todos,
@@ -165,20 +164,17 @@ const TodoList = () => {
       Alert.alert("이미 동일한 목표와 세부 목표가 존재합니다.");
       return;
     }
-
     if (isPrimaryHobbitDuplicate(todos, newPrimaryHobbit)) {
       Alert.alert(
         "이미 동일한 상위 목표가 존재합니다. 기존 상위 목표를 선택해주세요."
       );
       return;
     }
-
     const response = await apiClient(baseURL, "/add-hobbit", "POST", {
       primaryHobbit: newPrimaryHobbit || selectedPrimaryHobbit,
       hobbit: newHobbit,
       color: newPrimaryHobbit ? selectedColor : null,
     });
-
     if (response.status === 200) {
       const addedHobbit: PrimaryHobbit = response.data;
 

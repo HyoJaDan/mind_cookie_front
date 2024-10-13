@@ -108,7 +108,12 @@ function BottomTabNavigator() {
 
 function DrawerNavigator() {
   return (
-    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
+    <Drawer.Navigator
+      drawerContent={(props) => <DrawerContent {...props} />}
+      screenOptions={{
+        gestureEnabled: false, // 스와이프 제스처 비활성화
+      }}
+    >
       <Drawer.Screen
         name="BottomTabs"
         component={BottomTabNavigator} // BottomTab 포함

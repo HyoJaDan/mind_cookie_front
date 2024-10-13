@@ -16,44 +16,36 @@ import { fontStyle } from "../assets/font/font";
 import { apiClient } from "../data/apiClient";
 import { baseURLData } from "../data/userData";
 
-// 로그아웃 함수 (AsyncStorage에서 토큰 삭제)
 const logout = async (navigation: any) => {
-  try {
-    await AsyncStorage.removeItem("user_token"); // 저장된 토큰 삭제
-    navigation.replace("Auth"); // 로그인 화면으로 이동
-  } catch (error) {
-    console.error("로그아웃 중 오류 발생:", error);
-  }
+  await AsyncStorage.removeItem("user_token");
+  navigation.replace("Auth");
 };
 
-// 회원 탈퇴 함수 (API 호출 후 로그아웃)
 const deleteAccount = async (baseURL: string, navigation: any) => {
-  const response = await apiClient(baseURL, "/member/delete", "DELETE");
+  await apiClient(baseURL, "/member/delete", "DELETE");
 
   await AsyncStorage.removeItem("user_token");
-  navigation.replace("Auth"); // 로그인 화면으로 이동
+  navigation.replace("Auth");
 };
 
-// DrawerContent 컴포넌트
 export function DrawerContent(props: DrawerContentComponentProps) {
   const [baseURL] = useRecoilState(baseURLData);
+
   useEffect(() => {
     const backAction = () => {
       return true;
     };
 
-    // BackHandler 추가
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       backAction
     );
 
-    // 컴포넌트가 unmount 될 때 BackHandler 제거
     return () => backHandler.remove();
   }, []);
 
   const handleLogout = async () => {
-    await logout(props.navigation); // 로그아웃 함수 호출
+    await logout(props.navigation);
   };
 
   const handleDeleteAccount = () => {
@@ -68,7 +60,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
         {
           text: "확인",
           onPress: async () => {
-            await deleteAccount(baseURL, props.navigation); // 회원 탈퇴 함수 호출
+            await deleteAccount(baseURL, props.navigation);
           },
         },
       ]
@@ -133,7 +125,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   spacing: {
-    height: 20, // 버튼 사이 간격
+    height: 20,
   },
   footer: {
     alignItems: "center",
@@ -155,7 +147,7 @@ const styles = StyleSheet.create({
   },
   email: {
     fontSize: 16,
-    color: "#1e90ff", // 파란색으로 링크 강조
+    color: "#1e90ff",
     textDecorationLine: "underline",
   },
 });

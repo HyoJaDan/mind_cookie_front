@@ -78,7 +78,18 @@ export default function StopwatchChart({
   const chartData5 = sortedStopwatchData[4]
     ? createChartData(sortedStopwatchData[4], allDates)
     : [];
+  const calculateMaxValue = () => {
+    const maxValue = Math.max(
+      ...chartData1.map((item) => item.value),
+      ...chartData2.map((item) => item.value),
+      ...chartData3.map((item) => item.value),
+      ...chartData4.map((item) => item.value),
+      ...chartData5.map((item) => item.value)
+    );
 
+    // 최소값을 60으로 설정
+    return maxValue < 60 ? 60 : maxValue;
+  };
   const renderTitle = () => {
     return (
       <View>
@@ -170,6 +181,7 @@ export default function StopwatchChart({
           initialSpacing={15}
           endSpacing={15}
           noOfSections={4}
+          maxValue={calculateMaxValue()}
           scrollToEnd={true}
           scrollAnimation={true}
           color1="skyblue"

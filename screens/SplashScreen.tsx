@@ -12,7 +12,7 @@ import { fontStyle } from "../assets/font/font";
 import SplashIcon from "../assets/icon/main.svg";
 import { apiClient } from "../data/apiClient";
 import { dateData } from "../data/date";
-import { eventData } from "../data/event";
+import { allEventsData, eventData } from "../data/event";
 import { screenWidthData } from "../data/screen";
 import { stateData } from "../data/stateData";
 import { allStopwatchData, stopwatchData } from "../data/stopwatch";
@@ -32,6 +32,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
   const setTempTodoData = useSetRecoilState(tempTodoData);
   const setTop3Succeess = useSetRecoilState(top3SucceessData);
   const setStatusByDate = useSetRecoilState(statusByDateData);
+  const setAllEvent = useSetRecoilState(allEventsData);
   const [baseURL, setBaseURL] = useRecoilState(baseURLData);
 
   useEffect(() => {
@@ -63,6 +64,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
           stopwatchResponse,
           eventResponse,
           allStopwatchResponse,
+          allEventResponse,
         ] = await Promise.all([
           apiClient(baseURL, "/member", "GET"),
           apiClient(baseURL, "/hobbit-status", "GET"),
@@ -72,6 +74,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
             date: todayDate,
           }),
           apiClient(baseURL, "/stopwatch/all", "GET"),
+          apiClient(baseURL, "/all-event-list", "GET"),
         ]);
         setMemberState(memberResponse.data);
         setTempTodoData(temp.data.primaryHobbits);
@@ -81,6 +84,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
         setStopwatch(stopwatchResponse.data);
         setEvent(eventResponse.data);
         setAllStopwatch(allStopwatchResponse.data);
+        setAllEvent(allEventResponse.data);
         navigation.replace("AuthenticatedStack"); //AuthenticatedStack
       } catch (error) {
         navigation.replace("Auth");

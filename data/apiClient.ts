@@ -25,5 +25,6 @@ export const apiClient = async (
   });
 
   const responseData = await response.json();
+
   return responseData;
 };

@@ -2,7 +2,7 @@
   "expo": {
     "name": "마인드쿠키",
     "slug": "mindCookie",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon/icon.jpg",
     "userInterfaceStyle": "light",
@@ -14,17 +14,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.mindCookie",
-      "infoPlist": {
-        "NSAppTransportSecurity": {
-          "NSExceptionDomains": {
-            "43.202.105.187": {
-              "NSExceptionAllowsInsecureHTTPLoads": true,
-              "NSIncludesSubdomains": true
-            }
-          }
-        }
-      }
+      "bundleIdentifier": "com.anonymous.mindCookie"
     },
     "android": {
       "adaptiveIcon": {
@@ -49,16 +39,9 @@
         "expo-build-properties",
         {
           "ios": {
-            "supportsTablet": true,
-            "infoPlist": {
-              "NSAppTransportSecurity": {
-                "NSAllowsArbitraryLoads": true
-              }
-            }
+            "supportsTablet": true
           },
-          "android": {
-            "usesCleartextTraffic": true
-          }
+          "android": {}
         }
       ]
     ]

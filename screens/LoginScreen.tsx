@@ -18,6 +18,7 @@ import { fontStyle } from "../assets/font/font";
 import SpashIcon from "../assets/icon/main.svg";
 import { baseURLData, userToken } from "../data/userData";
 import { DefaultButton } from "../util/defaultButton";
+import { BASE_URL } from "../util/url";
 
 function LoginScreen({ navigation }) {
   const [userId, setUserId] = useState("");
@@ -26,7 +27,7 @@ function LoginScreen({ navigation }) {
   const passwordInputRef = useRef(null);
   const setUserToken = useSetRecoilState(userToken);
   const baseURL = useRecoilValue(baseURLData);
-  const URL = baseURL.split("/api")[0];
+  const URL = baseURL.replace(/\/api$/, "");
 
   const handleLogin = async () => {
     if (!userId || !userPassword) {
@@ -52,7 +53,6 @@ function LoginScreen({ navigation }) {
       });
       // 응답에서 Authorization 헤더 추출
       const authToken = response.headers.get("Authorization");
-
       if (authToken != null) setUserToken(authToken);
 
       setLoading(false);

@@ -34,12 +34,12 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
   const setStatusByDate = useSetRecoilState(statusByDateData);
   const setAllEvent = useSetRecoilState(allEventsData);
   const [baseURL, setBaseURL] = useRecoilState(baseURLData);
-
   useEffect(() => {
     const loadInitialData = async () => {
       // const newBaseURL = Platform.OS === "android" ? Android_URL : IOS_URL;
       // setBaseURL(newBaseURL);
-      setBaseURL("http://43.202.105.187:8080/api");
+      // setBaseURL("http://3.34.244.255:8080/api");
+      setBaseURL("https://api.mindcookie.site/api");
     };
 
     setScreenWidth(Dimensions.get("window").width);
@@ -48,6 +48,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
   useEffect(() => {
     const fetchData = async () => {
       const token = await AsyncStorage.getItem("user_token");
+
       if (!token) {
         navigation.replace("Auth");
         return;

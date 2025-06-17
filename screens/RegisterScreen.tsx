@@ -38,8 +38,9 @@ function RegisterScreen({ navigation }: { navigation: any }) {
   const [currentAgreement, setCurrentAgreement] = useState("");
   const passwordInputRef = useRef(null);
   const baseURL = useRecoilValue(baseURLData);
-  const URL = baseURL.split("/api")[0];
-
+  const URL = baseURL.replace(/\/api$/, "");
+  console.log(baseURL);
+  console.log(URL);
   const MIN_ID_LENGTH = 5;
   const MAX_ID_LENGTH = 15;
   const MIN_PASSWORD_LENGTH = 8;

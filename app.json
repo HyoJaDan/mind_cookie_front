@@ -2,7 +2,7 @@
   "expo": {
     "name": "마인드쿠키",
     "slug": "mindCookie",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "orientation": "portrait",
     "icon": "./assets/icon/icon.jpg",
     "userInterfaceStyle": "light",

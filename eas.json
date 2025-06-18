@@ -12,7 +12,8 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "image": "macos-xcode-16.0"
     }
   },
   "submit": {
